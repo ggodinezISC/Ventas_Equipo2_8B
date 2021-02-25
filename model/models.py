@@ -114,7 +114,6 @@ class Miembro(db.Model):
     CostoAsesoria = Column(Float, nullable=False)
     Estatus       = Column(String, nullable=False)
 
-
     def insertar(self):
         db.session.add(self)
         db.session.commit()
