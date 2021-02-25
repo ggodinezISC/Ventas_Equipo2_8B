@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Botiquin, LiquidoLaboratorio
+from model.models import db, Cliente, Cultivo,Asociacion,Miembro
 app = Flask(__name__)
 app.secret_key = 'ERP'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Admin:hola.123@localhost/ERP'
@@ -12,10 +12,13 @@ loginManager = LoginManager()
 loginManager.init_app(app)
 loginManager.login_view = "inicio"
 
+@loginManager.user_loader
+def load_user(Id):
+    return Cliente.query.get(int(Id))
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
