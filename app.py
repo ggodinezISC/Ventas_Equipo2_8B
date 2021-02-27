@@ -18,6 +18,10 @@ def load_user(Id):
 
 @app.route('/')
 def hello_world():
+    return render_template('Login.html')
+
+@app.route('/index')
+def index():
     return render_template('index.html')
 
 
