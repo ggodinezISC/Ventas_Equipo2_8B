@@ -8,38 +8,44 @@
     <title>Agroquímicos el Geiser</title>
     
 </head>
-<header>
-    
-    <nav>
-
-        <ul class="nav-right-section">
-            
+<header class="contenedor">
+        
+        
+    <nav class="dropdown">
+        <ul>
             <li>
-                <a href="#">Soporte</a>
-            </li>
-            <li>
-                <a href="#">Historial</a>
-            </li>
-            <li class="menu-icon">
-                <a href="#">
-                    <i></i>
+                <a href="">
+                    <img src="{{url_for('static',filename='Imagenes/user.png')}}" alt="" class="usuario">
                 </a>
             </li>
-            <li>
-                <a href="#">
-                    <img src="{{url_for('static',filename='Imagenes/user.png')}}" alt="Imagen de Usuario">
-                </a>
+            <li><a href="#">Menu</a>
+                <ul>
+                    <li><a href="#">Asociaciones</a></li>
+                    <li><a href="#">Clientes</a></li>
+                    <li><a href="#">Cultivos</a></li>
+                    <li><a href="#">Miembros</a></li>
+                </ul>
             </li>
-            
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Historial</a></li>
+            <li><a href="#">Nosotros</a>
+                <ul>
+                    <li><a href="#">Misión</a></li>
+                    <li><a href="#">Visión</a></li>
+                    <li><a href="#">Valores</a></li>
+                </ul>
+            </li>
         </ul>
-
     </nav>
+    
 
 </header>
 <main>
-    <p>Que onda raza</p>
+   
 </main>
 <body>
     
 </body>
 </html>
+
+
