@@ -20,6 +20,11 @@ def load_user(Id):
 def hello_world():
     return render_template('Login.html')
 
+@app.route('/Cultivos')
+def Cultivos():
+    return render_template('Cultivos.html')
+
+
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -28,3 +33,4 @@ def index():
 if __name__ == '__main__':
     db.init_app(app)
     app.run(debug=True)
+

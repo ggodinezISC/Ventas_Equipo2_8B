@@ -58,7 +58,7 @@ nav ul a {
 }
 .dropdown ul li ul li:hover{
     background-color: rgba(50, 205, 50, 0.774);
-    color: white;
+    color: wh;
 }
 @media screen and (min-width:768px) {
     .dropdown ul li  {
