@@ -20,9 +20,6 @@ def load_user(Id):
 def hello_world():
     return render_template('Login.html')
 
-@app.route('/Cultivos')
-def Cultivos():
-    return render_template('Cultivos.html')
 
 
 @app.route('/index')
@@ -117,6 +114,47 @@ def eliminarCliente(id):
     c.eliminar()
     return redirect(url_for('consultaClientes'))        
 #Fin Crud Clientes
+
+#Inicio Crud Cultivos
+@app.route('/Cultivos')
+def consultaCultivo():
+    c = Cultivo()
+    c = c.consultaGeneral()
+    return render_template('/Cultivos/AdministrarCultivo.html',Cultivos=c)
+
+@app.route('/AddCultivo',methods=['POST'])
+def guardarCultivo():
+    c = Cultivo()
+    c.Nombre = request.form['Nombre']
+    c.CostoAsesoria = request.form['Costo']
+    c.Estatus       = request.form['Estatus']
+    c.insertar()
+    return redirect(url_for('consultaCultivos'))
+
+@app.route('/EditCultivo/<int:id>')
+def consultarCultivo(id):
+    c = Cultivo()
+    c.IdCultivo = id
+    c = c.consultaIndividual()
+    return render_template('Cultivos/EditCultivo.html', Cultivo=c)
+
+@app.route('/Cultivo/modificar', methods=['POST'])
+def actualizarCultivo():
+    c = Cultivos()
+    c.IdCultivo = request.form['IdCultivo']
+    c.Nombre = request.form['Nombre']
+    c.CostoAsesoria = request.form['Costo']
+    c.Estatus       = request.form['Estatus']
+    c.actualizar()
+    return redirect(url_for('consultaCultivos'))
+
+@app.route('/DeleteCultivo/<int:id>')
+def eliminarCultivo(id):
+    c = Cultivo()
+    c.IdCultivo = id
+    c.eliminar()
+    return redirect(url_for('consultaCultivos'))        
+#Fin Crud Cultivos
 
 
 if __name__ == '__main__':
