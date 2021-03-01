@@ -5,9 +5,9 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
-class Cliente(UserMixin, db.Model):
+class Cliente(db.Model):
     __tablename__ = 'Clientes'
-    IdCiente = Column(Integer, primary_key=True)
+    IdCliente = Column(Integer, primary_key=True)
     Nombre = Column(String, nullable=False)
     RazonSocial = Column(String, nullable=False)
     LimiteCredito = Column(Float, nullable=False)
@@ -33,23 +33,7 @@ class Cliente(UserMixin, db.Model):
         cli = self.query.get(self.IdCliente)
         return cli
 
-    def validarPassword(self, Contrasenia):
-        pwd = self.query.filter_by(Contrasenia=Contrasenia).first()
-        print(Contrasenia)
-        return pwd
-    def is_authenticated(self):
-        return True
-    def is_anonymous(self):
-        return False
-    def get_id(self):
-        return self.IdCliente
-    def validar(self, Email, Contrasenia):
-        cli = Cliente.query.filter_by(Email=Email).first()
-        if cli != None:
-            if cli.validarPassword(Contrasenia):
-                return cli
-        else:
-            return None
+    
 
 class Asociacion(db.Model):
     __tablename__ = 'Asociaciones'
