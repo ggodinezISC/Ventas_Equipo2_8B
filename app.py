@@ -44,7 +44,6 @@ def inicio():
     try:
         if current_user.is_authenticated and current_user.Tipo=="C":
             return render_template('index.html')
-        
         else:
             return render_template('Login.html')
     except:

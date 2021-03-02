@@ -16,7 +16,6 @@ class Cliente(UserMixin,db.Model):
     Email = Column(String, nullable=False)
     Password = Column(String, nullable=False)
     Tipo = Column(String, nullable=False)
-
     def insertar(self):
         db.session.add(self)
         db.session.commit()
