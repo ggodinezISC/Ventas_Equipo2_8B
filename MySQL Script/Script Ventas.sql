@@ -13,6 +13,7 @@ create table Clientes
    Rfc              	CHAR(13) NOT NULL,
    Telefono             CHAR(12) NOT NULL,
    Email              	VARCHAR(100) NOT NULL,
+   Password             VARCHAR(12) NOT NULL,
    Tipo              	CHAR(1) NOT NULL,
    CONSTRAINT pk_sales_cliente PRIMARY KEY (IdCliente)
 );

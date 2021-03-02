@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
-class Cliente(db.Model):
+class Cliente(UserMixin,db.Model):
     __tablename__ = 'Clientes'
     IdCliente = Column(Integer, primary_key=True)
     Nombre = Column(String, nullable=False)
@@ -14,6 +14,7 @@ class Cliente(db.Model):
     Rfc = Column(String, nullable=False)
     Telefono = Column(String, nullable=False)
     Email = Column(String, nullable=False)
+    Password = Column(String, nullable=False)
     Tipo = Column(String, nullable=False)
 
     def insertar(self):
@@ -32,6 +33,23 @@ class Cliente(db.Model):
     def consultaIndividual(self):
         cli = self.query.get(self.IdCliente)
         return cli
+
+    def validarPassword(self, Password):
+        pwd = self.query.filter_by(Password=Password).first()
+        return pwd
+    def is_authenticated(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.IdCliente
+    def validar(self, Email, Password):
+        cli = Cliente.query.filter_by(Email=Email).first()
+        if cli != None:
+            if cli.validarPassword(Password):
+                return cli
+        else:
+            return None
 
     
 

@@ -2,6 +2,7 @@ from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from model.models import db, Cliente, Cultivo,Asociacion,Miembro
+import re
 app = Flask(__name__)
 app.secret_key = 'ERP'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Admin:hola.123@localhost/ERP'
@@ -16,15 +17,38 @@ loginManager.login_view = "inicio"
 def load_user(Id):
     return Cliente.query.get(int(Id))
 
+@app.route('/login',methods=['POST'])
+def login():
+    try:
+        c = Cliente()
+        c = c.validar(request.form['inputEmail'], request.form['inputPassword'])
+        if u != None:
+            login_user(u)
+            return redirect(url_for('inicio'))
+        else:
+            return 'Datos No Válidos'
+    except:
+        abort(500)
+
+@app.route('/cerrarSesion')
+@login_required
+def cerrarSesion():
+    if current_user.is_authenticated:
+        logout_user()
+        return redirect(url_for("inicio"))
+    else:
+        abort(404)
+
 @app.route('/')
-def hello_world():
-    return render_template('Login.html')
-
-
-
-@app.route('/index')
-def index():
-    return render_template('index.html')
+def inicio():
+    try:
+        if current_user.is_authenticated and current_user.Tipo=="C":
+            return render_template('index.html')
+        
+        else:
+            return render_template('Login.html')
+    except:
+        abort(500)
 
 
 #Inicio Crud Asociaciones
@@ -76,14 +100,30 @@ def consultaClientes():
 @app.route('/AddCliente',methods=['POST'])
 def guardarCliente():
     c = Cliente()
-    c.Nombre = request.form['Nombre']
-    c.RazonSocial = request.form['Razon']
-    c.LimiteCredito = request.form['Limite']
-    c.Rfc = request.form['Rfc']
-    c.Telefono = request.form['Telefono']
-    c.Email = request.form['Email']
-    c.Tipo = request.form['Tipo']
-    c.insertar()
+    c = c.consultaGeneral()
+    for cliente in c:
+        if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
+            return 'Datos repetidos (RFC, Teléfono, Email)'
+    C = Cliente()
+    C.Nombre = request.form['Nombre']
+    C.RazonSocial = request.form['Razon']
+    C.LimiteCredito = request.form['Limite']
+    C.Rfc = request.form['Rfc']
+    C.Telefono = request.form['Telefono']
+    C.Email = request.form['Email']
+    C.Tipo = request.form['Password']
+    C.Tipo = request.form['Tipo']
+    if(int(C.LimiteCredito) <= 0):
+        return 'Limite de credito no valido'
+    regex = "^(\d{10}$)"    
+    if(re.match(regex,str(C.Telefono))==None):
+        return 'Teléfono no válido'
+    
+    regex = "^(\D{4}\d{6}\D{3}$)"   
+    if(re.match(regex,str(C.Rfc))==None):
+        return 'Rfc no válido'
+
+    C.insertar()
     return redirect(url_for('consultaClientes'))
 
 @app.route('/EditCliente/<int:id>')
@@ -96,15 +136,34 @@ def consultarCliente(id):
 @app.route('/Clientes/modificar', methods=['POST'])
 def actualizarCliente():
     c = Cliente()
-    c.IdCliente = request.form['IdCliente']
-    c.Nombre = request.form['Nombre']
-    c.RazonSocial = request.form['Razon']
-    c.LimiteCredito = request.form['Limite']
-    c.Rfc = request.form['Rfc']
-    c.Telefono = request.form['Telefono']
-    c.Email = request.form['Email']
-    c.Tipo = request.form['Tipo']
-    c.actualizar()
+    c = c.consultaGeneral()
+    
+    for cliente in c:
+        if(int(cliente.IdCliente) != int(request.form['IdCliente'])):
+            if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
+                return 'Datos repetidos (Email, Telefono, RFC)'
+    C = Cliente()
+    C.IdCliente = request.form['IdCliente']
+    C.Nombre = request.form['Nombre']
+    C.RazonSocial = request.form['Razon']
+    C.LimiteCredito = request.form['Limite']
+    C.Rfc = request.form['Rfc']
+    C.Telefono = request.form['Telefono']
+    C.Email = request.form['Email']
+    C.Tipo = request.form['Password']
+    C.Tipo = request.form['Tipo']
+    if(float(C.LimiteCredito) <= 0):
+        return 'Limite de credito no valido'
+
+    regex = "^(\d{10}$)"   
+    if(re.match(regex,str(C.Telefono))==None):
+        return 'Teléfono no válido'
+    
+    regex = "^(\D{4}\d{6}\D{3}$)"   
+    if(re.match(regex,str(C.Rfc))==None):
+        return 'Rfc no válido'
+
+    C.actualizar()
     return redirect(url_for('consultaClientes'))
 
 @app.route('/DeleteCliente/<int:id>')

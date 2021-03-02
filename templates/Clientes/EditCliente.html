@@ -28,12 +28,19 @@
             </div>
 
             <div class="form-group">
+                <input type="password" value="{{Cliente.Password}}" name="Password" placeholder="Nueva Password" class="form-control" maxlength="12" required>
+            </div>
+
+            <div class="form-group">
                 <input type="text" value="{{Cliente.Telefono}}" maxlength="10" name="Telefono" placeholder="Teléfono" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.Tipo}}" maxlength="1" name="Tipo" placeholder="Tipo" class="form-control" required>
+                <select class="form-control" name="Tipo" id="Tipo">
+                    <option value="C" selected>Cliente</option>
+                </select>
             </div>
+            
             <div class="form-group">
                 <button type="submit" class="btn btn-success btn-block">
                     Guardar
