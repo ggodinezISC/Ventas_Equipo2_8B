@@ -26,7 +26,7 @@ def login():
             login_user(c)
             return redirect(url_for('inicio'))
         else:
-            return 'Datos No Válidos'
+            return 'Datos Incorrectos'
     except:
         abort(500)
 
@@ -42,7 +42,7 @@ def cerrarSesion():
 @app.route('/')
 def inicio():
     try:
-        if current_user.is_authenticated and current_user.Tipo=="C":
+        if current_user.is_authenticated and (current_user.Tipo=="A" or current_user.Tipo=="T"):
             return render_template('index.html')
         else:
             return render_template('Login.html')
@@ -119,12 +119,11 @@ def guardarMiembro():
     m.insertar()
     return redirect(url_for('consultaMiembros'))
 
-@app.route('/EditMiembro/<int:id>,<int:id2>')
+@app.route('/EditMiembro/<int:id>/<int:id2>')
 @login_required
-def consultarMiembro(id,id2):
+def consultarMiembro(id):
     m = Miembro()
-    m.IdAsociacion = id
-    m.IdCliente = id2
+    m.IdCliente = id
     m = m.consultaIndividual()
     return render_template('Miembros/EditMiembro.html', Miembro=m)
 
@@ -177,7 +176,7 @@ def guardarCliente():
     C.Tipo = request.form['Tipo']
     if(int(C.LimiteCredito) <= 0):
         return 'Limite de credito no valido'
-    regex = "^(\d{3}\d{3}\d{2}\d{2}$)"    
+    regex = "^(\d{10}$)"    
     if(re.match(regex,str(C.Telefono))==None):
         return 'Teléfono no válido'
     
@@ -225,7 +224,7 @@ def actualizarCliente():
     C.Rfc = request.form['Rfc']
     C.Telefono = request.form['Telefono']
     C.Email = request.form['Email']
-    C.Tipo = request.form['Password']
+    C.Password = request.form['Password']
     C.Tipo = request.form['Tipo']
     if(float(C.LimiteCredito) <= 0):
         return 'Limite de credito no valido'
@@ -238,6 +237,17 @@ def actualizarCliente():
     if(re.match(regex,str(C.Rfc))==None):
         return 'Rfc no válido'
 
+    #Minimo 8 caracteres
+    #Maximo 15
+    #Al menos una letra mayúscula
+    #Al menos una letra minucula
+    #Al menos un dígito
+    #No espacios en blanco
+    #Al menos 1 caracter especial de estos 3: $ % &
+    regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
+    if(re.match(regex,str(C.Password))==None):
+        return 'Password debil'
+        
     C.actualizar()
     return redirect(url_for('consultaClientes'))
 
@@ -265,7 +275,7 @@ def guardarCultivo():
     c.CostoAsesoria = request.form['Costo']
     c.Estatus       = request.form['Estatus']
     c.insertar()
-    return redirect(url_for('consultaCultivos'))
+    return redirect(url_for('consultaCultivo'))
 
 @app.route('/EditCultivo/<int:id>')
 @login_required
@@ -278,13 +288,13 @@ def consultarCultivo(id):
 @app.route('/Cultivo/modificar', methods=['POST'])
 @login_required
 def actualizarCultivo():
-    c = Cultivos()
+    c = Cultivo()
     c.IdCultivo = request.form['IdCultivo']
     c.Nombre = request.form['Nombre']
     c.CostoAsesoria = request.form['Costo']
     c.Estatus       = request.form['Estatus']
     c.actualizar()
-    return redirect(url_for('consultaCultivos'))
+    return redirect(url_for('consultaCultivo'))
 
 @app.route('/DeleteCultivo/<int:id>')
 @login_required
@@ -292,7 +302,7 @@ def eliminarCultivo(id):
     c = Cultivo()
     c.IdCultivo = id
     c.eliminar()
-    return redirect(url_for('consultaCultivos'))        
+    return redirect(url_for('consultaCultivo'))        
 #Fin Crud Cultivos
 
 

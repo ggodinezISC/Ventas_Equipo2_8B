@@ -132,6 +132,10 @@ class Miembro(db.Model):
         db.session.delete(cult)
         db.session.commit()
 
-    def consultaIndividual(self):
-        cult = self.query.get(self.IdCliente,self.IdAsociacion)
-        return cult
+    def consultaIndividual(self,Cliente,Asociacion):
+        cult = self.filter_by(Cliente=IdCliente).first()
+        if cult != None:
+            if (cult.filter_by(Asociacion=IdAsociacion)).first():
+                return cult
+        else:
+            return None

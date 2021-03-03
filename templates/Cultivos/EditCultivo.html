@@ -16,7 +16,16 @@
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cultivo.Estatus}}" name="Estatus" placeholder="Estatus" class="form-control" required>
+                <select class="form-control" name="Estatus" id="Estatus">
+                {%if Cultivo.Estatus=="A"%}
+                      <option value="{{Cultivo.Estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                      {%endif%}
+                      {%if Cultivo.Estatus=="I"%}
+                      <option value="{{Cultivo.Estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                      {%endif%}
+                </select>
             </div>
         
             
