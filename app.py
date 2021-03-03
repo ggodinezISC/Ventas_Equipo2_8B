@@ -51,12 +51,14 @@ def inicio():
 
 #Inicio Crud Asociaciones
 @app.route('/Asociaciones')
+@login_required
 def consultaAsociaciones():
     a = Asociacion()
     a = a.consultaGeneral()
     return render_template('/Asociaciones/AdministrarAsociacion.html',Asociaciones=a)
 
 @app.route('/AddAsociacion',methods=['POST'])
+@login_required
 def guardarAsociacion():
     a = Asociacion()
     a.Nombre = request.form['Nombre']
@@ -65,6 +67,7 @@ def guardarAsociacion():
     return redirect(url_for('consultaAsociaciones'))
 
 @app.route('/EditAsociacion/<int:id>')
+@login_required
 def consultarAsociacion(id):
     a = Asociacion()
     a.IdAsociacion = id
@@ -72,6 +75,7 @@ def consultarAsociacion(id):
     return render_template('Asociaciones/EditAsociacion.html', Asociacion=a)
 
 @app.route('/Asociacion/modificar', methods=['POST'])
+@login_required
 def actualizarAsociacion():
     a = Asociacion()
     a.IdAsociacion = request.form['IdAsociacion']
@@ -81,6 +85,7 @@ def actualizarAsociacion():
     return redirect(url_for('consultaAsociaciones'))
 
 @app.route('/DeleteAsociacion/<int:id>')
+@login_required
 def eliminarAsociacion(id):
     a = Asociacion()
     a.IdAsociacion = id
@@ -91,6 +96,7 @@ def eliminarAsociacion(id):
 
 #Inicio Crud Miembros
 @app.route('/Miembros')
+@login_required
 def consultaMiembros():
     m = Miembro()
     m = m.consultaGeneral()
@@ -103,6 +109,7 @@ def consultaMiembros():
     return render_template('/Miembros/AdministrarMiembro.html',Miembros=m,Asociaciones=a,Clientes=c)
 
 @app.route('/AddMiembro',methods=['POST'])
+@login_required
 def guardarMiembro():
     m = Miembro()
     m.IdAsociacion = request.form['Asociacion']
@@ -113,6 +120,7 @@ def guardarMiembro():
     return redirect(url_for('consultaMiembros'))
 
 @app.route('/EditMiembro/<int:id>,<int:id2>')
+@login_required
 def consultarMiembro(id,id2):
     m = Miembro()
     m.IdAsociacion = id
@@ -121,6 +129,7 @@ def consultarMiembro(id,id2):
     return render_template('Miembros/EditMiembro.html', Miembro=m)
 
 @app.route('/Miembro/modificar', methods=['POST'])
+@login_required
 def actualizarMiembro():
     m = Miembro()
     m.IdAsociacion = request.form['Asociacion']
@@ -131,6 +140,7 @@ def actualizarMiembro():
     return redirect(url_for('consultaMiembros'))
 
 @app.route('/DeleteMiembro/<int:id>')
+@login_required
 def eliminarMiembro(id):
     m = Miembro()
     m.IdAsociacion = id
@@ -141,12 +151,14 @@ def eliminarMiembro(id):
 
 #Inicio Crud Clientes
 @app.route('/Clientes')
+@login_required
 def consultaClientes():
     c = Cliente()
     c = c.consultaGeneral()
     return render_template('/Clientes/AdministrarCliente.html',Cliente=c)
 
 @app.route('/AddCliente',methods=['POST'])
+@login_required
 def guardarCliente():
     c = Cliente()
     c = c.consultaGeneral()
@@ -188,6 +200,7 @@ def guardarCliente():
     return redirect(url_for('consultaClientes'))
 
 @app.route('/EditCliente/<int:id>')
+@login_required
 def consultarCliente(id):
     c = Cliente()
     c.IdCliente = id
@@ -195,6 +208,7 @@ def consultarCliente(id):
     return render_template('Clientes/EditCliente.html', Cliente=c)
 
 @app.route('/Clientes/modificar', methods=['POST'])
+@login_required
 def actualizarCliente():
     c = Cliente()
     c = c.consultaGeneral()
@@ -228,6 +242,7 @@ def actualizarCliente():
     return redirect(url_for('consultaClientes'))
 
 @app.route('/DeleteCliente/<int:id>')
+@login_required
 def eliminarCliente(id):
     c = Cliente()
     c.IdCliente = id
@@ -237,6 +252,7 @@ def eliminarCliente(id):
 
 #Inicio Crud Cultivos
 @app.route('/Cultivos')
+@login_required
 def consultaCultivo():
     c = Cultivo()
     c = c.consultaGeneral()
@@ -252,6 +268,7 @@ def guardarCultivo():
     return redirect(url_for('consultaCultivos'))
 
 @app.route('/EditCultivo/<int:id>')
+@login_required
 def consultarCultivo(id):
     c = Cultivo()
     c.IdCultivo = id
@@ -259,6 +276,7 @@ def consultarCultivo(id):
     return render_template('Cultivos/EditCultivo.html', Cultivo=c)
 
 @app.route('/Cultivo/modificar', methods=['POST'])
+@login_required
 def actualizarCultivo():
     c = Cultivos()
     c.IdCultivo = request.form['IdCultivo']
@@ -269,6 +287,7 @@ def actualizarCultivo():
     return redirect(url_for('consultaCultivos'))
 
 @app.route('/DeleteCultivo/<int:id>')
+@login_required
 def eliminarCultivo(id):
     c = Cultivo()
     c.IdCultivo = id
