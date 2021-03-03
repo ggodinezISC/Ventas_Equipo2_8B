@@ -22,8 +22,8 @@ def login():
     try:
         c = Cliente()
         c = c.validar(request.form['inputEmail'], request.form['inputPassword'])
-        if u != None:
-            login_user(u)
+        if c != None:
+            login_user(c)
             return redirect(url_for('inicio'))
         else:
             return 'Datos No Válidos'
@@ -105,6 +105,7 @@ def guardarCliente():
             return 'Datos repetidos (RFC, Teléfono, Email)'
     C = Cliente()
     C.Nombre = request.form['Nombre']
+    C.Password = request.form['Password']
     C.RazonSocial = request.form['Razon']
     C.LimiteCredito = request.form['Limite']
     C.Rfc = request.form['Rfc']
