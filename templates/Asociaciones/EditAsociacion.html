@@ -1,14 +1,28 @@
-{% extends 'LayoutA.html'%} {% block body %}
+{% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Paqueterias/modificar" method="POST">
+        <form action="/Asociacion/modificar" method="POST">
             
             <div class="form-group">
-                <input type="number" value="{{Paqueteria.IdPaqueteria}}" name="IdPaqueteria" placeholder="IdPaqueteria" class="form-control" readonly required>
+                <input type="number" value="{{Asociacion.IdAsociacion}}" name="IdAsociacion" placeholder="IdAsociacion" class="form-control" readonly required>
             </div>
 
+
             <div class="form-group">
-                <input type="text"  value="{{Paqueteria.Nombre}}"  name="Nombre" placeholder="Nombre" class="form-control" required>
+                <input type="text" value="{{Asociacion.Nombre}}" name="Nombre" placeholder="Nombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="Estatus" id="Estatus">
+                      
+                      {%if Asociacion.Estatus=="A"%}
+                      <option value="{{Asociacion.Estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                      {%endif%}
+                      {%if Asociacion.Estatus=="I"%}
+                      <option value="{{Asociacion.Estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                      {%endif%}
+                </select>
             </div>
         
             

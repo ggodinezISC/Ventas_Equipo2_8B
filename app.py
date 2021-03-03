@@ -49,7 +49,6 @@ def inicio():
     except:
         abort(500)
 
-
 #Inicio Crud Asociaciones
 @app.route('/Asociaciones')
 def consultaAsociaciones():
@@ -89,6 +88,57 @@ def eliminarAsociacion(id):
     return redirect(url_for('consultaAsociaciones'))        
 #Fin Crud Asociaciones
 
+
+#Inicio Crud Miembros
+@app.route('/Miembros')
+def consultaMiembros():
+    m = Miembro()
+    m = m.consultaGeneral()
+
+    c = Cliente()
+    c = c.consultaGeneral()
+
+    a = Asociacion()
+    a = a.consultaGeneral()
+    return render_template('/Miembros/AdministrarMiembro.html',Miembros=m,Asociaciones=a,Clientes=c)
+
+@app.route('/AddMiembro',methods=['POST'])
+def guardarMiembro():
+    m = Miembro()
+    m.IdAsociacion = request.form['Asociacion']
+    m.IdCliente = request.form['Cliente']
+    m.FechaIncorporacion = request.form['Fecha']
+    m.Estatus = request.form['Estatus']
+    m.insertar()
+    return redirect(url_for('consultaMiembros'))
+
+@app.route('/EditMiembro/<int:id>,<int:id2>')
+def consultarMiembro(id,id2):
+    m = Miembro()
+    m.IdAsociacion = id
+    m.IdCliente = id2
+    m = m.consultaIndividual()
+    return render_template('Miembros/EditMiembro.html', Miembro=m)
+
+@app.route('/Miembro/modificar', methods=['POST'])
+def actualizarMiembro():
+    m = Miembro()
+    m.IdAsociacion = request.form['Asociacion']
+    m.IdCliente = request.form['Cliente']
+    m.FechaIncorporacion = request.form['Fecha']
+    m.Estatus = request.form['Estatus']
+    m.actualizar()
+    return redirect(url_for('consultaMiembros'))
+
+@app.route('/DeleteMiembro/<int:id>')
+def eliminarMiembro(id):
+    m = Miembro()
+    m.IdAsociacion = id
+    m.eliminar()
+    return redirect(url_for('consultaMiembros'))        
+#Fin Crud Miembros
+
+
 #Inicio Crud Clientes
 @app.route('/Clientes')
 def consultaClientes():
@@ -115,13 +165,24 @@ def guardarCliente():
     C.Tipo = request.form['Tipo']
     if(int(C.LimiteCredito) <= 0):
         return 'Limite de credito no valido'
-    regex = "^(\d{10}$)"    
+    regex = "^(\d{3}\d{3}\d{2}\d{2}$)"    
     if(re.match(regex,str(C.Telefono))==None):
         return 'Teléfono no válido'
     
     regex = "^(\D{4}\d{6}\D{3}$)"   
     if(re.match(regex,str(C.Rfc))==None):
-        return 'Rfc no válido'
+        return 'Rfc no válido LLLDDDDDDLLL'
+    
+    #Minimo 8 caracteres
+    #Maximo 15
+    #Al menos una letra mayúscula
+    #Al menos una letra minucula
+    #Al menos un dígito
+    #No espacios en blanco
+    #Al menos 1 caracter especial de estos 3: $ % &
+    regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
+    if(re.match(regex,str(C.Password))==None):
+        return 'Password debil'
 
     C.insertar()
     return redirect(url_for('consultaClientes'))

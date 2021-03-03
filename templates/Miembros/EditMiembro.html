@@ -1,0 +1,39 @@
+{% extends 'Layout.html'%} {% block body %}
+<div class="col-md-8 offset-md-2">
+    <div class="card card-body">
+        <form action="/Miembro/modificar" method="POST">
+            
+
+            <div class="form-group" >
+                <select class="form-control" name="Asociacion" id="Asociacion"></select>
+                      <option value="{{Miembro.IdAsociacion}}" selected>{{Miembro.IdAsociacion}}</option>
+                </select>
+                
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="Cliente" id="Cliente"></select>
+                      <option value="{{Miembro.Cliente}}" selected>{{Miembro.IdCliente}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="date" value="{{Miembro.FechaIncorporación}}" name="Fecha" placeholder="Fecha de incorporación" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="Estatus" id="Estatus">
+                    <option value="{{Miembro.Estatus}}" selected>{{Miembro.Estatus}}</option>
+                </select>  
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block">
+                    Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

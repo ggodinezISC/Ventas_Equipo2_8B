@@ -50,8 +50,6 @@ class Cliente(UserMixin,db.Model):
         else:
             return None
 
-    
-
 class Asociacion(db.Model):
     __tablename__ = 'Asociaciones'
     IdAsociacion = Column(Integer, primary_key=True)
@@ -110,10 +108,12 @@ class Cultivo(db.Model):
 
 class Miembro(db.Model):
     __tablename__ = 'Miembros'
-    IdCultivo     = Column(Integer, ForeignKey('Cultivos.IdCultivo') , primary_key=True)
+    IdCliente     = Column(Integer, ForeignKey('Clientes.IdCliente') , primary_key=True)
     IdAsociacion  = Column(Integer, ForeignKey('Asociaciones.IdAsociacion') , primary_key=True,)
-    CostoAsesoria = Column(Float, nullable=False)
+    FechaIncorporacion = Column(Date, nullable=False)
     Estatus       = Column(String, nullable=False)
+    Cliente=relationship('Cliente', foreign_keys=[IdCliente])
+    Asociacion=relationship('Asociacion', foreign_keys=[IdAsociacion])
 
     def insertar(self):
         db.session.add(self)
@@ -133,5 +133,5 @@ class Miembro(db.Model):
         db.session.commit()
 
     def consultaIndividual(self):
-        cult = self.query.get(self.IdCultivo)
+        cult = self.query.get(self.IdCliente,self.IdAsociacion)
         return cult

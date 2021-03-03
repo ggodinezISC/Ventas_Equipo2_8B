@@ -1,0 +1,87 @@
+{% extends 'Layout.html' %} {% block body%}
+
+
+<div class="row">
+    <div class="col-md-5">
+
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <div class="card card-body">
+            <form action="/AddMiembro" method="POST">
+
+                <div class="form-group" >
+                    <select class="form-control" name="Asociacion" id="Asociacion">
+
+                    {% for asociacion in Asociaciones %}
+                          <option value="{{asociacion.IdAsociacion}}" selected>{{asociacion.Nombre}}</option>
+                    {% endfor %}
+                    </select>
+                    
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" name="Cliente" id="Cliente">
+                    {% for cliente in Clientes %}
+                          <option value="{{cliente.IdCliente}}" selected>{{cliente.Nombre}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="date" name="Fecha" placeholder="Fecha de incorporación" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" name="Estatus" id="Estatus">
+                        <option value="A" selected>Activo</option>
+                        <option value="I">Inactivo</option>
+                    </select>
+                    
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block">
+                        Guardar
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <table class="table table-striped table-bordered bg-white table-sm">
+            <thead>
+                <tr>
+                    <td>Cliente</td>
+                    <td>Asociacion</td>
+                    <td>FechaIncorporación</td>
+                    <td>Estatus</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for miembro in Miembros %}
+                <tr>
+                    <td>{{miembro.Cliente.Nombre}} </td>
+                    <td>{{miembro.Asociacion.Nombre}}       </td>
+                    <td>{{miembro.FechaIncorporacion}}       </td>
+                    <td>{{miembro.Estatus}}       </td>
+                    <td>
+                        <a href="/EditMiembro/{{miembro.IdCliente}},{{miembro.IdAsociacion}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteMiembro/{{miembro.IdCliente}},{{miembro.IdAsociacion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
