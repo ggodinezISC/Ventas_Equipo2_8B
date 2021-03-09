@@ -50,6 +50,12 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <select class="form-control" name="Estatus" id="Estatus">
+                        <option value="A" selected>Activo</option>
+                        <option value="I" selected>Inactivo</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block">
                         Guardar
                     </button>
@@ -71,6 +77,7 @@
                     <td>Password</td>
                     <td>Telefono</td>
                     <td>Tipo</td>
+                    <td>Estatus</td>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +91,7 @@
                     <td>{{cli.Password}}       </td>
                     <td>{{cli.Telefono}}       </td>
                     <td>{{cli.Tipo}}       </td>
+                    <td>{{cli.Estatus}}       </td>
                     <td>
                         <a href="/EditCliente/{{cli.IdCliente}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteCliente/{{cli.IdCliente}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>

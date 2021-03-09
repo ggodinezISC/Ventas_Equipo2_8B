@@ -42,9 +42,11 @@ def cerrarSesion():
 @app.route('/')
 def inicio():
     try:
-        if current_user.is_authenticated and (current_user.Tipo=="A" or current_user.Tipo=="T"):
+        if current_user.is_authenticated and (current_user.Estatus=="A"):
             return render_template('index.html')
         else:
+            if current_user.is_authenticated:
+                logout_user()
             return render_template('Login.html')
     except:
         abort(500)
@@ -60,29 +62,43 @@ def consultaAsociaciones():
 @app.route('/AddAsociacion',methods=['POST'])
 @login_required
 def guardarAsociacion():
-    a = Asociacion()
-    a.Nombre = request.form['Nombre']
-    a.Estatus = request.form['Estatus']
-    a.insertar()
-    return redirect(url_for('consultaAsociaciones'))
+    try:
+        a = Asociacion()
+        a = a.consultaGeneral()
+        for asociacion in a:
+            if(str(asociacion.Nombre) == request.form['Nombre']):
+                return 'Datos repetidos (Nombre)'
+        aso = Asociacion()
+        aso.Nombre = request.form['Nombre']
+        aso.Estatus = request.form['Estatus']
+        aso.insertar()
+        return redirect(url_for('consultaAsociaciones'))
+    except:
+        return 'No se pudo realizar la inserción'
 
 @app.route('/EditAsociacion/<int:id>')
 @login_required
 def consultarAsociacion(id):
-    a = Asociacion()
-    a.IdAsociacion = id
-    a = a.consultaIndividual()
-    return render_template('Asociaciones/EditAsociacion.html', Asociacion=a)
+    try:
+        a = Asociacion()
+        a.IdAsociacion = id
+        a = a.consultaIndividual()
+        return render_template('Asociaciones/EditAsociacion.html', Asociacion=a)
+    except:
+        return 'No se cargaron los datos correctamente'
 
 @app.route('/Asociacion/modificar', methods=['POST'])
 @login_required
 def actualizarAsociacion():
-    a = Asociacion()
-    a.IdAsociacion = request.form['IdAsociacion']
-    a.Nombre = request.form['Nombre']
-    a.Estatus = request.form['Estatus']
-    a.actualizar()
-    return redirect(url_for('consultaAsociaciones'))
+    try:
+        a = Asociacion()
+        a.IdAsociacion = request.form['IdAsociacion']
+        a.Nombre = request.form['Nombre']
+        a.Estatus = request.form['Estatus']
+        a.actualizar()
+        return redirect(url_for('consultaAsociaciones'))
+    except:
+        return 'No se realizó la actualización, información incorrecta'
 
 @app.route('/DeleteAsociacion/<int:id>')
 @login_required
@@ -111,39 +127,49 @@ def consultaMiembros():
 @app.route('/AddMiembro',methods=['POST'])
 @login_required
 def guardarMiembro():
-    m = Miembro()
-    m.IdAsociacion = request.form['Asociacion']
-    m.IdCliente = request.form['Cliente']
-    m.FechaIncorporacion = request.form['Fecha']
-    m.Estatus = request.form['Estatus']
-    m.insertar()
-    return redirect(url_for('consultaMiembros'))
+    try:
+        m = Miembro()
+        m.IdAsociacion = request.form['Asociacion']
+        m.IdCliente = request.form['Cliente']
+        m.FechaIncorporacion = request.form['Fecha']
+        m.Estatus = request.form['Estatus']
+        m.insertar()
+        return redirect(url_for('consultaMiembros'))
+    except:
+        return'Campos Vacíos o Repetidos'
 
-@app.route('/EditMiembro/<int:id>/<int:id2>')
+@app.route('/EditMiembro/<int:idcli>/<int:idaso>')
 @login_required
-def consultarMiembro(id):
+def consultarMiembro(idcli,idaso):
     m = Miembro()
-    m.IdCliente = id
-    m = m.consultaIndividual()
-    return render_template('Miembros/EditMiembro.html', Miembro=m)
+    m = m.consultaIndividual(idcli,idaso)
+
+    a=Asociacion()
+    a=a.consultaGeneral()
+    
+    c=Cliente()
+    c=c.consultaGeneral()
+    return render_template('Miembros/EditMiembro.html', Miembro=m, Asociacion=a,Cliente=c)
 
 @app.route('/Miembro/modificar', methods=['POST'])
 @login_required
 def actualizarMiembro():
-    m = Miembro()
-    m.IdAsociacion = request.form['Asociacion']
-    m.IdCliente = request.form['Cliente']
-    m.FechaIncorporacion = request.form['Fecha']
-    m.Estatus = request.form['Estatus']
-    m.actualizar()
-    return redirect(url_for('consultaMiembros'))
+    try:
+        m = Miembro()
+        m.IdAsociacion = request.form['Asociacion']
+        m.IdCliente = request.form['Cliente']
+        m.FechaIncorporacion = request.form['Fecha']
+        m.Estatus = request.form['Estatus']
+        m.actualizar()
+        return redirect(url_for('consultaMiembros'))
+    except:
+        return 'No se actualizó la información'
 
-@app.route('/DeleteMiembro/<int:id>')
+@app.route('/DeleteMiembro/<int:idcli>/<int:idaso>')
 @login_required
-def eliminarMiembro(id):
+def eliminarMiembro(idcli,idaso):
     m = Miembro()
-    m.IdAsociacion = id
-    m.eliminar()
+    m = m.eliminar(idcli,idaso)
     return redirect(url_for('consultaMiembros'))        
 #Fin Crud Miembros
 
@@ -159,44 +185,48 @@ def consultaClientes():
 @app.route('/AddCliente',methods=['POST'])
 @login_required
 def guardarCliente():
-    c = Cliente()
-    c = c.consultaGeneral()
-    for cliente in c:
-        if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
-            return 'Datos repetidos (RFC, Teléfono, Email)'
-    C = Cliente()
-    C.Nombre = request.form['Nombre']
-    C.Password = request.form['Password']
-    C.RazonSocial = request.form['Razon']
-    C.LimiteCredito = request.form['Limite']
-    C.Rfc = request.form['Rfc']
-    C.Telefono = request.form['Telefono']
-    C.Email = request.form['Email']
-    C.Tipo = request.form['Password']
-    C.Tipo = request.form['Tipo']
-    if(int(C.LimiteCredito) <= 0):
-        return 'Limite de credito no valido'
-    regex = "^(\d{10}$)"    
-    if(re.match(regex,str(C.Telefono))==None):
-        return 'Teléfono no válido'
-    
-    regex = "^(\D{4}\d{6}\D{3}$)"   
-    if(re.match(regex,str(C.Rfc))==None):
-        return 'Rfc no válido LLLDDDDDDLLL'
-    
-    #Minimo 8 caracteres
-    #Maximo 15
-    #Al menos una letra mayúscula
-    #Al menos una letra minucula
-    #Al menos un dígito
-    #No espacios en blanco
-    #Al menos 1 caracter especial de estos 3: $ % &
-    regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
-    if(re.match(regex,str(C.Password))==None):
-        return 'Password debil'
+    try:
+        c = Cliente()
+        c = c.consultaGeneral()
+        for cliente in c:
+            if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
+                return 'Datos repetidos (RFC, Teléfono, Email)'
+        C = Cliente()
+        C.Nombre = request.form['Nombre']
+        C.Password = request.form['Password']
+        C.RazonSocial = request.form['Razon']
+        C.LimiteCredito = request.form['Limite']
+        C.Rfc = request.form['Rfc']
+        C.Telefono = request.form['Telefono']
+        C.Email = request.form['Email']
+        C.Tipo = request.form['Password']
+        C.Tipo = request.form['Tipo']
+        C.Estatus = request.form['Estatus']
+        if(int(C.LimiteCredito) <= 0):
+            return 'Limite de credito no valido'
+        regex = "^(\d{10}$)"    
+        if(re.match(regex,str(C.Telefono))==None):
+            return 'Teléfono no válido'
+        
+        regex = "^(\D{4}\d{6}\D{3}$)"   
+        if(re.match(regex,str(C.Rfc))==None):
+            return 'Rfc no válido LLLDDDDDDLLL'
+        
+        #Minimo 8 caracteres
+        #Maximo 15
+        #Al menos una letra mayúscula
+        #Al menos una letra minucula
+        #Al menos un dígito
+        #No espacios en blanco
+        #Al menos 1 caracter especial de estos 3: $ % &
+        regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
+        if(re.match(regex,str(C.Password))==None):
+            return 'Password debil'
 
-    C.insertar()
-    return redirect(url_for('consultaClientes'))
+        C.insertar()
+        return redirect(url_for('consultaClientes'))
+    except:
+        return 'No se guardó la información'
 
 @app.route('/EditCliente/<int:id>')
 @login_required
@@ -209,47 +239,51 @@ def consultarCliente(id):
 @app.route('/Clientes/modificar', methods=['POST'])
 @login_required
 def actualizarCliente():
-    c = Cliente()
-    c = c.consultaGeneral()
-    
-    for cliente in c:
-        if(int(cliente.IdCliente) != int(request.form['IdCliente'])):
-            if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
-                return 'Datos repetidos (Email, Telefono, RFC)'
-    C = Cliente()
-    C.IdCliente = request.form['IdCliente']
-    C.Nombre = request.form['Nombre']
-    C.RazonSocial = request.form['Razon']
-    C.LimiteCredito = request.form['Limite']
-    C.Rfc = request.form['Rfc']
-    C.Telefono = request.form['Telefono']
-    C.Email = request.form['Email']
-    C.Password = request.form['Password']
-    C.Tipo = request.form['Tipo']
-    if(float(C.LimiteCredito) <= 0):
-        return 'Limite de credito no valido'
-
-    regex = "^(\d{10}$)"   
-    if(re.match(regex,str(C.Telefono))==None):
-        return 'Teléfono no válido'
-    
-    regex = "^(\D{4}\d{6}\D{3}$)"   
-    if(re.match(regex,str(C.Rfc))==None):
-        return 'Rfc no válido'
-
-    #Minimo 8 caracteres
-    #Maximo 15
-    #Al menos una letra mayúscula
-    #Al menos una letra minucula
-    #Al menos un dígito
-    #No espacios en blanco
-    #Al menos 1 caracter especial de estos 3: $ % &
-    regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
-    if(re.match(regex,str(C.Password))==None):
-        return 'Password debil'
+    try:
+        c = Cliente()
+        c = c.consultaGeneral()
         
-    C.actualizar()
-    return redirect(url_for('consultaClientes'))
+        for cliente in c:
+            if(int(cliente.IdCliente) != int(request.form['IdCliente'])):
+                if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
+                    return 'Datos repetidos (Email, Telefono, RFC)'
+        C = Cliente()
+        C.IdCliente = request.form['IdCliente']
+        C.Nombre = request.form['Nombre']
+        C.RazonSocial = request.form['Razon']
+        C.LimiteCredito = request.form['Limite']
+        C.Rfc = request.form['Rfc']
+        C.Telefono = request.form['Telefono']
+        C.Email = request.form['Email']
+        C.Password = request.form['Password']
+        C.Tipo = request.form['Tipo']
+        C.Estatus = request.form['Estatus']
+        if(float(C.LimiteCredito) <= 0):
+            return 'Limite de credito no valido'
+
+        regex = "^(\d{10}$)"   
+        if(re.match(regex,str(C.Telefono))==None):
+            return 'Teléfono no válido'
+        
+        regex = "^(\D{4}\d{6}\D{3}$)"   
+        if(re.match(regex,str(C.Rfc))==None):
+            return 'Rfc no válido'
+
+        #Minimo 8 caracteres
+        #Maximo 15
+        #Al menos una letra mayúscula
+        #Al menos una letra minucula
+        #Al menos un dígito
+        #No espacios en blanco
+        #Al menos 1 caracter especial de estos 3: $ % &
+        regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
+        if(re.match(regex,str(C.Password))==None):
+            return 'Password debil'
+            
+        C.actualizar()
+        return redirect(url_for('consultaClientes'))
+    except:
+        return 'No se actualizó la información'
 
 @app.route('/DeleteCliente/<int:id>')
 @login_required
@@ -270,12 +304,15 @@ def consultaCultivo():
 
 @app.route('/AddCultivo',methods=['POST'])
 def guardarCultivo():
-    c = Cultivo()
-    c.Nombre = request.form['Nombre']
-    c.CostoAsesoria = request.form['Costo']
-    c.Estatus       = request.form['Estatus']
-    c.insertar()
-    return redirect(url_for('consultaCultivo'))
+    try:
+        c = Cultivo()
+        c.Nombre = request.form['Nombre']
+        c.CostoAsesoria = request.form['Costo']
+        c.Estatus       = request.form['Estatus']
+        c.insertar()
+        return redirect(url_for('consultaCultivo'))
+    except:
+        return 'No se guardó la información'
 
 @app.route('/EditCultivo/<int:id>')
 @login_required
@@ -288,13 +325,16 @@ def consultarCultivo(id):
 @app.route('/Cultivo/modificar', methods=['POST'])
 @login_required
 def actualizarCultivo():
-    c = Cultivo()
-    c.IdCultivo = request.form['IdCultivo']
-    c.Nombre = request.form['Nombre']
-    c.CostoAsesoria = request.form['Costo']
-    c.Estatus       = request.form['Estatus']
-    c.actualizar()
-    return redirect(url_for('consultaCultivo'))
+    try:
+        c = Cultivo()
+        c.IdCultivo = request.form['IdCultivo']
+        c.Nombre = request.form['Nombre']
+        c.CostoAsesoria = request.form['Costo']
+        c.Estatus       = request.form['Estatus']
+        c.actualizar()
+        return redirect(url_for('consultaCultivo'))
+    except:
+        return 'No se actualizó la información'
 
 @app.route('/DeleteCultivo/<int:id>')
 @login_required

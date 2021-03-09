@@ -16,6 +16,7 @@ class Cliente(UserMixin,db.Model):
     Email = Column(String, nullable=False)
     Password = Column(String, nullable=False)
     Tipo = Column(String, nullable=False)
+    Estatus = Column(String, nullable=False)
     def insertar(self):
         db.session.add(self)
         db.session.commit()
@@ -27,7 +28,8 @@ class Cliente(UserMixin,db.Model):
         db.session.commit()
     def eliminar(self):
         cli = self.consultaIndividual()
-        db.session.delete(cli)
+        cli.Estatus="I"
+        db.session.merge(cli)
         db.session.commit()
     def consultaIndividual(self):
         cli = self.query.get(self.IdCliente)
@@ -71,7 +73,8 @@ class Asociacion(db.Model):
 
     def eliminar(self):
         aso = self.consultaIndividual()
-        db.session.delete(aso)
+        aso.Estatus="I"
+        db.session.merge(aso)
         db.session.commit()
 
     def consultaIndividual(self):
@@ -99,7 +102,8 @@ class Cultivo(db.Model):
 
     def eliminar(self):
         cult = self.consultaIndividual()
-        db.session.delete(cult)
+        cult.Estatus="I"
+        db.session.merge(cult)
         db.session.commit()
 
     def consultaIndividual(self):
@@ -127,15 +131,20 @@ class Miembro(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self):
-        cult = self.consultaIndividual()
-        db.session.delete(cult)
-        db.session.commit()
+    def eliminar(self,Cliente,Asociacion):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.IdCliente==Cliente and cu.IdAsociacion==Asociacion):
+                cu.Estatus="I"
+                db.session.merge(cu)
+                db.session.commit()
+        else:
+            return None
 
     def consultaIndividual(self,Cliente,Asociacion):
-        cult = self.filter_by(Cliente=IdCliente).first()
-        if cult != None:
-            if (cult.filter_by(Asociacion=IdAsociacion)).first():
-                return cult
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.IdCliente==Cliente and cu.IdAsociacion==Asociacion):
+                return cu
         else:
             return None

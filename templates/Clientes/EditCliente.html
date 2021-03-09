@@ -46,6 +46,19 @@
                     {%endif%}
                 </select>
             </div>
+
+            <div class="form-group">
+                <select class="form-control" name="Estatus" id="Estatus">
+                    {%if Cliente.Estatus=="A"%}
+                      <option value="{{Cliente.Estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                    {%endif%}
+                    {%if Cliente.Estatus=="I"%}
+                      <option value="{{Cliente.Estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                    {%endif%}
+                </select>
+            </div>
             
             <div class="form-group">
                 <button type="submit" class="btn btn-success btn-block">

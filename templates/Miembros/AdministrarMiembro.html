@@ -20,7 +20,9 @@
                     <select class="form-control" name="Asociacion" id="Asociacion">
 
                     {% for asociacion in Asociaciones %}
+                        {%if asociacion.Estatus=="A"%}
                           <option value="{{asociacion.IdAsociacion}}" selected>{{asociacion.Nombre}}</option>
+                        {%endif%}
                     {% endfor %}
                     </select>
                     
@@ -29,7 +31,9 @@
                 <div class="form-group">
                     <select class="form-control" name="Cliente" id="Cliente">
                     {% for cliente in Clientes %}
+                        {%if cliente.Estatus=="A"%}
                           <option value="{{cliente.IdCliente}}" selected>{{cliente.Nombre}}</option>
+                        {%endif%}
                     {% endfor %}
                     </select>
                 </div>
@@ -74,8 +78,8 @@
                     <td>{{miembro.FechaIncorporacion}}       </td>
                     <td>{{miembro.Estatus}}       </td>
                     <td>
-                        <a href="/EditMiembro/{{miembro.IdCliente}},{{miembro.IdAsociacion}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteMiembro/{{miembro.IdCliente}},{{miembro.IdAsociacion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditMiembro/{{miembro.IdCliente}}/{{miembro.IdAsociacion}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteMiembro/{{miembro.IdCliente}}/{{miembro.IdAsociacion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}
