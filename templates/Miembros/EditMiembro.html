@@ -6,12 +6,6 @@
 
             <div class="form-group" >
                 <select class="form-control" name="Asociacion" id="Asociacion">
-
-                {% for aso in Asociacion %}
-                    {%if aso.Estatus=="A" and aso.IdAsociacion!= Miembro.Asociacion.IdAsociacion %}
-                      <option value="{{aso.IdAsociacion}}" >{{aso.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
                 <option value="{{Miembro.Asociacion.IdAsociacion}}" selected>{{Miembro.Asociacion.Nombre}}</option>
                 </select>
                 
@@ -19,11 +13,6 @@
 
             <div class="form-group">
                 <select class="form-control" name="Cliente" id="Cliente">
-                {% for cli in Cliente %}
-                    {%if cli.Estatus=="A" and cli.IdCliente != Miembro.Cliente.IdCliente%}
-                      <option value="{{cli.IdCliente}}">{{cli.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
                 <option value="{{Miembro.Cliente.IdCliente}}" selected>{{Miembro.Cliente.Nombre}}</option>
                 </select>
             </div>

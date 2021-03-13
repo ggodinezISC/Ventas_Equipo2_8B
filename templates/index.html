@@ -1,13 +1,30 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static',filename='CSS/main.css')}}">
+    <script>
+        function CalcularFecha()
+        {
+            var f = new Date();
+            dia= f.getDate();
+            mes= f.getMonth()+1;
+            año= f.getYear()+1900;
+            fecha=dia+"/"+ mes + "/" + año;
+            Hora= (f.getHours()+":"+f.getMinutes());
+            alert ("La fecha es: "+fecha + "  La Hora actual es: "+Hora);
+            document.getElementById("Hora").setAttribute("value",Hora);
+            document.getElementById("Fecha").setAttribute("value",fecha);
+        }
+        Concurrent.Thread.create(CalcularFecha);
+    </script>
     <title>Agroquímicos el Geiser</title>
     
 </head>
+
 <header class="contenedor">
         
         
@@ -36,7 +53,13 @@
                 </ul>
             </li>
             <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
-            <li><p>Bienvenido {{current_user.Nombre}}</p></li>
+            <li>Bienvenido {{current_user.Nombre}}</li>
+            <li>
+              Fecha: <input type="text" id="Fecha" readonly>
+            </li>
+            <li>
+                Hora: <input type="text" id="Hora" readonly>
+              </li>
         </ul>
     </nav>
     
@@ -45,7 +68,7 @@
 <main>
    
 </main>
-<body>
+<body onload="CalcularFecha()">
     
 </body>
 </html>
