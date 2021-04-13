@@ -649,3 +649,4 @@ GRANT ALL PRIVILEGES ON ERP.Cultivos TO 'Admin'@'localhost';
 INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
 VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041660","memogodi@gmail.com","Hola.123#$","A","A");
 SHOW TABLES FROM ERP;
+Select * from Clientes;
