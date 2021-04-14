@@ -40,6 +40,8 @@ create table Miembros
    FechaIncorporacion   DATE        NOT NULL,
    CONSTRAINT pk_sales_miembro PRIMARY KEY (IdCliente,IdAsociacion)
 );
+
+
 /*==============================================================*/
 /* Table: Cultivos                                              */
 /*==============================================================*/
@@ -51,6 +53,128 @@ create table Cultivos
    Estatus    	  CHAR(1)       	 NOT NULL,
    CONSTRAINT pk_sales_cultivo PRIMARY KEY (IdCultivo)
 );
+
+
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*================================================tablas unidad 2 =================================================*/
+
+/*==============================================================*/
+/* Table:Estados											    */
+/*==============================================================*/
+drop table estados;
+Create Table Estados(
+idEstado int auto_increment NOT NULL,
+nombre varchar(60) NOT NULL,
+siglas varchar(10) NOT NULL,
+estatus char NOT NULL,
+CONSTRAINT PK_Estados PRIMARY KEY (idEstado)
+);
+/*==============================================================*/
+/* Table:Ciudades											    */
+/*==============================================================*/
+drop table Ciudades;
+Create Table Ciudades(
+idCiudad int auto_increment NOT NULL,
+idEstado int NOT NULL,
+nombre varchar(80) NOT NULL,
+estatus char NOT NULL,
+CONSTRAINT PK_Ciudades PRIMARY KEY (idCiudad)
+);
+
+
+/*==============================================================*/
+/* Table: DireccionesCliente                                   	*/
+/*==============================================================*/
+drop table DireccionesCliente;
+create table DireccionesCliente(
+idDireccion int auto_increment not null,
+idCliente int not null,
+idCiudad int not null,
+calle varchar(100) not null,
+numero varchar(5) not null,
+colonia varchar(100) not null,
+codigoPostal varchar(5) not null,
+tipo char not null,
+estatus char not null,
+CONSTRAINT pk_Direcciones_Cliente PRIMARY KEY (idDireccion)
+);
+
+
+/*==============================================================*/
+/* Table:Mantenimiento			             				    */
+/*==============================================================*/
+drop table Mantenimientos;
+create table Mantenimientos(
+idMantenimiento int auto_increment not null,
+idUnidadTransporte int not null,
+fechaInicio date not null,
+fechaFin date not null,
+taller varchar(100) not null,
+costo float not null,
+comentarios varchar(200),
+tipo varchar(30) not null,
+estatus char not null,
+CONSTRAINT pk_Mantenimientos PRIMARY KEY (idMantenimiento)
+);
+
+
+/*==============================================================*/
+/* Table: Parcelas				                               	*/
+/*==============================================================*/
+drop table Parcelas;
+create table Parcelas(
+idParcela int auto_increment not null,
+idCliente int not null,
+idCultivo int not null,
+idDireccion int not null,
+extension float not null,
+estatus char not null,
+CONSTRAINT pk_Parcelas PRIMARY KEY (idParcela)
+);
+
+
+/*==============================================================*/
+/* Table: UnidadesTransporte					                */
+/*==============================================================*/
+drop table UnidadesTransporte;
+create table UnidadesTransporte(
+idUnidadTransporte int auto_increment not null,
+placas varchar(10) not null,
+marca varchar(80) not null,
+modelo varchar(80) not null,
+anio int not null,
+capacidad int not null,
+tipo varchar(30) not null,
+estatus char not null,
+CONSTRAINT pk_UnidadesTransporte PRIMARY KEY (idUnidadTransporte)
+);
+
+
+/*==============================================================*/
+/* Table: ContactosCliente						                */
+/*==============================================================*/
+drop table ContactosCliente;
+create table ContactosCliente(
+idContacto int auto_increment not null,
+idCliente int not null,
+nombre varchar(100) not null,
+telefono varchar(12) not null,
+email varchar(100) not null,
+estatus char not null,
+CONSTRAINT pk_ContactosCliente PRIMARY KEY (idContacto)
+);
+
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+/*=================================================================================================================*/
+
+
+
 /*==============================================================*/
 /* Table: VentasDetalle                                         */
 /*==============================================================*/
@@ -89,31 +213,8 @@ idSucursal int not null,
 idEmpleado int not null,
 CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
 );
-/*==============================================================*/
-/* Table: DireccionesCliente                                   	*/
-/*==============================================================*/
-create table DireccionesCliente(
-idDireccion int not null,
-calle varchar(100) not null,
-numero varchar(15) not null,
-colonia varchar(100) not null,
-codigoPostal varchar(2) not null,
-tipo char not null,
-idCliente int not null,
-idCiudad int not null,
-CONSTRAINT pk_Direcciones_Cliente PRIMARY KEY (idDireccion)
-);
-/*==============================================================*/
-/* Table: Parcelas				                               	*/
-/*==============================================================*/
-create table Parcelas(
-idParcela int not null,
-extension float not null,
-idCliente int not null,
-idCultivo int not null,
-idDireccion int not null,
-CONSTRAINT pk_Parcelas PRIMARY KEY (idParcela)
-);
+
+
 /*==============================================================*/
 /* Table: Tripulacion				                            */
 /*==============================================================*/
@@ -146,30 +247,8 @@ estatus char not null,
 idContacto int not null,
 CONSTRAINT pk_Detalles_Envio PRIMARY KEY (idEnvio,idVenta)
 );
-/*==============================================================*/
-/* Table: UnidadesTransporte					                */
-/*==============================================================*/
-create table UnidadesTransporte(
-idUnidadTransporte int not null,
-placas varchar(10) not null,
-marca varchar(80) not null,
-modelo varchar(80) not null,
-anio int not null,
-capacidad int not null,
-tipo varchar(30) not null,
-CONSTRAINT pk_UnidadesTransporte PRIMARY KEY (idUnidadTransporte)
-);
-/*==============================================================*/
-/* Table: ContactosCliente						                */
-/*==============================================================*/
-create table ContactosCliente(
-idContacto int not null,
-nombre varchar(100) not null,
-telefono varchar(12) not null,
-email varchar(100) not null,
-idCliente int not null,
-CONSTRAINT pk_ContactosCliente PRIMARY KEY (idContacto)
-);
+
+
 /*==============================================================*/
 /* Table: Asesorias						                		*/
 /*==============================================================*/
@@ -195,20 +274,7 @@ idUnidadTransporte int not null,
 pesoTotal float not null,
 CONSTRAINT pk_Envios PRIMARY KEY (idEnvio)
 );
-/*==============================================================*/
-/* Table:Mantenimiento			             				    */
-/*==============================================================*/
-create table Mantenimiento(
-idMantenimiento int not null,
-fechaInicio date not null,
-fechaFin date not null,
-taller varchar(100) not null,
-costo float not null,
-comentarios varchar(200),
-tipo varchar(30) not null,
-idUnidadTransporte int not null,
-CONSTRAINT pk_Mantenimiestos PRIMARY KEY (idMantenimiento)
-);
+
 
 /*==============================================================*/
 /* Table:Laboratorios			             				    */
@@ -488,26 +554,7 @@ horaFin date NOT NULL,
 dias varchar(30) NOT NULL,
 CONSTRAINT PK_Turnos PRIMARY KEY (idTurno)
 );
-/*==============================================================*/
-/* Table:Estados											    */
-/*==============================================================*/
-Create Table Estados(
-idEstado int  NOT NULL,
-nombre varchar(60) NOT NULL,
-siglas varchar(10) NOT NULL,
-estatus char NOT NULL,
-CONSTRAINT PK_Estados PRIMARY KEY (idEstado)
-);
-/*==============================================================*/
-/* Table:Ciudades											    */
-/*==============================================================*/
-Create Table Ciudades(
-idCiudad int  NOT NULL,
-nombre varchar(80) NOT NULL,
-idEstado int NOT NULL,
-estatus char NOT NULL,
-CONSTRAINT PK_Ciudades PRIMARY KEY (idCiudad)
-);
+
 /*==============================================================*/
 /* Table:Empleados											    */
 /*==============================================================*/
@@ -636,6 +683,43 @@ alter table Miembros add constraint IdCliente_Miembro_FK foreign key (IdCliente)
 alter table Miembros add constraint IdAsociacion_Miembro_FK foreign key (IdAsociacion)
       references Asociaciones (IdAsociacion);
 
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*=====================================RESTRICCIONES UNIDAD 2===========================================*/
+/*======================================================================================================*/
+alter table DireccionesCliente add constraint FK_DC_Cliente foreign key (IdCliente)
+      references Clientes (IdCliente);
+
+alter table DireccionesCliente add constraint FK_DC_Ciudad foreign key (idCiudad)
+      references Ciudades (idCiudad);
+
+alter table Ciudades add constraint FK_Ciudades_Estado foreign key (idEstado)
+      references Estados (idEstado);
+
+alter table Parcelas add constraint FK_Parcelas_Cliente foreign key (IdCliente)
+      references Clientes (IdCliente);
+
+alter table Parcelas add constraint FK_Parcelas_Cultivos foreign key (IdCultivo)
+      references Cultivos (IdCultivo);
+
+alter table Parcelas add constraint FK_Parcelas_DC foreign key (idDireccion)
+      references DireccionesCliente (idDireccion);
+
+alter table ContactosCliente add constraint FK_CC_Cliente foreign key (IdCliente)
+      references Clientes (IdCliente);
+
+alter table Mantenimientos add constraint FK_Mantenimientos_UniTransporte foreign key (idUnidadTransporte)
+      references UnidadesTransporte (idUnidadTransporte);
+
+
+
+
+
+
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*======================================================================================================*/
+
 /*==============================================================*/
 /* Creacion del Usuario para la conexion   y permisos           */
 /*==============================================================*/
@@ -646,7 +730,22 @@ GRANT ALL PRIVILEGES ON ERP.Asociaciones TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Miembros TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Cultivos TO 'Admin'@'localhost';
 
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*=====================================INSTRUCCIONES UNIDAD 2===========================================*/
+/*======================================================================================================*/
+GRANT ALL PRIVILEGES ON ERP.DireccionesCliente TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Parcelas TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.ContactosCliente TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Mantenimientos TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.UnidadesTransporte TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Ciudades TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Estados TO 'Admin'@'localhost';
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*======================================================================================================*/
+
 INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
 VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041660","memogodi@gmail.com","Hola.123#$","A","A");
 SHOW TABLES FROM ERP;
-Select * from Clientes;
