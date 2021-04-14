@@ -1,0 +1,83 @@
+{% extends 'Layout.html'%} {% block body %}
+<div class="col-md-8 offset-md-2">
+    <div class="card card-body">
+        <form action="/Direcciones/modificar" method="POST">
+
+            <div class="form-group">
+                <input type="number" value="{{Direccion.idDireccion}}"name="IdDireccion" id="IdDireccion" placeholder="Calle" class="form-control" readonly required>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="IdCliente" id="IdCliente">
+                {% for cliente in Clientes %}
+                    {%if cliente.Estatus=="A"%}
+                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Direccion.Cliente.IdCliente}}"selected >{{Direccion.Cliente.Nombre}}</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <select class="form-control" name="IdCiudad" id="IdCiudad">
+                {% for cli in Ciudad %}
+                    {%if cli.estatus=="A"%}
+                      <option value="{{cli.idCiudad}}" >{{cli.nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Direccion.Ciudad.idCiudad}}" selected>{{Direccion.Ciudad.nombre}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Direccion.calle}}"name="Calle" id="Calle" placeholder="Calle" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="number"value="{{Direccion.numero}}" name="Numero" id="Numero" placeholder="Num Ext." class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Direccion.colonia}}" name="Colonia" id="Colonia" placeholder="Colonia" maxlength="13" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <input type="text" value="{{Direccion.codigoPostal}}" maxlength="5" name="CP" id="CP" placeholder="Código Postal" class="form-control" required>
+            </div>
+
+
+            <div class="form-group">
+                <select class="form-control" name="Tipo" id="Tipo">
+                    {%if Direccion.tipo=="H"%}
+                      <option value="{{Direccion.tipo}}" selected>Hogar</option>
+                      <option value="E">Empresa</option>
+                    {%endif%}
+                    {%if Direccion.tipo=="E"%}
+                      <option value="{{Direccion.tipo}}" selected>Empresa</option>
+                      <option value="H" >Hogar</option>
+                    {%endif%}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="Estatus" id="Estatus">
+                    {%if Direccion.estatus=="A"%}
+                      <option value="{{Direccion.estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                    {%endif%}
+                    {%if Direccion.estatus=="I"%}
+                      <option value="{{Direccion.estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                    {%endif%}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block">
+                    Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

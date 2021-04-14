@@ -20,17 +20,21 @@ class Cliente(UserMixin,db.Model):
     def insertar(self):
         db.session.add(self)
         db.session.commit()
+
     def consultaGeneral(self):
         cli = self.query.all()
         return cli
+    
     def actualizar(self):
         db.session.merge(self)
         db.session.commit()
+    
     def eliminar(self):
         cli = self.consultaIndividual()
         cli.Estatus="I"
         db.session.merge(cli)
         db.session.commit()
+    
     def consultaIndividual(self):
         cli = self.query.get(self.IdCliente)
         return cli
@@ -38,6 +42,7 @@ class Cliente(UserMixin,db.Model):
     def validarPassword(self, Password):
         pwd = self.query.filter_by(Password=Password).first()
         return pwd
+    
     def is_authenticated(self):
         return True
     def is_anonymous(self):
@@ -168,23 +173,15 @@ class Estado(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,Estado):
-        Edo = self.query.all()
-        for est in Edo:
-            if(est.idEstado==Estado):
-                est.estatus="I"
-                db.session.merge(est)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,Estado):
-        EDO = self.query.all()
-        for est in EDO:
-            if(est.idEstado==Estado):
-                return est
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idEstado)
+        return cli
         
 class Ciudad(db.Model):
     __tablename__ = 'Ciudades'
@@ -192,7 +189,8 @@ class Ciudad(db.Model):
     idEstado   = Column(Integer, ForeignKey('Estados.idEstado') )
     nombre     = Column(String, nullable=False)
     estatus    = Column(String, nullable=False)
-    
+    Estado=relationship('Estado', foreign_keys=[idEstado])
+
     def insertar(self):
         db.session.add(self)
         db.session.commit()
@@ -205,23 +203,15 @@ class Ciudad(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,Ciudad):
-        CUI = self.query.all()
-        for est in CIU:
-            if(est.idCiudad==Ciudad):
-                est.estatus="I"
-                db.session.merge(est)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,Ciudad):
-        CIU = self.query.all()
-        for est in CIU:
-            if(est.idCiudad==Ciudad):
-                return est
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idCiudad)
+        return cli
             
 class DireccionesClientes(db.Model):
     __tablename__ = 'DireccionesCliente'
@@ -234,6 +224,8 @@ class DireccionesClientes(db.Model):
     codigoPostal  = Column(String, nullable=False)
     tipo          = Column(String, nullable=False)
     estatus       = Column(String, nullable=False)
+    Cliente=relationship('Cliente', foreign_keys=[idCliente])
+    Ciudad=relationship('Ciudad', foreign_keys=[idCiudad])
 
     def insertar(self):
         db.session.add(self)
@@ -247,23 +239,15 @@ class DireccionesClientes(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idDireccion):
-        dc = self.query.all()
-        for cu in dc:
-            if(cu.idDireccion==idDireccion ):
-                cu.estatus="I"
-                db.session.merge(cu)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,Direccion):
-        DC = self.query.all()
-        for cu in DC:
-            if(cu.idDireccion==Direccion):
-                return cu
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idDireccion)
+        return cli
 
 class Parcela(db.Model):
     __tablename__ = 'Parcelas'
@@ -286,23 +270,15 @@ class Parcela(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idParcela):
-        parc = self.query.all()
-        for cu in parc:
-            if(cu.idParcela==idParcela ):
-                cu.estatus="I"
-                db.session.merge(cu)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,idParcela):
-        parc = self.query.all()
-        for cu in parc:
-            if(cu.idParcela==idParcela):
-                return cu
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idParcela)
+        return cli
 
 class ContactosClientes(db.Model):
     __tablename__ = 'ContactosCliente'
@@ -325,23 +301,15 @@ class ContactosClientes(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idContacto):
-        CC = self.query.all()
-        for cu in CC:
-            if(cu.idContacto==idContacto ):
-                cu.estatus="I"
-                db.session.merge(cu)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,idContacto):
-        CC = self.query.all()
-        for cu in CC:
-            if(cu.idContacto==idContacto):
-                return cu
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idContacto)
+        return cli
 
 class UnidadesTransportes(db.Model):
     __tablename__ = 'UnidadesTransporte'
@@ -366,23 +334,15 @@ class UnidadesTransportes(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idUnidadTransporte):
-        UT = self.query.all()
-        for cu in UT:
-            if(cu.idUnidadTransporte==idUnidadTransporte ):
-                cu.estatus="I"
-                db.session.merge(cu)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,idUnidadTransporte):
-        UT = self.query.all()
-        for cu in UT:
-            if(cu.idUnidadTransporte==idUnidadTransporte):
-                return cu
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idUnidadTransporte)
+        return cli
 
 class Mantenimiento(db.Model):
     __tablename__ = 'Mantenimientos'
@@ -408,23 +368,15 @@ class Mantenimiento(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idMantenimiento):
-        MAN = self.query.all()
-        for cu in MAN:
-            if(cu.idMantenimiento==idMantenimiento ):
-                cu.estatus="I"
-                db.session.merge(cu)
-                db.session.commit()
-        else:
-            return None
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
 
-    def consultaIndividual(self,idMantenimiento):
-        MAN = self.query.all()
-        for cu in MAN:
-            if(cu.idMantenimiento==idMantenimiento):
-                return cu
-        else:
-            return None
+    def consultaIndividual(self):
+        cli = self.query.get(self.idMantenimiento)
+        return cli
 
 
 

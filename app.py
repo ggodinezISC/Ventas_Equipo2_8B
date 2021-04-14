@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Cliente, Cultivo,Asociacion,Miembro
+from model.models import db, Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
 import re
 app = Flask(__name__)
 app.secret_key = 'ERP'
@@ -199,7 +199,6 @@ def guardarCliente():
         C.Rfc = request.form['Rfc']
         C.Telefono = request.form['Telefono']
         C.Email = request.form['Email']
-        C.Tipo = request.form['Password']
         C.Tipo = request.form['Tipo']
         C.Estatus = request.form['Estatus']
         if(int(C.LimiteCredito) <= 0):
@@ -344,6 +343,421 @@ def eliminarCultivo(id):
     c.eliminar()
     return redirect(url_for('consultaCultivo'))        
 #Fin Crud Cultivos
+
+
+#Inicio Crud Estados
+@app.route('/Estados')
+@login_required
+def consultaEstados():
+    E = Estado()
+    E = E.consultaGeneral()
+    return render_template('/Estados/AdministrarEstado.html',Estado=E)
+
+@app.route('/AddEstado',methods=['POST'])
+@login_required
+def guardarEstado():
+    try:
+        E = Estado()
+        E.nombre = request.form['Nombre']
+        E.siglas = request.form['Siglas']
+        E.estatus = request.form['Estatus']
+        E.insertar()
+        return redirect(url_for('consultaEstados'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditEstado/<int:id>')
+@login_required
+def consultarEstado(id):
+    E = Estado()
+    E.idEstado = id
+    E = E.consultaIndividual()
+    return render_template('Estados/EditEstado.html', Estado=E)
+
+@app.route('/Estados/modificar', methods=['POST'])
+@login_required
+def actualizarEstado():
+    try:
+        E = Estado()
+        E.idEstado = request.form['IdEstado']
+        E.nombre = request.form['Nombre']
+        E.siglas = request.form['Siglas']
+        E.estatus = request.form['Estatus']
+        E.actualizar()
+        return redirect(url_for('consultaEstados'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteEstado/<int:id>')
+@login_required
+def eliminarEstado(id):
+    E = Estado()
+    E.idEstado = id
+    E.eliminar()
+    return redirect(url_for('consultaEstados'))        
+#Fin Crud Estados
+
+
+#Inicio Crud Ciudades
+@app.route('/Ciudades')
+@login_required
+def consultaCiudades():
+    C = Ciudad()
+    C = C.consultaGeneral()
+    E = Estado()
+    E = E.consultaGeneral()
+    return render_template('/Ciudades/AdministrarCiudad.html',Ciudades=C,Estados=E)
+
+@app.route('/AddCiudad',methods=['POST'])
+@login_required
+def guardarCiudad():
+    try:
+        C = Ciudad()
+        C.idEstado = request.form['IdEstado']
+        C.nombre = request.form['Nombre']
+        C.estatus = request.form['Estatus']
+        C.insertar()
+        return redirect(url_for('consultaCiudades'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditCiudad/<int:id>')
+@login_required
+def consultarCiudad(id):
+    C = Ciudad()
+    C.idCiudad = id
+    C = C.consultaIndividual()
+    return render_template('Ciudades/EditCiudad.html', Ciudad=C)
+
+@app.route('/Ciudades/modificar', methods=['POST'])
+@login_required
+def actualizarCiudad():
+    try:
+        C = Ciudad()
+        C.idCiudad = request.form['IdCiudad']
+        C.idEstado = request.form['IdEstado']
+        C.nombre = request.form['Nombre']
+        C.estatus = request.form['Estatus']
+        C.actualizar()
+        return redirect(url_for('consultaCiudades'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteCiudad/<int:id>')
+@login_required
+def eliminarCiudad(id):
+    C = Ciudad()
+    C.idCiudad = id
+    C.eliminar()
+    return redirect(url_for('consultaCiudades'))        
+#Fin Crud Ciudades
+
+#Inicio Crud DireccionesClientes
+@app.route('/DireccionesClientes')
+@login_required
+def consultaDirecciones():
+    D = DireccionesClientes()
+    D = D.consultaGeneral()
+    E = Cliente()
+    E = E.consultaGeneral()
+    F = Ciudad()
+    F = F.consultaGeneral()
+    return render_template('/DireccionesClientes/AdministrarDireccion.html',Direccion=D,Clientes=E,Ciudad=F)
+
+@app.route('/AddDireccion',methods=['POST'])
+@login_required
+def guardarDireccion():
+    try:
+        D = DireccionesClientes()
+        D.idCliente = request.form['IdCliente']
+        D.idCiudad = request.form['IdCiudad']
+        D.calle = request.form['Calle']
+        D.numero = request.form['Numero']
+        D.colonia = request.form['Colonia']
+        D.codigoPostal = request.form['CP']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.insertar()
+        return redirect(url_for('consultaDirecciones'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditDireccion/<int:id>')
+@login_required
+def consultarDireccion(id):
+    D = DireccionesClientes()
+    D.idDireccion = id
+    D = D.consultaIndividual()
+    E = Cliente()
+    E = E.consultaGeneral()
+    F = Ciudad()
+    F = F.consultaGeneral()
+    return render_template('DireccionesClientes/EditDireccion.html', Direccion=D,Clientes=E,Ciudad=F)
+
+@app.route('/Direcciones/modificar', methods=['POST'])
+@login_required
+def actualizarDireccion():
+    try:
+        D = DireccionesClientes()
+        D.idDireccion = request.form['IdDireccion']
+        D.idCliente = request.form['IdCliente']
+        D.idCiudad = request.form['IdCiudad']
+        D.calle = request.form['Calle']
+        D.numero = request.form['Numero']
+        D.colonia = request.form['Colonia']
+        D.codigoPostal = request.form['CP']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.actualizar()
+        return redirect(url_for('consultaDirecciones'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteDireccion/<int:id>')
+@login_required
+def eliminarDireccion(id):
+    D= DireccionesClientes()
+    D.idDireccion = id
+    D.eliminar()
+    return redirect(url_for('consultaDirecciones'))        
+#Fin Crud DireccionesClientes
+
+#Inicio Crud Parcelas
+@app.route('/Parcelas')
+@login_required
+def consultaParcelas():
+    D = Parcela()
+    D = D.consultaGeneral()
+    return render_template('/Parcelas/AdministrarParcela.html',Parcela=D)
+
+@app.route('/AddParcela',methods=['POST'])
+@login_required
+def guardarParcela():
+    try:
+        D = Parcela()
+        D.idCliente = request.form['IdCliente']
+        D.idCultivo = request.form['IdCultivo']
+        D.idDireccion = request.form['IdDireccion']
+        D.extension = request.form['Extension']
+        D.estatus = request.form['Estatus']
+        D.insertar()
+        return redirect(url_for('consultaParcelas'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditParcela/<int:id>')
+@login_required
+def consultarParcela(id):
+    D = Parcelas()
+    D.idParcela = id
+    D = D.consultaIndividual()
+    return render_template('Parcelas/EditParcela.html', Parcela=D)
+
+@app.route('/Parcelas/modificar', methods=['POST'])
+@login_required
+def actualizarParcela():
+    try:
+        D = Parcelas()
+        D.idParcela = request.form['IdParcela']
+        D.idCliente = request.form['IdCliente']
+        D.idCultivo = request.form['IdCultivo']
+        D.idDireccion = request.form['IdDireccion']
+        D.extension = request.form['Extension']
+        D.estatus = request.form['Estatus']
+        D.actualizar()
+        return redirect(url_for('consultaParcelas'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteParcela/<int:id>')
+@login_required
+def eliminarParcela(id):
+    D= Parcela()
+    D.idParcela = id
+    D.eliminar()
+    return redirect(url_for('consultaParcelas'))        
+#Fin Crud Parcelas
+
+
+#Inicio Crud ContactosCliente
+@app.route('/ContactosClientes')
+@login_required
+def consultaContactos():
+    D = ContactosClientes()
+    D = D.consultaGeneral()
+    return render_template('/ContactosCliente/AdministrarContacto.html',Contacto=D)
+
+@app.route('/AddContacto',methods=['POST'])
+@login_required
+def guardarContacto():
+    try:
+        D = ContactosClientes()
+        D.idCliente = request.form['IdCliente']
+        D.nombre = request.form['Nombre']
+        D.telefono = request.form['Telefono']
+        D.email = request.form['Email']
+        D.estatus = request.form['Estatus']
+        D.insertar()
+        return redirect(url_for('consultaContactos'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditContacto/<int:id>')
+@login_required
+def consultarContacto(id):
+    D = ContactosClientes()
+    D.idContacto = id
+    D = D.consultaIndividual()
+    return render_template('ContactosCliente/EditContacto.html', Contacto=D)
+
+@app.route('/Contacto/modificar', methods=['POST'])
+@login_required
+def actualizarContacto():
+    try:
+        D = ContactosClientes()
+        D.idContacto = request.form['IdContacto']
+        D.idCliente = request.form['IdCliente']
+        D.nombre = request.form['Nombre']
+        D.telefono = request.form['Telefono']
+        D.email = request.form['Email']
+        D.estatus = request.form['Estatus']
+        D.actualizar()
+        return redirect(url_for('consultaContactos'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteContacto/<int:id>')
+@login_required
+def eliminarContacto(id):
+    D= ContactosClientes()
+    D.idContacto = id
+    D.eliminar()
+    return redirect(url_for('consultaContactos'))        
+#Fin Crud ContactosCliente
+
+
+#Inicio Crud UnidadesTransporte
+@app.route('/UnidadesTransporte')
+@login_required
+def consultaUnidades():
+    D = UnidadesTransportes()
+    D = D.consultaGeneral()
+    return render_template('/UnidadesTransporte/AdministrarUnidad.html',Unidades=D)
+
+@app.route('/AddUnidad',methods=['POST'])
+@login_required
+def guardarUnidad():
+    try:
+        D = UnidadesTransportes()
+        D.placas = request.form['Placas']
+        D.marca = request.form['Marca']
+        D.modelo = request.form['Modelo']
+        D.anio = request.form['Anio']
+        D.capacidad = request.form['Capacidad']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.insertar()
+        return redirect(url_for('consultaUnidades'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditUnidad/<int:id>')
+@login_required
+def consultarUnidad(id):
+    D = UnidadesTransportes()
+    D.idUnidadTransporte = id
+    D = D.consultaIndividual()
+    return render_template('UnidadesTransporte/EditUnidad.html', Unidad=D)
+
+@app.route('/Unidad/modificar', methods=['POST'])
+@login_required
+def actualizarUnidad():
+    try:
+        D = UnidadesTransportes()
+        D.idUnidadTransporte = request.form['IdUnidad']
+        D.placas = request.form['Placas']
+        D.marca = request.form['Marca']
+        D.modelo = request.form['Modelo']
+        D.anio = request.form['Anio']
+        D.capacidad = request.form['Capacidad']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.actualizar()
+        return redirect(url_for('consultaUnidades'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteUnidad/<int:id>')
+@login_required
+def eliminarUnidad(id):
+    D= UnidadesTransportes()
+    D.idUnidadTransporte = id
+    D.eliminar()
+    return redirect(url_for('consultaUnidades'))        
+#Fin Crud UnidadesTransporte
+
+
+#Inicio Crud Mantenimiento
+@app.route('/Mantenimientos')
+@login_required
+def consultaMantenimientos():
+    D = Mantenimiento()
+    D = D.consultaGeneral()
+    return render_template('/Mantenimientos/AdministrarMantenimiento.html',Mantenimientos=D)
+
+@app.route('/AddMantenimiento',methods=['POST'])
+@login_required
+def guardarMantenimiento():
+    try:
+        D = Mantenimiento()
+        D.idUnidadTransporte = request.form['IdUnidad']
+        D.fechaInicio = request.form['FechaI']
+        D.fechaFin = request.form['FechaF']
+        D.taller = request.form['Taller']
+        D.costo = request.form['Costo']
+        D.comentario = request.form['Comentario']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.insertar()
+        return redirect(url_for('consultaMantenimientos'))
+    except:
+        return 'No se guardó la información'
+
+@app.route('/EditMantenimiento/<int:id>')
+@login_required
+def consultarMantenimiento(id):
+    D = Mantenimiento()
+    D.idMantenimiento = id
+    D = D.consultaIndividual()
+    return render_template('Mantenimientos/EditMantenimiento.html', Mantenimiento=D)
+
+@app.route('/Mantenimiento/modificar', methods=['POST'])
+@login_required
+def actualizarMantenimiento():
+    try:
+        D = Mantenimiento()
+        D.idMantenimiento = request.form['IdMantenimiento']
+        D.idUnidadTransporte = request.form['IdUnidad']
+        D.fechaInicio = request.form['FechaI']
+        D.fechaFin = request.form['FechaF']
+        D.taller = request.form['Taller']
+        D.costo = request.form['Costo']
+        D.comentario = request.form['Comentario']
+        D.tipo = request.form['Tipo']
+        D.estatus = request.form['Estatus']
+        D.actualizar()
+        return redirect(url_for('consultaMantenimientos'))
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteMantenimiento/<int:id>')
+@login_required
+def eliminarMantenimiento(id):
+    D= Mantenimiento()
+    D.idMantenimiento = id
+    D.eliminar()
+    return redirect(url_for('consultaMantenimientos'))        
+#Fin Crud Mantenimiento
 
 
 if __name__ == '__main__':
