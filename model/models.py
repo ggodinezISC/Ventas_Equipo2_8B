@@ -257,6 +257,9 @@ class Parcela(db.Model):
     idDireccion      = Column(Integer, ForeignKey('DireccionesCliente.idDireccion') , nullable=False)
     extension        = Column(String, nullable=False)
     estatus          = Column(String, nullable=False)
+    Cliente=relationship('Cliente', foreign_keys=[idCliente])
+    Cultivo=relationship('Cultivo', foreign_keys=[idCultivo])
+    Direccion=relationship('DireccionesClientes', foreign_keys=[idDireccion])
 
     def insertar(self):
         db.session.add(self)

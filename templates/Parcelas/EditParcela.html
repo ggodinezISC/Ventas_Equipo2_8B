@@ -1,60 +1,57 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Clientes/modificar" method="POST">
+        <form action="/Parcelas/modificar" method="POST">
 
             <div class="form-group">
-                <input type="number" value="{{Cliente.IdCliente}}" name="IdCliente" placeholder="IdCLiente" class="form-control" readonly>
+                <input type="number" value="{{Parcela.idParcela}}" name="IdParcela" placeholder="IdParcela" class="form-control" readonly>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.Nombre}}" name="Nombre" placeholder="Nombre" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.RazonSocial}}" name="Razon" placeholder="Razon Social" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="number" value="{{Cliente.LimiteCredito}}" name="Limite" placeholder="Limite de Crédito" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.Rfc}}" name="Rfc" placeholder="RFC" maxlength="13" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="email" value="{{Cliente.Email}}" name="Email" placeholder="Email" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="password" value="{{Cliente.Password}}" name="Password" placeholder="Nueva Password" class="form-control" maxlength="15" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.Telefono}}" maxlength="10" name="Telefono" placeholder="Teléfono" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Cliente.Tipo=="A"%}
-                      <option value="{{Cliente.Tipo}}" selected>Agricultor</option>
-                      <option value="T">Tienda</option>
+                <select class="form-control" name="IdCliente" id="IdCliente">
+                {% for cliente in Clientes %}
+                    {%if cliente.Estatus=="A"%}
+                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
                     {%endif%}
-                    {%if Cliente.Tipo=="T"%}
-                      <option value="{{Cliente.Tipo}}" selected>Tienda</option>
-                      <option value="A" >Agricultor</option>
+                {% endfor %}
+                <option value="{{Parcela.Cliente.IdCliente}}" selected>{{Parcela.Cliente.Nombre}}</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <select class="form-control" name="IdCultivo" id="IdCultivo">
+                {% for cli in Cultivo %}
+                    {%if cli.Estatus=="A"%}
+                      <option value="{{cli.IdCultivo}}" >{{cli.Nombre}}</option>
                     {%endif%}
+                {% endfor %}
+                <option value="{{Parcela.Cultivo.IdCultivo}}" selected>{{Parcela.Cultivo.Nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
+                <select class="form-control" name="IdDireccion" id="IdDireccion">
+                {% for cli in Direccion %}
+                    {%if cli.estatus=="A"%}
+                      <option value="{{cli.idDireccion}}">{{cli.idDireccion}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Parcela.idDireccion}}" selected>{{Parcela.idDireccion}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="number" value="{{Parcela.extension}}" name="Extension" id="Extension" placeholder="Extension" class="form-control" required>
+            </div>
+
+            
                 <select class="form-control" name="Estatus" id="Estatus">
-                    {%if Cliente.Estatus=="A"%}
-                      <option value="{{Cliente.Estatus}}" selected>Activo</option>
+                    {%if Parcela.estatus=="A"%}
+                      <option value="{{Parcela.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
                     {%endif%}
-                    {%if Cliente.Estatus=="I"%}
-                      <option value="{{Cliente.Estatus}}" selected>Inactivo</option>
+                    {%if Parcela.estatus=="I"%}
+                      <option value="{{Parcela.estatus}}" selected>Inactivo</option>
                       <option value="A" >Activo</option>
                     {%endif%}
                 </select>

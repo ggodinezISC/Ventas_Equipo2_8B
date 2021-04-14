@@ -528,7 +528,13 @@ def eliminarDireccion(id):
 def consultaParcelas():
     D = Parcela()
     D = D.consultaGeneral()
-    return render_template('/Parcelas/AdministrarParcela.html',Parcela=D)
+    E = Cliente()
+    E = E.consultaGeneral()
+    F = Cultivo()
+    F = F.consultaGeneral()
+    G = DireccionesClientes()
+    G = G.consultaGeneral()
+    return render_template('/Parcelas/AdministrarParcela.html',Parcela=D,Clientes=E,Cultivo=F,Direccion=G)
 
 @app.route('/AddParcela',methods=['POST'])
 @login_required
@@ -548,16 +554,22 @@ def guardarParcela():
 @app.route('/EditParcela/<int:id>')
 @login_required
 def consultarParcela(id):
-    D = Parcelas()
+    D = Parcela()
     D.idParcela = id
+    E = Cliente()
+    E = E.consultaGeneral()
+    F = Cultivo()
+    F = F.consultaGeneral()
+    G = DireccionesClientes()
+    G = G.consultaGeneral()
     D = D.consultaIndividual()
-    return render_template('Parcelas/EditParcela.html', Parcela=D)
+    return render_template('Parcelas/EditParcela.html', Parcela=D, Clientes=E,Cultivo=F,Direccion=G)
 
 @app.route('/Parcelas/modificar', methods=['POST'])
 @login_required
 def actualizarParcela():
     try:
-        D = Parcelas()
+        D = Parcela()
         D.idParcela = request.form['IdParcela']
         D.idCliente = request.form['IdCliente']
         D.idCultivo = request.form['IdCultivo']
