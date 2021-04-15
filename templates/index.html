@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static',filename='CSS/main.css')}}">
-    <script>
-        function CalcularFecha()
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <title>AgroquímicosElGeiser</title>
+
+<script>
+    function Nombre()
+        {
+            var a=document.getElementById("User").getAttribute("value");
+            var b=a.split(" ");
+            document.getElementById("User").innerHTML = "Bienvenido:" +b[0];
+        }
+    function CalcularFecha()
         {
             var f = new Date();
             dia= f.getDate();
             mes= f.getMonth()+1;
             año= f.getYear()+1900;
             fecha=dia+"/"+ mes + "/" + año;
-            document.getElementById("Fecha").innerHTML = fecha;
+            document.getElementById("Fecha").innerHTML = "Fecha:"+fecha;
+
+            Nombre();
             generateTime();
         }
         function generateTime() {
@@ -31,8 +42,7 @@
      //  Concatenando variables | Usando ES6: Template Strings (Template literals) 
     let mainTime = `${hours}:${minutes}:${seconds}`;
     // Escribo la hora en el elemento h1 con id="time"
-    document.getElementById("Hora").innerHTML = mainTime;
-  
+    document.getElementById("Hora").innerHTML = "Hora:"+mainTime;
 }
 
 // Si quiero que el efecto del reloj se vea correctamente, tengo que usar un setInterval de 1000
@@ -41,56 +51,293 @@ setInterval(() => {
     generateTime();
 }, 1000);
     </script>
-    <title>Agroquímicos el Geiser</title>
-    
 </head>
 
-<header class="contenedor">
-        
-        
-    <nav class="dropdown">
-        <ul>
-            <li>
-                <a href="">
-                    <img src="{{url_for('static',filename='Imagenes/user.png')}}" alt="" class="usuario">
-                </a>
-            </li>
-            <li><a href="#">Menu</a>
-                <ul>
-                    <li><a href="/Asociaciones">Asociaciones</a></li>
-                    <li><a href="/Clientes">Clientes</a></li>
-                    <li><a href="/Cultivos">Cultivos</a></li>
-                    <li><a href="/Miembros">Miembros</a></li>
-                </ul>
-            </li>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="#">Historial</a></li>
-            <li><a href="#">Nosotros</a>
-                <ul>
-                    <li><a href="#">Misión</a></li>
-                    <li><a href="#">Visión</a></li>
-                    <li><a href="#">Valores</a></li>
-                </ul>
-            </li>
-            <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
-            <li>Bienvenido {{current_user.Nombre}}</li>
-            <li>
-                <h1 class="main_time" id="Fecha"></h1>
-            </li>
-            <li>
-                <h1 class="main_time" id="Hora"></h1>
-              </li>
-        </ul>
-    </nav>
-    
 
-</header>
-<main>
-   
-</main>
+
 <body onload="CalcularFecha()">
-    
+    <header>
+        <div class="container">
+            <input type="checkbox" name="" id="check">
+            
+            <div class="logo-container">
+                <h3 class="logo"><span>Agroquímicos el </span>Geiser</h3>
+            </div>
+
+            <div class="nav-btn">
+                <div class="nav-links">
+                    <ul>
+                        <li class="nav-link" style="--i: .85s">
+                            <a>Menu<i class="fas fa-caret-down"></i></a>
+                            <div class="dropdown">
+                                <ul>
+                                    <li class="dropdown-link">
+                                        <a>Recursos Humanos<i class="fas fa-caret-down"></i></a>
+                                        <div class="dropdown second">
+                                            <ul>
+                                                <li class="dropdown-link">
+                                                    <a>Sección1<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección2<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección3<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección4<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <div class="arrow"></div>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-link">
+                                        <a>Ventas<i class="fas fa-caret-down"></i></a>
+                                        <div class="dropdown second">
+                                            <ul>
+                                                <li class="dropdown-link">
+                                                    <a>Entrega 1:<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="/Clientes">Clientes</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="/Asociaciones">Asociaciones</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="/Cultivos">Cultivos</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="/Miembros">Miembros</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Entrega 2<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Entrega 3<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Entrega 4<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <div class="arrow"></div>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-link">
+                                        <a>Compras<i class="fas fa-caret-down"></i></a>
+                                        <div class="dropdown second">
+                                            <ul>
+                                                <li class="dropdown-link">
+                                                    <a>Sección1<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección2<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div> 
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección3<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="dropdown-link">
+                                                    <a>Sección4<i class="fas fa-caret-down"></i></a>
+                                                    <div class="dropdown second">
+                                                        <ul>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 1</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 2</a>
+                                                            </li>
+                                                            <li class="dropdown-link">
+                                                                <a href="#">Tabla 3</a>
+                                                            </li>
+                                                            <div class="arrow"></div>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <div class="arrow"></div>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <div class="arrow"></div>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-link" style="--i: .6s">
+                            <a>Historial</a>
+                        </li>
+                        <li class="nav-link" style="--i: .6s">
+                            <a id="Fecha"></a>
+                        </li>
+                        <li class="nav-link" style="--i: .6s">
+                            <a id=Hora></a>
+                        </li><li class="nav-link" style="--i: .6s">
+                            <a id="User" value="{{current_user.Nombre}}"></a>
+                        </li>
+                        <div class="log-sign" style="--i: 1.8s">
+                            <a href="/cerrarSesion" class="btn transparent">Salir</a>
+                        </div>
+                    </ul>
+                </div>
+
+                
+            </div>
+
+            <div class="hamburger-menu-container">
+                <div class="hamburger-menu">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section>
+            <div class="overlay"></div>
+        </section>
+    </main>
 </body>
+
 </html>
-
-

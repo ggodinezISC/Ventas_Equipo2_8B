@@ -26,7 +26,7 @@ def login():
             login_user(c)
             return redirect(url_for('inicio'))
         else:
-            return 'Datos Incorrectos'
+            return render_template('Errores/error500.html',mensaje='Datos incorrectos de inicio')
     except:
         abort(500)
 
@@ -67,14 +67,14 @@ def guardarAsociacion():
         a = a.consultaGeneral()
         for asociacion in a:
             if(str(asociacion.Nombre) == request.form['Nombre']):
-                return 'Datos repetidos (Nombre)'
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Nombre)')
         aso = Asociacion()
         aso.Nombre = request.form['Nombre']
         aso.Estatus = request.form['Estatus']
         aso.insertar()
         return redirect(url_for('consultaAsociaciones'))
     except:
-        return 'No se pudo realizar la inserción'
+        return render_template('Errores/error500.html',mensaje='No se pudo realizar la inserción')
 
 @app.route('/EditAsociacion/<int:id>')
 @login_required
@@ -85,20 +85,26 @@ def consultarAsociacion(id):
         a = a.consultaIndividual()
         return render_template('Asociaciones/EditAsociacion.html', Asociacion=a)
     except:
-        return 'No se cargaron los datos correctamente'
+        return render_template('Errores/error400.html',mensaje='No se cargaron los datos correctamente')
 
 @app.route('/Asociacion/modificar', methods=['POST'])
 @login_required
 def actualizarAsociacion():
     try:
-        a = Asociacion()
-        a.IdAsociacion = request.form['IdAsociacion']
-        a.Nombre = request.form['Nombre']
-        a.Estatus = request.form['Estatus']
-        a.actualizar()
-        return redirect(url_for('consultaAsociaciones'))
+        A = Asociacion()
+        A = A.consultaGeneral()
+        for asociacion in A:
+            if(str(asociacion.Nombre) == request.form['Nombre']):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Nombre)')
+            else:
+                aso = Asociacion()
+                a.IdAsociacion = request.form['IdAsociacion']
+                a.Nombre = request.form['Nombre']
+                a.Estatus = request.form['Estatus']
+                a.actualizar()
+                return redirect(url_for('consultaAsociaciones'))
     except:
-        return 'No se realizó la actualización, información incorrecta'
+        return render_template('Errores/error500.html',mensaje='No se cargó la página')
 
 @app.route('/DeleteAsociacion/<int:id>')
 @login_required
@@ -136,7 +142,7 @@ def guardarMiembro():
         m.insertar()
         return redirect(url_for('consultaMiembros'))
     except:
-        return'Campos Vacíos o Repetidos'
+        return  render_template('Errores/error500.html',mensaje='Campos Vacíos o Repetidos')
 
 @app.route('/EditMiembro/<int:idcli>/<int:idaso>')
 @login_required
@@ -163,7 +169,7 @@ def actualizarMiembro():
         m.actualizar()
         return redirect(url_for('consultaMiembros'))
     except:
-        return 'No se actualizó la información'
+        return  render_template('Errores/error500.html',mensaje='No se actualizó')
 
 @app.route('/DeleteMiembro/<int:idcli>/<int:idaso>')
 @login_required
@@ -190,7 +196,7 @@ def guardarCliente():
         c = c.consultaGeneral()
         for cliente in c:
             if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
-                return 'Datos repetidos (RFC, Teléfono, Email)'
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (RFC, Teléfono, Email)')
         C = Cliente()
         C.Nombre = request.form['Nombre']
         C.Password = request.form['Password']
@@ -202,14 +208,14 @@ def guardarCliente():
         C.Tipo = request.form['Tipo']
         C.Estatus = request.form['Estatus']
         if(int(C.LimiteCredito) <= 0):
-            return 'Limite de credito no valido'
+            return  render_template('Errores/error500.html',mensaje='Limite de credito no valido')
         regex = "^(\d{10}$)"    
         if(re.match(regex,str(C.Telefono))==None):
-            return 'Teléfono no válido'
+            return  render_template('Errores/error500.html',mensaje='Teléfono no válido')
         
         regex = "^(\D{4}\d{6}\D{3}$)"   
         if(re.match(regex,str(C.Rfc))==None):
-            return 'Rfc no válido LLLDDDDDDLLL'
+            return  render_template('Errores/error500.html',mensaje='Rfc no válido LLLDDDDDDLLL')
         
         #Minimo 8 caracteres
         #Maximo 15
@@ -220,7 +226,7 @@ def guardarCliente():
         #Al menos 1 caracter especial de estos 3: $ % &
         regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
         if(re.match(regex,str(C.Password))==None):
-            return 'Password debil'
+            return  render_template('Errores/error500.html',mensaje='Password debil')
 
         C.insertar()
         return redirect(url_for('consultaClientes'))
@@ -245,7 +251,7 @@ def actualizarCliente():
         for cliente in c:
             if(int(cliente.IdCliente) != int(request.form['IdCliente'])):
                 if(str(cliente.Rfc) == request.form['Rfc'] or str(cliente.Telefono) == request.form['Telefono'] or str(cliente.Email)== request.form['Email']):
-                    return 'Datos repetidos (Email, Telefono, RFC)'
+                    return  render_template('Errores/error500.html',mensaje='Datos repetidos (Email, Telefono, RFC)')
         C = Cliente()
         C.IdCliente = request.form['IdCliente']
         C.Nombre = request.form['Nombre']
@@ -258,15 +264,15 @@ def actualizarCliente():
         C.Tipo = request.form['Tipo']
         C.Estatus = request.form['Estatus']
         if(float(C.LimiteCredito) <= 0):
-            return 'Limite de credito no valido'
+            return  render_template('Errores/error500.html',mensaje='Limite de credito no valido')
 
         regex = "^(\d{10}$)"   
         if(re.match(regex,str(C.Telefono))==None):
-            return 'Teléfono no válido'
+            return  render_template('Errores/error500.html',mensaje='Teléfono no válido')
         
         regex = "^(\D{4}\d{6}\D{3}$)"   
         if(re.match(regex,str(C.Rfc))==None):
-            return 'Rfc no válido'
+            return  render_template('Errores/error500.html',mensaje='Rfc no válido')
 
         #Minimo 8 caracteres
         #Maximo 15
@@ -277,12 +283,12 @@ def actualizarCliente():
         #Al menos 1 caracter especial de estos 3: $ % &
         regex = "^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$)"   
         if(re.match(regex,str(C.Password))==None):
-            return 'Password debil'
+            return  render_template('Errores/error500.html',mensaje='Password debil')
             
         C.actualizar()
         return redirect(url_for('consultaClientes'))
     except:
-        return 'No se actualizó la información'
+        return  render_template('Errores/error500.html',mensaje='No se actualizó la información')
 
 @app.route('/DeleteCliente/<int:id>')
 @login_required
@@ -311,7 +317,7 @@ def guardarCultivo():
         c.insertar()
         return redirect(url_for('consultaCultivo'))
     except:
-        return 'No se guardó la información'
+        return  render_template('Errores/error500.html',mensaje='No se guardó la información')
 
 @app.route('/EditCultivo/<int:id>')
 @login_required
@@ -333,7 +339,7 @@ def actualizarCultivo():
         c.actualizar()
         return redirect(url_for('consultaCultivo'))
     except:
-        return 'No se actualizó la información'
+        return  render_template('Errores/error500.html',mensaje='No se actualizó la información')
 
 @app.route('/DeleteCultivo/<int:id>')
 @login_required
@@ -780,6 +786,19 @@ def eliminarMantenimiento(id):
 #Fin Crud Mantenimiento
 
 
+@app.errorhandler(400)
+def error_400(e):
+    return render_template('Errores/error404.html',mensaje='La pagina que buscas No Existe en esta plataforma'),400
+
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('Errores/error404.html',mensaje='La pagina que buscas No Existe en esta plataforma'),404
+
+@app.errorhandler(500)
+def error_500(e):
+    return render_template('Errores/error500.html',mensaje='Introdujiste información errónea en algunos campos'),500
+
 if __name__ == '__main__':
     db.init_app(app)
     app.run(debug=True)
+
