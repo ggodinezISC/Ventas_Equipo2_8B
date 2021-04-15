@@ -1,60 +1,44 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Clientes/modificar" method="POST">
+        <form action="/Contacto/modificar" method="POST">
 
             <div class="form-group">
-                <input type="number" value="{{Cliente.IdCliente}}" name="IdCliente" placeholder="IdCLiente" class="form-control" readonly>
+                <input type="number" value="{{Contacto.idContacto}}" name="IdContacto" placeholder="IdContacto" class="form-control" readonly>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.Nombre}}" name="Nombre" placeholder="Nombre" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.RazonSocial}}" name="Razon" placeholder="Razon Social" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="number" value="{{Cliente.LimiteCredito}}" name="Limite" placeholder="Limite de Crédito" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.Rfc}}" name="Rfc" placeholder="RFC" maxlength="13" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="email" value="{{Cliente.Email}}" name="Email" placeholder="Email" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="password" value="{{Cliente.Password}}" name="Password" placeholder="Nueva Password" class="form-control" maxlength="15" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.Telefono}}" maxlength="10" name="Telefono" placeholder="Teléfono" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Cliente.Tipo=="A"%}
-                      <option value="{{Cliente.Tipo}}" selected>Agricultor</option>
-                      <option value="T">Tienda</option>
+                <select class="form-control" name="IdCliente" id="IdCliente">
+                {% for cliente in Cliente %}
+                    {%if cliente.Estatus=="A"%}
+                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
                     {%endif%}
-                    {%if Cliente.Tipo=="T"%}
-                      <option value="{{Cliente.Tipo}}" selected>Tienda</option>
-                      <option value="A" >Agricultor</option>
-                    {%endif%}
+                {% endfor %}
+                <option value="{{Contacto.idCliente}}" selected>{{Contacto.Cliente.Nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
+                <input type="text" value="{{Contacto.nombre}}" name="Nombre" maxlength="100" placeholder="Nombre" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="tel" value="{{Contacto.telefono}}" maxlength="10" name="Telefono" placeholder="Telefono" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="email" value="{{Contacto.email}}" maxlength="100" name="Email" placeholder="Email" maxlength="13" class="form-control" required>
+            </div>
+
+
+            <div class="form-group">
                 <select class="form-control" name="Estatus" id="Estatus">
-                    {%if Cliente.Estatus=="A"%}
-                      <option value="{{Cliente.Estatus}}" selected>Activo</option>
+                    {%if Contacto.estatus=="A"%}
+                      <option value="{{Contacto.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
                     {%endif%}
-                    {%if Cliente.Estatus=="I"%}
-                      <option value="{{Cliente.Estatus}}" selected>Inactivo</option>
+                    {%if Contacto.estatus=="I"%}
+                      <option value="{{Contacto.estatus}}" selected>Inactivo</option>
                       <option value="A" >Activo</option>
                     {%endif%}
                 </select>

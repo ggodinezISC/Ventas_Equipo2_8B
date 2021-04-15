@@ -291,6 +291,7 @@ class ContactosClientes(db.Model):
     telefono        = Column(String, nullable=False)
     email       = Column(String, nullable=False)
     estatus       = Column(String, nullable=False)
+    Cliente=relationship('Cliente', foreign_keys=[idCliente])
 
     def insertar(self):
         db.session.add(self)

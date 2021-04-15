@@ -1,60 +1,64 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Clientes/modificar" method="POST">
+        <form action="/Mantenimiento/modificar" method="POST">
+
 
             <div class="form-group">
-                <input type="number" value="{{Cliente.IdCliente}}" name="IdCliente" placeholder="IdCLiente" class="form-control" readonly>
+                <input type="number" value="{{Mantenimiento.idMantenimiento}}"  id="IdMantenimiento" name="IdMantenimiento" placeholder="IdMantenimiento" class="form-control" readonly required>
+            </div>
+            
+            <div class="form-group">
+                <select class="form-control" name="IdUnidad" id="IdUnidad">
+                {% for cliente in Unidades %}
+                    {%if cliente.estatus=="A"%}
+                      <option value="{{cliente.idUnidadTransporte}}" >{{cliente.idUnidadTransporte}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.idUnidadTransporte}}</option>
+                </select>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.Nombre}}" name="Nombre" placeholder="Nombre" class="form-control" required>
+                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.RazonSocial}}" name="Razon" placeholder="Razon Social" class="form-control" required>
+                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="number" value="{{Cliente.LimiteCredito}}" name="Limite" placeholder="Limite de Crédito" class="form-control" required>
+                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="RFC" maxlength="100" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Cliente.Rfc}}" name="Rfc" placeholder="RFC" maxlength="13" class="form-control" required>
+                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required>
             </div>
-
-            <div class="form-group">
-                <input type="email" value="{{Cliente.Email}}" name="Email" placeholder="Email" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <input type="password" value="{{Cliente.Password}}" name="Password" placeholder="Nueva Password" class="form-control" maxlength="15" required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Cliente.Telefono}}" maxlength="10" name="Telefono" placeholder="Teléfono" class="form-control" required>
-            </div>
+            
             <div class="form-group">
                 <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Cliente.Tipo=="A"%}
-                      <option value="{{Cliente.Tipo}}" selected>Agricultor</option>
-                      <option value="T">Tienda</option>
+                    {%if Mantenimiento.tipo=="C"%}
+                      <option value="{{Mantenimiento.tipo}}" selected>Completo</option>
+                      <option value="P">Parcial</option>
                     {%endif%}
-                    {%if Cliente.Tipo=="T"%}
-                      <option value="{{Cliente.Tipo}}" selected>Tienda</option>
-                      <option value="A" >Agricultor</option>
+                    {%if Mantenimiento.tipo=="P"%}
+                      <option value="{{Mantenimiento.Tipo}}" selected>Parcial</option>
+                      <option value="C" >Completo</option>
                     {%endif%}
                 </select>
             </div>
 
             <div class="form-group">
                 <select class="form-control" name="Estatus" id="Estatus">
-                    {%if Cliente.Estatus=="A"%}
-                      <option value="{{Cliente.Estatus}}" selected>Activo</option>
+                    {%if Mantenimiento.estatus=="A"%}
+                      <option value="{{Mantenimiento.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
                     {%endif%}
-                    {%if Cliente.Estatus=="I"%}
-                      <option value="{{Cliente.Estatus}}" selected>Inactivo</option>
+                    {%if Mantenimiento.estatus=="I"%}
+                      <option value="{{Mantenimiento.estatus}}" selected>Inactivo</option>
                       <option value="A" >Activo</option>
                     {%endif%}
                 </select>

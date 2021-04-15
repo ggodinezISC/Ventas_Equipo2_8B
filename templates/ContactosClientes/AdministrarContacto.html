@@ -14,41 +14,30 @@
         {% endfor %} {% endif %} {% endwith %}
 
         <div class="card card-body">
-            <form action="/AddCliente" method="POST">
+            <form action="/AddContacto" method="POST">
 
                 <div class="form-group">
-                    <input type="text" name="Nombre" placeholder="Nombre" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" name="Razon" placeholder="Razon Social" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="number" name="Limite" placeholder="Limite de Crédito" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" name="Rfc" placeholder="RFC" maxlength="13" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="Email" placeholder="Email" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" name="Password" placeholder="Password" class="form-control" maxlength="15" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" maxlength="10" name="Telefono" placeholder="Teléfono" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <select class="form-control" name="Tipo" id="Tipo">
-                        <option value="A" selected>Agricultor</option>
-                        <option value="T" selected>Tienda</option>
+                    <select class="form-control" name="IdCliente" id="IdCliente">
+                    {% for cliente in Cliente %}
+                        {%if cliente.Estatus=="A"%}
+                          <option value="{{cliente.IdCliente}}" selected>{{cliente.Nombre}}</option>
+                        {%endif%}
+                    {% endfor %}
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <input type="text" name="Nombre" maxlength="100" placeholder="Nombre" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" maxlength="10" name="Telefono" placeholder="Telefono" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" maxlength="100" name="Email" placeholder="Email" maxlength="13" class="form-control" required>
+                </div>
+
                 <div class="form-group">
                     <select class="form-control" name="Estatus" id="Estatus">
                         <option value="A" selected>Activo</option>
@@ -65,74 +54,61 @@
     </div>
 
     <div class="col-md-7">
-        <p>Clientes Activos</p>
+        <p>Contacto de Clientes Activos</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
+                    <td>IdContacto</td>
+                    <td>IdCliente</td>
                     <td>Nombre</td>
-                    <td>RazonSocial</td>
-                    <td>Credito</td>
-                    <td>Rfc</td>
-                    <td>Email</td>
-                    <td>Password</td>
                     <td>Telefono</td>
-                    <td>Tipo</td>
+                    <td>Email</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cli in Cliente %}
-                {%if cli.Estatus=="A"%}
+                {% for cli in Contacto %}
+                {%if cli.estatus=="A"%}
                 <tr>
-                    <td>{{cli.Nombre}}       </td>
-                    <td>{{cli.RazonSocial}}       </td>
-                    <td>{{cli.LimiteCredito}}       </td>
-                    <td>{{cli.Rfc}}       </td>
-                    <td>{{cli.Email}}       </td>
-                    <td>{{cli.Password}}       </td>
-                    <td>{{cli.Telefono}}       </td>
-                    <td>{{cli.Tipo}}       </td>
-                    <td>{{cli.Estatus}}       </td>
+                    <td>{{cli.idContacto}}       </td>
+                    <td>{{cli.idCliente}}       </td>
+                    <td>{{cli.nombre}}       </td>
+                    <td>{{cli.telefono}}       </td>
+                    <td>{{cli.email}}       </td>
+                    <td>{{cli.estatus}}       </td>
                     <td>
-                        <a href="/EditCliente/{{cli.IdCliente}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteCliente/{{cli.IdCliente}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditContacto/{{cli.idContacto}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteContacto/{{cli.idContacto}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                     </td>
                 </tr>
                 {%endif%}
                 {% endfor %}
             </tbody>
         </table>
-        <p>Clientes Inactivos</p>
+        <p>Contacto de Clientes Inactivos</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
+                    <td>IdContacto</td>
+                    <td>IdCliente</td>
                     <td>Nombre</td>
-                    <td>RazonSocial</td>
-                    <td>Credito</td>
-                    <td>Rfc</td>
-                    <td>Email</td>
-                    <td>Password</td>
                     <td>Telefono</td>
-                    <td>Tipo</td>
+                    <td>Email</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cli in Cliente %}
-                {%if cli.Estatus=="I"%}
+                {% for cli in Contacto %}
+                {%if cli.estatus=="I"%}
                 <tr>
-                    <td>{{cli.Nombre}}       </td>
-                    <td>{{cli.RazonSocial}}       </td>
-                    <td>{{cli.LimiteCredito}}       </td>
-                    <td>{{cli.Rfc}}       </td>
-                    <td>{{cli.Email}}       </td>
-                    <td>{{cli.Password}}       </td>
-                    <td>{{cli.Telefono}}       </td>
-                    <td>{{cli.Tipo}}       </td>
-                    <td>{{cli.Estatus}}       </td>
+                    <td>{{cli.idContacto}}       </td>
+                    <td>{{cli.idCliente}}       </td>
+                    <td>{{cli.nombre}}       </td>
+                    <td>{{cli.telefono}}       </td>
+                    <td>{{cli.email}}       </td>
+                    <td>{{cli.estatus}}       </td>
                     <td>
-                        <a href="/EditCliente/{{cli.IdCliente}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteCliente/{{cli.IdCliente}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditContacto/{{cli.idContacto}}" class="btn btn-warning btn-block">Editar</a>
                     </td>
                 </tr>
                 {%endif%}

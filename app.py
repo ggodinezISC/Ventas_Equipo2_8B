@@ -597,7 +597,9 @@ def eliminarParcela(id):
 def consultaContactos():
     D = ContactosClientes()
     D = D.consultaGeneral()
-    return render_template('/ContactosCliente/AdministrarContacto.html',Contacto=D)
+    C = Cliente()
+    C = C.consultaGeneral()
+    return render_template('/ContactosClientes/AdministrarContacto.html',Contacto=D,Cliente=C)
 
 @app.route('/AddContacto',methods=['POST'])
 @login_required
@@ -620,7 +622,9 @@ def consultarContacto(id):
     D = ContactosClientes()
     D.idContacto = id
     D = D.consultaIndividual()
-    return render_template('ContactosCliente/EditContacto.html', Contacto=D)
+    C = Cliente()
+    C = C.consultaGeneral()
+    return render_template('ContactosClientes/EditContacto.html', Contacto=D, Cliente=C)
 
 @app.route('/Contacto/modificar', methods=['POST'])
 @login_required
@@ -715,7 +719,9 @@ def eliminarUnidad(id):
 def consultaMantenimientos():
     D = Mantenimiento()
     D = D.consultaGeneral()
-    return render_template('/Mantenimientos/AdministrarMantenimiento.html',Mantenimientos=D)
+    F = UnidadesTransportes()
+    F = F.consultaGeneral()
+    return render_template('/Mantenimientos/AdministrarMantenimiento.html',Mantenimientos=D,Unidades=F)
 
 @app.route('/AddMantenimiento',methods=['POST'])
 @login_required
@@ -727,7 +733,7 @@ def guardarMantenimiento():
         D.fechaFin = request.form['FechaF']
         D.taller = request.form['Taller']
         D.costo = request.form['Costo']
-        D.comentario = request.form['Comentario']
+        D.comentarios = request.form['Comentarios']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
         D.insertar()
@@ -741,7 +747,9 @@ def consultarMantenimiento(id):
     D = Mantenimiento()
     D.idMantenimiento = id
     D = D.consultaIndividual()
-    return render_template('Mantenimientos/EditMantenimiento.html', Mantenimiento=D)
+    F = UnidadesTransportes()
+    F = F.consultaGeneral()
+    return render_template('Mantenimientos/EditMantenimiento.html', Mantenimiento=D,Unidades=F)
 
 @app.route('/Mantenimiento/modificar', methods=['POST'])
 @login_required
@@ -754,7 +762,7 @@ def actualizarMantenimiento():
         D.fechaFin = request.form['FechaF']
         D.taller = request.form['Taller']
         D.costo = request.form['Costo']
-        D.comentario = request.form['Comentario']
+        D.comentarios = request.form['Comentarios']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
         D.actualizar()
