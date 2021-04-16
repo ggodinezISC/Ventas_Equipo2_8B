@@ -23,7 +23,7 @@
             mes= f.getMonth()+1;
             año= f.getYear()+1900;
             fecha=dia+"/"+ mes + "/" + año;
-            document.getElementById("Fecha").innerHTML = "Fecha:"+fecha;
+            document.getElementById("Fecha").innerHTML = "Fecha: "+fecha;
 
             Nombre();
             generateTime();
@@ -42,7 +42,7 @@
      //  Concatenando variables | Usando ES6: Template Strings (Template literals) 
     let mainTime = `${hours}:${minutes}:${seconds}`;
     // Escribo la hora en el elemento h1 con id="time"
-    document.getElementById("Hora").innerHTML = "Hora:"+mainTime;
+    document.getElementById("Hora").innerHTML = "Hora: "+mainTime;
 }
 
 // Si quiero que el efecto del reloj se vea correctamente, tengo que usar un setInterval de 1000
@@ -310,11 +310,6 @@ setInterval(() => {
                             <a>Historial</a>
                         </li>
                         <li class="nav-link" style="--i: .6s">
-                            <a id="Fecha"></a>
-                        </li>
-                        <li class="nav-link" style="--i: .6s">
-                            <a id=Hora></a>
-                        </li><li class="nav-link" style="--i: .6s">
                             <a id="User" value="{{current_user.Nombre}}"></a>
                         </li>
                         <div class="log-sign" style="--i: 1.8s">
@@ -334,9 +329,20 @@ setInterval(() => {
         </div>
     </header>
     <main>
-        <section>
-            <div class="overlay"></div>
+    <div >
+        <section >
+            <br>
+            <ul>
+                <li style="text-align: center;">
+                    <h1 id="Fecha"></h1>
+                </li>
+
+                <li style="text-align: center;">
+                    <h1 id=Hora></h1>
+                </li>
+            </ul>
         </section>
+    </div>
     </main>
 </body>
 
