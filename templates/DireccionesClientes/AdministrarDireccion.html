@@ -1,6 +1,6 @@
 {% extends 'Layout.html' %} {% block body%}
 
-
+</script>
 <div class="row">
     <div class="col-md-5">
 
@@ -90,26 +90,41 @@
             </thead>
             <tbody>
                 {% for cli in Direccion %}
-                {%if cli.estatus=="A"%}
-                <tr>
-                    <td>{{cli.idDireccion}}       </td>
-                    <td>{{cli.Cliente.Nombre}}       </td>
-                    <td>{{cli.Ciudad.nombre}}       </td>
-                    <td>{{cli.calle}}       </td>
-                    <td>{{cli.numero}}       </td>
-                    <td>{{cli.colonia}}       </td>
-                    <td>{{cli.codigoPostal}}       </td>
-                    <td>{{cli.tipo}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
-                        <a href="/EditDireccion/{{cli.idDireccion}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteDireccion/{{cli.idDireccion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
-                    </td>
-                </tr>
-                {%endif%}
+                    {%if cli.estatus=="A" and (cli.idDireccion) <= (PosicionA*5) and (cli.idDireccion) >= ((PosicionA*5)-4) %}
+                    <tr>
+                        <td>{{cli.idDireccion}}       </td>
+                        <td>{{cli.Cliente.Nombre}}       </td>
+                        <td>{{cli.Ciudad.nombre}}       </td>
+                        <td>{{cli.calle}}       </td>
+                        <td>{{cli.numero}}       </td>
+                        <td>{{cli.colonia}}       </td>
+                        <td>{{cli.codigoPostal}}       </td>
+                        <td>{{cli.tipo}}       </td>
+                        <td>{{cli.estatus}}       </td>
+                        <td>
+                            <a href="/EditDireccion/{{cli.idDireccion}}" class="btn btn-warning btn-block">Editar</a>
+                            <a href="/DeleteDireccion/{{cli.idDireccion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endif%}
                 {% endfor %}
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionA > 1 %}
+              <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA-1}}/{{PosicionB}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasA) %}
+              <li class="page-item" selected><a class="page-link" href="/DireccionesClientes/{{x+1}}//{{PosicionB}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionA < PaginasA %}
+              <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA+1}}//{{PosicionB}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+
         <p>Direcciones de Clientes Inactivas</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
@@ -127,7 +142,7 @@
             </thead>
             <tbody>
                 {% for cli in Direccion %}
-                {%if cli.estatus=="I"%}
+                {%if cli.estatus=="I" and (cli.idDireccion) <= (PosicionB*5) and (cli.idDireccion) >= ((PosicionB*5)-4)%}
                 <tr>
                     <td>{{cli.idDireccion}}       </td>
                     <td>{{cli.Cliente.Nombre}}       </td>
@@ -140,13 +155,25 @@
                     <td>{{cli.estatus}}       </td>
                     <td>
                         <a href="/EditDireccion/{{cli.idDireccion}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteDireccion/{{cli.idDireccion}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                     </td>
                 </tr>
-                {%endif%}
+                {% endif%}
                 {% endfor %}
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionB > 1 %}
+              <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA}}/{{PosicionB-1}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasB) %}
+              <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA}}//{{x+1}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionB < PaginasB %}
+              <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA}}//{{PosicionB+1}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
     </div>
 </div>
 

@@ -459,16 +459,35 @@ def eliminarCiudad(id):
 #Fin Crud Ciudades
 
 #Inicio Crud DireccionesClientes
-@app.route('/DireccionesClientes')
+@app.route('/DireccionesClientes/<int:id>/<int:id2>')
 @login_required
-def consultaDirecciones():
+def consultaDirecciones(id,id2):
+    cantA=0;cantB=0;
     D = DireccionesClientes()
     D = D.consultaGeneral()
     E = Cliente()
     E = E.consultaGeneral()
+    for direc in D:
+        if(direc.estatus=="A"):
+            cantA+=1
+        else:
+            cantB+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    
+    if(cantB%5!=0):
+        cantB= int(cantB/5)
+        cantB+=1 
+    else:
+        cantB= int(cantB/5)
+    
+    
     F = Ciudad()
     F = F.consultaGeneral()
-    return render_template('/DireccionesClientes/AdministrarDireccion.html',Direccion=D,Clientes=E,Ciudad=F)
+    return render_template('/DireccionesClientes/AdministrarDireccion.html',Direccion=D,Clientes=E,Ciudad=F,PaginasA=cantA,PaginasB=cantB,PosicionA=id,PosicionB=id2)
 
 @app.route('/AddDireccion',methods=['POST'])
 @login_required
@@ -483,8 +502,13 @@ def guardarDireccion():
         D.codigoPostal = request.form['CP']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+        regex = "^(\d{5}$)"    
+        if(re.match(regex,str(D.codigoPostal))==None):
+            return  render_template('Errores/error500.html',mensaje='CP no válido')  
+        if(D.numero<=0):
+            return  render_template('Errores/error500.html',mensaje='Número no válido')
         D.insertar()
-        return redirect(url_for('consultaDirecciones'))
+        return redirect('/DireccionesClientes/1/1')
     except:
         return 'No se guardó la información'
 
@@ -514,8 +538,14 @@ def actualizarDireccion():
         D.codigoPostal = request.form['CP']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+
+        regex = "^(\d{5}$)"    
+        if(re.match(regex,str(D.codigoPostal))==None):
+            return  render_template('Errores/error500.html',mensaje='CP no válido')  
+        if(D.numero<=0):
+            return  render_template('Errores/error500.html',mensaje='Número no válido')
         D.actualizar()
-        return redirect(url_for('consultaDirecciones'))
+        return redirect('/DireccionesClientes/1/')
     except:
         return 'No se actualizó la información'
 
@@ -525,7 +555,7 @@ def eliminarDireccion(id):
     D= DireccionesClientes()
     D.idDireccion = id
     D.eliminar()
-    return redirect(url_for('consultaDirecciones'))        
+    return redirect('/DireccionesClientes/1/1')        
 #Fin Crud DireccionesClientes
 
 #Inicio Crud Parcelas
@@ -551,7 +581,9 @@ def guardarParcela():
         D.idCultivo = request.form['IdCultivo']
         D.idDireccion = request.form['IdDireccion']
         D.extension = request.form['Extension']
-        D.estatus = request.form['Estatus']
+        D.estatus = request.form['Estatus']   
+        if(D.extension<=0):
+            return  render_template('Errores/error500.html',mensaje='extensión no válida') 
         D.insertar()
         return redirect(url_for('consultaParcelas'))
     except:
@@ -582,6 +614,8 @@ def actualizarParcela():
         D.idDireccion = request.form['IdDireccion']
         D.extension = request.form['Extension']
         D.estatus = request.form['Estatus']
+        if(D.extension<=0):
+            return  render_template('Errores/error500.html',mensaje='extensión no válida') 
         D.actualizar()
         return redirect(url_for('consultaParcelas'))
     except:
@@ -617,6 +651,10 @@ def guardarContacto():
         D.telefono = request.form['Telefono']
         D.email = request.form['Email']
         D.estatus = request.form['Estatus']
+
+        regex = "^(\d{10}$)"    
+        if(re.match(regex,str(D.telefono))==None):
+            return  render_template('Errores/error500.html',mensaje='teléfono no válido')  
         D.insertar()
         return redirect(url_for('consultaContactos'))
     except:
@@ -643,6 +681,9 @@ def actualizarContacto():
         D.telefono = request.form['Telefono']
         D.email = request.form['Email']
         D.estatus = request.form['Estatus']
+        regex = "^(\d{10}$)"    
+        if(re.match(regex,str(D.telefono))==None):
+            return  render_template('Errores/error500.html',mensaje='teléfono no válido')  
         D.actualizar()
         return redirect(url_for('consultaContactos'))
     except:
@@ -678,6 +719,21 @@ def guardarUnidad():
         D.capacidad = request.form['Capacidad']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+        
+        d= UnidadesTransportes()
+        d=d.consultaGeneral()
+        for cliente in d:
+            if(str(cliente.placas) == request.form['Placas'] ):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Placas)')
+
+        regex = "^(\d{4}$)"   
+        if(re.match(regex,str(D.anio))==None):
+            return  render_template('Errores/error500.html',mensaje='año no válido DDDD')
+          
+        
+        if(int (D.capacidad)<=0):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')
+
         D.insertar()
         return redirect(url_for('consultaUnidades'))
     except:
@@ -704,6 +760,17 @@ def actualizarUnidad():
         D.capacidad = request.form['Capacidad']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+        
+
+        regex = "^(\d{4}$)"   
+        if(re.match(regex,str(D.anio))==None):
+            return  render_template('Errores/error500.html',mensaje='año no válido DDDD')
+          
+        
+        if(int (D.capacidad)<=0):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
+        
+
         D.actualizar()
         return redirect(url_for('consultaUnidades'))
     except:
@@ -742,6 +809,12 @@ def guardarMantenimiento():
         D.comentarios = request.form['Comentarios']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+        
+        if(D.fechaFin>=D.fechaInicio):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
+        if(int (D.costo)>0):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')
+
         D.insertar()
         return redirect(url_for('consultaMantenimientos'))
     except:
@@ -771,6 +844,10 @@ def actualizarMantenimiento():
         D.comentarios = request.form['Comentarios']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
+        if(D.fechaFin>=D.fechaInicio):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
+        if(int(D.costo)>=0):
+            return  render_template('Errores/error500.html',mensaje='capacidad no válida')
         D.actualizar()
         return redirect(url_for('consultaMantenimientos'))
     except:

@@ -8,6 +8,8 @@
     <title>Administración</title>
     <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/PanelAdministracion.css') }}">
+    <script src="{{url_for('static',filename='JS/global.js')}}" ></script>
+    
 </head>
 
 <body>
@@ -27,12 +29,12 @@
                     <a class="nav-link active" aria-current="page" href="/Clientes">Clientes</a> {% endif %} {% if current_user.is_authenticated %}
                     <a class="nav-link active" aria-current="page" href="/Estados">Estados</a> {% endif %} {% if current_user.is_authenticated %}
                     <a class="nav-link active" aria-current="page" href="/Ciudades">Ciudades</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/DireccionesClientes">DireccionesClientes</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/Parcelas">Parcelas</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/ContactosClientes">ContactosClientes</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/UnidadesTransporte">UnidadesTransporte</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/Mantenimientos">Mantenimientos</a> {% endif %} {% if current_user.is_authenticated %}
-                    <a class="nav-link active" aria-current="page" href="/cerrarSesion">Cerrar Sesion</a> {% endif %}
+                    <a class="nav-link active" aria-current="page" href="/DireccionesClientes/1/1">DireccionesClientes</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Parcelas/1/1">Parcelas</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/ContactosClientes/1/1">ContactosClientes</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/UnidadesTransporte/1/1">UnidadesTransporte</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Mantenimientos/1/1">Mantenimientos</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/cerrarSesion/1/1">Cerrar Sesion</a> {% endif %}
                     <a class="nav-link active" aria-current="page" href="/">Inicio</a>
                 </div>
             </div>
