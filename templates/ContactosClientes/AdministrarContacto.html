@@ -54,13 +54,13 @@
     </div>
 
     <div class="col-md-7">
-        <p>Contacto de Clientes Activos</p>
+        <p>Contacto de Clientes </p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
                     <td>IdContacto</td>
-                    <td>IdCliente</td>
-                    <td>Nombre</td>
+                    <td>ClienteRegistrado</td>
+                    <td>Nombre_Contacto</td>
                     <td>Telefono</td>
                     <td>Email</td>
                     <td>Estatus</td>
@@ -68,53 +68,44 @@
             </thead>
             <tbody>
                 {% for cli in Contacto %}
-                {%if cli.estatus=="A"%}
+                {%if ((cli.idContacto) <= (PosicionA*5)) and ((cli.idContacto) >= ((PosicionA*5)-4)) %}
                 <tr>
                     <td>{{cli.idContacto}}       </td>
-                    <td>{{cli.idCliente}}       </td>
+                    <td>{{cli.Cliente.Nombre}}       </td>
                     <td>{{cli.nombre}}       </td>
                     <td>{{cli.telefono}}       </td>
                     <td>{{cli.email}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
+                        {%if cli.estatus=="A"%}
+                        <td>Activo      </td>
+                        <td>
                         <a href="/EditContacto/{{cli.idContacto}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteContacto/{{cli.idContacto}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
-                    </td>
+                        </td>
+                        {%else%}
+                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td>
+                            <a href="/EditContacto/{{cli.idContacto}}" class="btn btn-warning btn-block">Editar</a>
+                            
+                        </td>
+                        {%endif%}
                 </tr>
                 {%endif%}
                 {% endfor %}
             </tbody>
         </table>
-        <p>Contacto de Clientes Inactivos</p>
-        <table class="table table-striped table-bordered bg-white table-sm">
-            <thead>
-                <tr>
-                    <td>IdContacto</td>
-                    <td>IdCliente</td>
-                    <td>Nombre</td>
-                    <td>Telefono</td>
-                    <td>Email</td>
-                    <td>Estatus</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cli in Contacto %}
-                {%if cli.estatus=="I"%}
-                <tr>
-                    <td>{{cli.idContacto}}       </td>
-                    <td>{{cli.idCliente}}       </td>
-                    <td>{{cli.nombre}}       </td>
-                    <td>{{cli.telefono}}       </td>
-                    <td>{{cli.email}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
-                        <a href="/EditContacto/{{cli.idContacto}}" class="btn btn-warning btn-block">Editar</a>
-                    </td>
-                </tr>
-                {%endif%}
-                {% endfor %}
-            </tbody>
-        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionA > 1 %}
+              <li class="page-item"><a class="page-link" href="/ContactosClientes/{{PosicionA-1}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasA) %}
+              <li class="page-item" selected><a class="page-link" href="/ContactosClientes/{{x+1}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionA < PaginasA %}
+              <li class="page-item"><a class="page-link" href="/ContactosClientes/{{PosicionA+1}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
     </div>
 </div>
 

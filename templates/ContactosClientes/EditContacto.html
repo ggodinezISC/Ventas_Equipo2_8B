@@ -9,17 +9,13 @@
 
             <div class="form-group">
                 <select class="form-control" name="IdCliente" id="IdCliente">
-                {% for cliente in Cliente %}
-                    {%if cliente.Estatus=="A"%}
-                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
+                
                 <option value="{{Contacto.idCliente}}" selected>{{Contacto.Cliente.Nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Contacto.nombre}}" name="Nombre" maxlength="100" placeholder="Nombre" class="form-control" required>
+                <input type="text" value="{{Contacto.nombre}}" name="Nombre" maxlength="100" placeholder="Nombre" class="form-control" readonly required>
             </div>
 
             <div class="form-group">

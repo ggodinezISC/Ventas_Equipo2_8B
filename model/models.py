@@ -359,6 +359,7 @@ class Mantenimiento(db.Model):
     comentarios         = Column(String, nullable=False)
     tipo                = Column(String, nullable=False)
     estatus             = Column(String, nullable=False)
+    Transporte=relationship('UnidadesTransportes', foreign_keys=[idUnidadTransporte])
 
     def insertar(self):
         db.session.add(self)

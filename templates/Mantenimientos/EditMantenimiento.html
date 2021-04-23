@@ -10,43 +10,37 @@
             
             <div class="form-group">
                 <select class="form-control" name="IdUnidad" id="IdUnidad">
-                {% for cliente in Unidades %}
-                    {%if cliente.estatus=="A"%}
-                      <option value="{{cliente.idUnidadTransporte}}" >{{cliente.idUnidadTransporte}}</option>
-                    {%endif%}
-                {% endfor %}
-                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.idUnidadTransporte}}</option>
+                
+                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.Transporte.marca}} -- {{Mantenimiento.Transporte.modelo}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" required>
+                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" readonly required>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" required>
+                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" readonly required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="RFC" maxlength="100" class="form-control" required>
+                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="Teller" maxlength="100" class="form-control" readonly required>
             </div>
             <div class="form-group">
-                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" required>
+                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" readonly required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required>
+                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" readonly required>
             </div>
             
             <div class="form-group">
                 <select class="form-control" name="Tipo" id="Tipo">
                     {%if Mantenimiento.tipo=="C"%}
                       <option value="{{Mantenimiento.tipo}}" selected>Completo</option>
-                      <option value="P">Parcial</option>
                     {%endif%}
                     {%if Mantenimiento.tipo=="P"%}
-                      <option value="{{Mantenimiento.Tipo}}" selected>Parcial</option>
-                      <option value="C" >Completo</option>
+                      <option value="{{Mantenimiento.tipo}}" selected>Parcial</option>
                     {%endif%}
                 </select>
             </div>

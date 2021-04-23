@@ -1,7 +1,8 @@
 
 create  database ERP;
 use ERP;
-
+select * from Mantenimientos;
+update Mantenimientos set tipo = "P" where idMantenimiento>0;
 /*==============================================================*/
 /* Table: Clientes                                              */
 /*==============================================================*/

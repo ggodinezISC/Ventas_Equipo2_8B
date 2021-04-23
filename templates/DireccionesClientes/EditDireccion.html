@@ -9,11 +9,6 @@
 
             <div class="form-group">
                 <select class="form-control" name="IdCliente" id="IdCliente">
-                {% for cliente in Clientes %}
-                    {%if cliente.Estatus=="A"%}
-                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
                 <option value="{{Direccion.Cliente.IdCliente}}"selected >{{Direccion.Cliente.Nombre}}</option>
                 </select>
             </div>

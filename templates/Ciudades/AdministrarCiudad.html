@@ -46,7 +46,7 @@
     </div>
 
     <div class="col-md-7">
-        <p>Ciudades Activas</p>
+        <p>Ciudades </p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
@@ -58,48 +58,43 @@
             </thead>
             <tbody>
                 {% for cli in Ciudades %}
-                {%if cli.estatus=="A"%}
+                {%if (cli.idCiudad) <= (PosicionA*5) and (cli.idCiudad) >= ((PosicionA*5)-4)%}
                 <tr>
                     <td>{{cli.idCiudad}}       </td>
                     <td>{{cli.Estado.nombre}}       </td>
                     <td>{{cli.nombre}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
+                    {%if cli.estatus=="A"%}
+                        <td>Activo      </td>
+                        <td>
                         <a href="/EditCiudad/{{cli.idCiudad}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteCiudad/{{cli.idCiudad}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
-                    </td>
+                        </td>
+                        {%else%}
+                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td>
+                            <a href="/EditCiudad/{{cli.idCiudad}}" class="btn btn-warning btn-block">Editar</a>
+                            
+                        </td>
+                        {%endif%}
                 </tr>
                 {%endif%}
                 {% endfor %}
             </tbody>
         </table>
-        <p>Ciudades Inactivas</p>
-        <table class="table table-striped table-bordered bg-white table-sm">
-            <thead>
-                <tr>
-                    <td>IdCiudad</td>
-                    <td>Estado</td>
-                    <td>NombreCiudad</td>
-                    <td>Estatus</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cli in Ciudades %}
-                {%if cli.estatus=="I"%}
-                <tr>
-                    <td>{{cli.idCiudad}}       </td>
-                    <td>{{cli.Estado.nombre}}       </td>
-                    <td>{{cli.nombre}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
-                        <a href="/EditCiudad/{{cli.idCiudad}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteCiudad/{{cli.idCiudad}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
-                    </td>
-                </tr>
-                {%endif%}
-                {% endfor %}
-            </tbody>
-        </table>
+        
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionA > 1 %}
+              <li class="page-item"><a class="page-link" href="/Ciudades/{{PosicionA-1}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasA) %}
+              <li class="page-item" selected><a class="page-link" href="/Ciudades/{{x+1}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionA < PaginasA %}
+              <li class="page-item"><a class="page-link" href="/Ciudades/{{PosicionA+1}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
     </div>
 </div>
 

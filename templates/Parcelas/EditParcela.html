@@ -9,39 +9,27 @@
 
             <div class="form-group">
                 <select class="form-control" name="IdCliente" id="IdCliente">
-                {% for cliente in Clientes %}
-                    {%if cliente.Estatus=="A"%}
-                      <option value="{{cliente.IdCliente}}" >{{cliente.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
+                
                 <option value="{{Parcela.Cliente.IdCliente}}" selected>{{Parcela.Cliente.Nombre}}</option>
                 </select>
             </div>
             
             <div class="form-group">
                 <select class="form-control" name="IdCultivo" id="IdCultivo">
-                {% for cli in Cultivo %}
-                    {%if cli.Estatus=="A"%}
-                      <option value="{{cli.IdCultivo}}" >{{cli.Nombre}}</option>
-                    {%endif%}
-                {% endfor %}
+                
                 <option value="{{Parcela.Cultivo.IdCultivo}}" selected>{{Parcela.Cultivo.Nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <select class="form-control" name="IdDireccion" id="IdDireccion">
-                {% for cli in Direccion %}
-                    {%if cli.estatus=="A"%}
-                      <option value="{{cli.idDireccion}}">{{cli.idDireccion}}</option>
-                    {%endif%}
-                {% endfor %}
+                
                 <option value="{{Parcela.idDireccion}}" selected>{{Parcela.idDireccion}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="number" value="{{Parcela.extension}}" name="Extension" id="Extension" placeholder="Extension" class="form-control" required>
+                <input type="number" value="{{Parcela.extension}}" name="Extension" id="Extension" placeholder="Extension" class="form-control" readonly required>
             </div>
 
             

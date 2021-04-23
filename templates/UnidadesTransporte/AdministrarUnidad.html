@@ -58,7 +58,7 @@
     </div>
 
     <div class="col-md-7">
-        <p>Unidades de Transporte Activas</p>
+        <p>Unidades de Transporte</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
@@ -74,7 +74,7 @@
             </thead>
             <tbody>
                 {% for cli in Unidades %}
-                {%if cli.estatus=="A"%}
+                {%if (cli.idUnidadTransporte) <= (PosicionA*5) and (cli.idUnidadTransporte) >= ((PosicionA*5)-4) %}
                 <tr>
                     <td>{{cli.idUnidadTransporte}}       </td>
                     <td>{{cli.placas}}       </td>
@@ -83,50 +83,39 @@
                     <td>{{cli.anio}}       </td>
                     <td>{{cli.capacidad}}       </td>
                     <td>{{cli.tipo}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
+                    {%if cli.estatus=="A"%}
+                        <td>Activo      </td>
+                        <td>
                         <a href="/EditUnidad/{{cli.idUnidadTransporte}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteUnidad/{{cli.idUnidadTransporte}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
-                    </td>
+                        </td>
+                        {%else%}
+                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td>
+                            <a href="/EditUnidad/{{cli.idUnidadTransporte}}" class="btn btn-warning btn-block">Editar</a>
+                            
+                        </td>
+                        {%endif%}
                 </tr>
                 {%endif%}
                 {% endfor %}
             </tbody>
         </table>
-        <p>Unidades de Transporte Activas</p>
-        <table class="table table-striped table-bordered bg-white table-sm">
-            <thead>
-                <tr>
-                    <td>IdUnidad</td>
-                    <td>Placas</td>
-                    <td>Marca</td>
-                    <td>Modelo</td>
-                    <td>Año</td>
-                    <td>Capacidad</td>
-                    <td>Tipo</td>
-                    <td>Estatus</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cli in Unidades %}
-                {%if cli.estatus=="I"%}
-                <tr>
-                    <td>{{cli.idUnidadTransporte}}       </td>
-                    <td>{{cli.placas}}       </td>
-                    <td>{{cli.marca}}       </td>
-                    <td>{{cli.modelo}}       </td>
-                    <td>{{cli.anio}}       </td>
-                    <td>{{cli.capacidad}}       </td>
-                    <td>{{cli.tipo}}       </td>
-                    <td>{{cli.estatus}}       </td>
-                    <td>
-                        <a href="/EditUnidad/{{cli.idUnidadTransporte}}" class="btn btn-warning btn-block">Editar</a>
-                    </td>
-                </tr>
-                {%endif%}
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionA > 1 %}
+              <li class="page-item"><a class="page-link" href="/UnidadesTransporte/{{PosicionA-1}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasA) %}
+              <li class="page-item" selected><a class="page-link" href="/UnidadesTransporte/{{x+1}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionA < PaginasA %}
+              <li class="page-item"><a class="page-link" href="/UnidadesTransporte/{{PosicionA+1}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        
     </div>
 </div>
 

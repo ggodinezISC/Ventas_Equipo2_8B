@@ -314,6 +314,11 @@ def guardarCultivo():
         c.Nombre = request.form['Nombre']
         c.CostoAsesoria = request.form['Costo']
         c.Estatus       = request.form['Estatus']
+        C=Cultivo()
+        C=C.consultaGeneral()
+        for direccion in C:
+            if(str(direccion.Nombre) == c.Nombre):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Nombre)')
         c.insertar()
         return redirect(url_for('consultaCultivo'))
     except:
@@ -352,12 +357,21 @@ def eliminarCultivo(id):
 
 
 #Inicio Crud Estados
-@app.route('/Estados')
+@app.route('/Estados/<int:id>')
 @login_required
-def consultaEstados():
+def consultaEstados(id):
     E = Estado()
     E = E.consultaGeneral()
-    return render_template('/Estados/AdministrarEstado.html',Estado=E)
+    cantA=0;cantB=0;
+    for direc in E:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+
+    return render_template('/Estados/AdministrarEstado.html',Estado=E,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddEstado',methods=['POST'])
 @login_required
@@ -367,8 +381,13 @@ def guardarEstado():
         E.nombre = request.form['Nombre']
         E.siglas = request.form['Siglas']
         E.estatus = request.form['Estatus']
+        d = Estado()
+        d=d.consultaGeneral()
+        for direccion in d:
+            if(str(direccion.nombre) == E.nombre):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Nombre)')
         E.insertar()
-        return redirect(url_for('consultaEstados'))
+        return redirect('/Estados/1')
     except:
         return 'No se guardó la información'
 
@@ -389,8 +408,9 @@ def actualizarEstado():
         E.nombre = request.form['Nombre']
         E.siglas = request.form['Siglas']
         E.estatus = request.form['Estatus']
+        
         E.actualizar()
-        return redirect(url_for('consultaEstados'))
+        return redirect('/Estados/1')
     except:
         return 'No se actualizó la información'
 
@@ -400,19 +420,27 @@ def eliminarEstado(id):
     E = Estado()
     E.idEstado = id
     E.eliminar()
-    return redirect(url_for('consultaEstados'))        
+    return redirect('/Estados/1')        
 #Fin Crud Estados
 
 
 #Inicio Crud Ciudades
-@app.route('/Ciudades')
+@app.route('/Ciudades/<int:id>')
 @login_required
-def consultaCiudades():
+def consultaCiudades(id):
     C = Ciudad()
     C = C.consultaGeneral()
     E = Estado()
     E = E.consultaGeneral()
-    return render_template('/Ciudades/AdministrarCiudad.html',Ciudades=C,Estados=E)
+    cantA=0;cantB=0;
+    for direc in C:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/Ciudades/AdministrarCiudad.html',Ciudades=C,Estados=E, PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddCiudad',methods=['POST'])
 @login_required
@@ -422,8 +450,14 @@ def guardarCiudad():
         C.idEstado = request.form['IdEstado']
         C.nombre = request.form['Nombre']
         C.estatus = request.form['Estatus']
+        
+        d = Ciudad()
+        d=d.consultaGeneral()
+        for direccion in d:
+            if(str(direccion.nombre) == C.nombre):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Nombre)')
         C.insertar()
-        return redirect(url_for('consultaCiudades'))
+        return redirect('/Ciudades/1')
     except:
         return 'No se guardó la información'
 
@@ -445,7 +479,7 @@ def actualizarCiudad():
         C.nombre = request.form['Nombre']
         C.estatus = request.form['Estatus']
         C.actualizar()
-        return redirect(url_for('consultaCiudades'))
+        return redirect('/Ciudades/1')
     except:
         return 'No se actualizó la información'
 
@@ -455,39 +489,30 @@ def eliminarCiudad(id):
     C = Ciudad()
     C.idCiudad = id
     C.eliminar()
-    return redirect(url_for('consultaCiudades'))        
+    return redirect('/Ciudades/1')        
 #Fin Crud Ciudades
 
 #Inicio Crud DireccionesClientes
-@app.route('/DireccionesClientes/<int:id>/<int:id2>')
+@app.route('/DireccionesClientes/<int:id>')
 @login_required
-def consultaDirecciones(id,id2):
+def consultaDirecciones(id):
     cantA=0;cantB=0;
     D = DireccionesClientes()
     D = D.consultaGeneral()
     E = Cliente()
     E = E.consultaGeneral()
     for direc in D:
-        if(direc.estatus=="A"):
-            cantA+=1
-        else:
-            cantB+=1
+        cantA+=1
     if(cantA%5!=0):
         cantA= int(cantA/5)
         cantA+=1 
     else:
         cantA= int(cantA/5)
     
-    if(cantB%5!=0):
-        cantB= int(cantB/5)
-        cantB+=1 
-    else:
-        cantB= int(cantB/5)
-    
     
     F = Ciudad()
     F = F.consultaGeneral()
-    return render_template('/DireccionesClientes/AdministrarDireccion.html',Direccion=D,Clientes=E,Ciudad=F,PaginasA=cantA,PaginasB=cantB,PosicionA=id,PosicionB=id2)
+    return render_template('/DireccionesClientes/AdministrarDireccion.html',Direccion=D,Clientes=E,Ciudad=F,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddDireccion',methods=['POST'])
 @login_required
@@ -505,10 +530,10 @@ def guardarDireccion():
         regex = "^(\d{5}$)"    
         if(re.match(regex,str(D.codigoPostal))==None):
             return  render_template('Errores/error500.html',mensaje='CP no válido')  
-        if(D.numero<=0):
+        if(int(D.numero)<=0):
             return  render_template('Errores/error500.html',mensaje='Número no válido')
         D.insertar()
-        return redirect('/DireccionesClientes/1/1')
+        return redirect('/DireccionesClientes/1')
     except:
         return 'No se guardó la información'
 
@@ -542,10 +567,10 @@ def actualizarDireccion():
         regex = "^(\d{5}$)"    
         if(re.match(regex,str(D.codigoPostal))==None):
             return  render_template('Errores/error500.html',mensaje='CP no válido')  
-        if(D.numero<=0):
+        if(int(D.numero)<=0):
             return  render_template('Errores/error500.html',mensaje='Número no válido')
         D.actualizar()
-        return redirect('/DireccionesClientes/1/')
+        return redirect('/DireccionesClientes/1')
     except:
         return 'No se actualizó la información'
 
@@ -555,13 +580,13 @@ def eliminarDireccion(id):
     D= DireccionesClientes()
     D.idDireccion = id
     D.eliminar()
-    return redirect('/DireccionesClientes/1/1')        
+    return redirect('/DireccionesClientes/1')        
 #Fin Crud DireccionesClientes
 
 #Inicio Crud Parcelas
-@app.route('/Parcelas')
+@app.route('/Parcelas/<int:id>')
 @login_required
-def consultaParcelas():
+def consultaParcelas(id):
     D = Parcela()
     D = D.consultaGeneral()
     E = Cliente()
@@ -570,7 +595,16 @@ def consultaParcelas():
     F = F.consultaGeneral()
     G = DireccionesClientes()
     G = G.consultaGeneral()
-    return render_template('/Parcelas/AdministrarParcela.html',Parcela=D,Clientes=E,Cultivo=F,Direccion=G)
+    cantA=0;cantB=0;
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+
+    return render_template('/Parcelas/AdministrarParcela.html',Parcela=D,Clientes=E,Cultivo=F,Direccion=G,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddParcela',methods=['POST'])
 @login_required
@@ -582,10 +616,10 @@ def guardarParcela():
         D.idDireccion = request.form['IdDireccion']
         D.extension = request.form['Extension']
         D.estatus = request.form['Estatus']   
-        if(D.extension<=0):
+        if(float(D.extension)<=0):
             return  render_template('Errores/error500.html',mensaje='extensión no válida') 
         D.insertar()
-        return redirect(url_for('consultaParcelas'))
+        return redirect('/Parcelas/1')
     except:
         return 'No se guardó la información'
 
@@ -594,14 +628,8 @@ def guardarParcela():
 def consultarParcela(id):
     D = Parcela()
     D.idParcela = id
-    E = Cliente()
-    E = E.consultaGeneral()
-    F = Cultivo()
-    F = F.consultaGeneral()
-    G = DireccionesClientes()
-    G = G.consultaGeneral()
     D = D.consultaIndividual()
-    return render_template('Parcelas/EditParcela.html', Parcela=D, Clientes=E,Cultivo=F,Direccion=G)
+    return render_template('Parcelas/EditParcela.html', Parcela=D)
 
 @app.route('/Parcelas/modificar', methods=['POST'])
 @login_required
@@ -614,10 +642,10 @@ def actualizarParcela():
         D.idDireccion = request.form['IdDireccion']
         D.extension = request.form['Extension']
         D.estatus = request.form['Estatus']
-        if(D.extension<=0):
+        if(float(D.extension)<=0):
             return  render_template('Errores/error500.html',mensaje='extensión no válida') 
         D.actualizar()
-        return redirect(url_for('consultaParcelas'))
+        return redirect('/Parcelas/1')
     except:
         return 'No se actualizó la información'
 
@@ -627,19 +655,27 @@ def eliminarParcela(id):
     D= Parcela()
     D.idParcela = id
     D.eliminar()
-    return redirect(url_for('consultaParcelas'))        
+    return redirect('/Parcelas/1')        
 #Fin Crud Parcelas
 
 
 #Inicio Crud ContactosCliente
-@app.route('/ContactosClientes')
+@app.route('/ContactosClientes/<int:id>')
 @login_required
-def consultaContactos():
+def consultaContactos(id):
     D = ContactosClientes()
     D = D.consultaGeneral()
     C = Cliente()
     C = C.consultaGeneral()
-    return render_template('/ContactosClientes/AdministrarContacto.html',Contacto=D,Cliente=C)
+    cantA=0;
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/ContactosClientes/AdministrarContacto.html',Contacto=D,Cliente=C,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddContacto',methods=['POST'])
 @login_required
@@ -652,11 +688,16 @@ def guardarContacto():
         D.email = request.form['Email']
         D.estatus = request.form['Estatus']
 
+        d = ContactosClientes()
+        d = d.consultaGeneral()
+        for cliente in d:
+            if(str(cliente.email) == str(D.email) or str(cliente.telefono) == str(D.telefono) ):
+                return  render_template('Errores/error500.html',mensaje='Datos repetidos (Email o Teléfono)')
         regex = "^(\d{10}$)"    
         if(re.match(regex,str(D.telefono))==None):
             return  render_template('Errores/error500.html',mensaje='teléfono no válido')  
         D.insertar()
-        return redirect(url_for('consultaContactos'))
+        return redirect('/ContactosClientes/1')
     except:
         return 'No se guardó la información'
 
@@ -685,7 +726,7 @@ def actualizarContacto():
         if(re.match(regex,str(D.telefono))==None):
             return  render_template('Errores/error500.html',mensaje='teléfono no válido')  
         D.actualizar()
-        return redirect(url_for('consultaContactos'))
+        return redirect('/ContactosClientes/1')
     except:
         return 'No se actualizó la información'
 
@@ -695,17 +736,25 @@ def eliminarContacto(id):
     D= ContactosClientes()
     D.idContacto = id
     D.eliminar()
-    return redirect(url_for('consultaContactos'))        
+    return redirect('/ContactosClientes/1')        
 #Fin Crud ContactosCliente
 
 
 #Inicio Crud UnidadesTransporte
-@app.route('/UnidadesTransporte')
+@app.route('/UnidadesTransporte/<int:id>')
 @login_required
-def consultaUnidades():
+def consultaUnidades(id):
     D = UnidadesTransportes()
     D = D.consultaGeneral()
-    return render_template('/UnidadesTransporte/AdministrarUnidad.html',Unidades=D)
+    cantA=0;
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/UnidadesTransporte/AdministrarUnidad.html',Unidades=D,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddUnidad',methods=['POST'])
 @login_required
@@ -726,6 +775,10 @@ def guardarUnidad():
             if(str(cliente.placas) == request.form['Placas'] ):
                 return  render_template('Errores/error500.html',mensaje='Datos repetidos (Placas)')
 
+        regex = "^(\d{3}-\D{4}$)"   
+        if(re.match(regex,str(D.placas))==None):
+            return  render_template('Errores/error500.html',mensaje='Placas no válidas LLL-DDDD')
+
         regex = "^(\d{4}$)"   
         if(re.match(regex,str(D.anio))==None):
             return  render_template('Errores/error500.html',mensaje='año no válido DDDD')
@@ -735,7 +788,7 @@ def guardarUnidad():
             return  render_template('Errores/error500.html',mensaje='capacidad no válida')
 
         D.insertar()
-        return redirect(url_for('consultaUnidades'))
+        return redirect('/UnidadesTransporte/1')
     except:
         return 'No se guardó la información'
 
@@ -772,7 +825,7 @@ def actualizarUnidad():
         
 
         D.actualizar()
-        return redirect(url_for('consultaUnidades'))
+        return redirect('/UnidadesTransporte/1')
     except:
         return 'No se actualizó la información'
 
@@ -782,19 +835,27 @@ def eliminarUnidad(id):
     D= UnidadesTransportes()
     D.idUnidadTransporte = id
     D.eliminar()
-    return redirect(url_for('consultaUnidades'))        
+    return redirect('/UnidadesTransporte/1')        
 #Fin Crud UnidadesTransporte
 
 
 #Inicio Crud Mantenimiento
-@app.route('/Mantenimientos')
+@app.route('/Mantenimientos/<int:id>')
 @login_required
-def consultaMantenimientos():
+def consultaMantenimientos(id):
     D = Mantenimiento()
     D = D.consultaGeneral()
     F = UnidadesTransportes()
     F = F.consultaGeneral()
-    return render_template('/Mantenimientos/AdministrarMantenimiento.html',Mantenimientos=D,Unidades=F)
+    cantA=0;
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/Mantenimientos/AdministrarMantenimiento.html',Mantenimientos=D,Unidades=F,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddMantenimiento',methods=['POST'])
 @login_required
@@ -810,13 +871,12 @@ def guardarMantenimiento():
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
         
-        if(D.fechaFin>=D.fechaInicio):
-            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
-        if(int (D.costo)>0):
-            return  render_template('Errores/error500.html',mensaje='capacidad no válida')
+        
+        if(int (D.costo)<1):
+            return  render_template('Errores/error500.html',mensaje='Costo no válido')
 
         D.insertar()
-        return redirect(url_for('consultaMantenimientos'))
+        return redirect('/Mantenimientos/1')
     except:
         return 'No se guardó la información'
 
@@ -844,12 +904,11 @@ def actualizarMantenimiento():
         D.comentarios = request.form['Comentarios']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
-        if(D.fechaFin>=D.fechaInicio):
-            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
-        if(int(D.costo)>=0):
-            return  render_template('Errores/error500.html',mensaje='capacidad no válida')
+         
+        if(float(D.costo)<0):
+            return  render_template('Errores/error500.html',mensaje='Costo no válido')
         D.actualizar()
-        return redirect(url_for('consultaMantenimientos'))
+        return redirect('/Mantenimientos/1')
     except:
         return 'No se actualizó la información'
 
@@ -859,7 +918,7 @@ def eliminarMantenimiento(id):
     D= Mantenimiento()
     D.idMantenimiento = id
     D.eliminar()
-    return redirect(url_for('consultaMantenimientos'))        
+    return redirect('/Mantenimientos/1')        
 #Fin Crud Mantenimiento
 
 
