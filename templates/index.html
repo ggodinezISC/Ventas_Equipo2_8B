@@ -320,6 +320,15 @@ setInterval(() => {
                         </li>
                         <li class="nav-link" style="--i: .6s">
                             <a>Historial</a>
+                            <div class="dropdown">
+                                <ul>
+                                    {% for a in Historial %}
+                                    <li class="dropdown-link" width=100px>
+                                        <a>{{a.Email}}<i class="fas fa-caret-down"></i></a>
+                                    </li>
+                                    {%endfor%}
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-link" style="--i: .6s">
                             <a id="User" value="{{current_user.Nombre}}"></a>

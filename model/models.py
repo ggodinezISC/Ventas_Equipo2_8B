@@ -383,5 +383,26 @@ class Mantenimiento(db.Model):
         cli = self.query.get(self.idMantenimiento)
         return cli
 
+class History(db.Model):
+    __tablename__ = 'Historial'
+    IdHistorial     = Column(Integer, primary_key=True)
+    Nombre          = Column(String ,nullable=False)
+    Email           = Column(Date, nullable=False)
+   
 
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()    
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.IdHistorial)
+        return cli
 

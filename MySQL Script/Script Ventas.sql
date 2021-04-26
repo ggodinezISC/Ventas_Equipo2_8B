@@ -2,7 +2,17 @@
 create  database ERP;
 use ERP;
 select * from Mantenimientos;
+select * from Historial;
 update Mantenimientos set tipo = "P" where idMantenimiento>0;
+
+create table Historial
+(
+   IdHistorial          INT AUTO_INCREMENT NOT NULL,
+   Nombre          		VARCHAR(100) NOT NULL,
+   Email          		VARCHAR(100) NOT NULL,
+   CONSTRAINT pk_inicio_cliente PRIMARY KEY (IdHistorial)
+);
+alter table historial add constraint uq_email_historial unique (Email);
 /*==============================================================*/
 /* Table: Clientes                                              */
 /*==============================================================*/
@@ -742,6 +752,7 @@ GRANT ALL PRIVILEGES ON ERP.Mantenimientos TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.UnidadesTransporte TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Ciudades TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Estados TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Historial TO 'Admin'@'localhost';
 /*======================================================================================================*/
 /*======================================================================================================*/
 /*======================================================================================================*/

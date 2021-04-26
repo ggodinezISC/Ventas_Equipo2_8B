@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
+from model.models import db, Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
 import re
 app = Flask(__name__)
 app.secret_key = 'ERP'
@@ -43,7 +43,17 @@ def cerrarSesion():
 def inicio():
     try:
         if current_user.is_authenticated and (current_user.Estatus=="A"):
-            return render_template('index.html')
+            cult = History()
+            c = History()
+            cult=cult.consultaGeneral()
+            for a in cult:
+                if(str(a.Email)==current_user.Email):
+                    return render_template('index.html',Historial=cult)           
+            
+            c.Nombre= current_user.Nombre
+            c.Email=current_user.Email
+            c.insertar()
+            return render_template('index.html',Historial=cult)
         else:
             if current_user.is_authenticated:
                 logout_user()
