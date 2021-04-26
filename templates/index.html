@@ -16,6 +16,7 @@
             var b=a.split(" ");
             document.getElementById("User").innerHTML = "Bienvenido:" +b[0];
         }
+        
     function CalcularFecha()
         {
             var f = new Date();
@@ -324,7 +325,7 @@ setInterval(() => {
                                 <ul>
                                     {% for a in Historial %}
                                     <li class="dropdown-link" width=100px>
-                                        <a>{{a.Email}}<i class="fas fa-caret-down"></i></a>
+                                        <a href="/Historial/{{a.Email}}">{{a.Email}}<i class="fas fa-caret-down"></i></a>
                                     </li>
                                     {%endfor%}
                                 </ul>
@@ -352,7 +353,7 @@ setInterval(() => {
     <main>
     <div >
         <section >
-            <br>
+            <br><br><br><br><br><br>
             <ul>
                 <li style="text-align: center;">
                     <h1 id="Fecha"></h1>

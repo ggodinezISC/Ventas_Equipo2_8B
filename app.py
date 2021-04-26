@@ -24,7 +24,17 @@ def login():
         c = c.validar(request.form['inputEmail'], request.form['inputPassword'])
         if c != None:
             login_user(c)
-            return redirect(url_for('inicio'))
+            cult = History()
+            c = History()
+            cult=cult.consultaGeneral()
+            for a in cult:
+                if(str(a.Email)==current_user.Email):
+                    return redirect('/')           
+            
+            c.Nombre= current_user.Nombre
+            c.Email=current_user.Email
+            c.insertar()
+            return redirect('/')
         else:
             return render_template('Errores/error500.html',mensaje='Datos incorrectos de inicio')
     except:
@@ -39,20 +49,23 @@ def cerrarSesion():
     else:
         abort(404)
 
+@app.route('/Historial/<string:id>')
+@login_required
+def hosto(id):
+    if current_user.is_authenticated:
+        logout_user()
+        return render_template('login.html',correo=id)
+    else:
+        abort(404)
+
+
 @app.route('/')
 def inicio():
     try:
         if current_user.is_authenticated and (current_user.Estatus=="A"):
             cult = History()
-            c = History()
             cult=cult.consultaGeneral()
-            for a in cult:
-                if(str(a.Email)==current_user.Email):
-                    return render_template('index.html',Historial=cult)           
             
-            c.Nombre= current_user.Nombre
-            c.Email=current_user.Email
-            c.insertar()
             return render_template('index.html',Historial=cult)
         else:
             if current_user.is_authenticated:
