@@ -323,8 +323,9 @@ setInterval(() => {
                             <a>Historial</a>
                             <div class="dropdown">
                                 <ul>
+                                    
                                     {% for a in Historial %}
-                                    <li class="dropdown-link" width=100px>
+                                    <li class="dropdown-link" >
                                         <a href="/Historial/{{a.Email}}">{{a.Email}}<i class="fas fa-caret-down"></i></a>
                                     </li>
                                     {%endfor%}
