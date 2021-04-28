@@ -15,28 +15,23 @@
             
             <div class="form-group">
                 <select class="form-control" name="IdCiudad" id="IdCiudad">
-                {% for cli in Ciudad %}
-                    {%if cli.estatus=="A"%}
-                      <option value="{{cli.idCiudad}}" >{{cli.nombre}}</option>
-                    {%endif%}
-                {% endfor %}
                 <option value="{{Direccion.Ciudad.idCiudad}}" selected>{{Direccion.Ciudad.nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Direccion.calle}}"name="Calle" id="Calle" placeholder="Calle" class="form-control" required>
+                <input type="text" value="{{Direccion.calle}}"name="Calle" id="Calle" placeholder="Calle" class="form-control"readonly required>
             </div>
 
             <div class="form-group">
-                <input type="number"value="{{Direccion.numero}}" name="Numero" id="Numero" placeholder="Num Ext." class="form-control" required>
+                <input type="number"value="{{Direccion.numero}}" name="Numero" id="Numero" placeholder="Num Ext." class="form-control"readonly required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Direccion.colonia}}" name="Colonia" id="Colonia" placeholder="Colonia" maxlength="13" class="form-control" required>
+                <input type="text" value="{{Direccion.colonia}}" name="Colonia" id="Colonia" placeholder="Colonia" maxlength="13" class="form-control"readonly required>
             </div>
             <div class="form-group">
-                <input type="text" value="{{Direccion.codigoPostal}}" maxlength="5" name="CP" id="CP" placeholder="Código Postal" class="form-control" required>
+                <input type="text" value="{{Direccion.codigoPostal}}" maxlength="5" name="CP" id="CP" placeholder="Código Postal" class="form-control"readonly required>
             </div>
 
 

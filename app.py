@@ -2,7 +2,7 @@ from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from model.models import db, Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
-import re
+import re,js2py
 app = Flask(__name__)
 app.secret_key = 'ERP'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Admin:hola.123@localhost/ERP'
@@ -558,7 +558,7 @@ def guardarDireccion():
         D.insertar()
         return redirect('/DireccionesClientes/1')
     except:
-        return 'No se guardó la información'
+        return 'No hay respuesta a tu peticion'
 
 @app.route('/EditDireccion/<int:id>')
 @login_required
