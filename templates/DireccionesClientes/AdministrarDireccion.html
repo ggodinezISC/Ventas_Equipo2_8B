@@ -125,15 +125,13 @@
                 {%if PosicionA > 1 %}
               <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA-1}}">Previous</a></li>
               {% endif %}
-              {% for x in range(PaginasA) %}
-              <li class="page-item" selected><a class="page-link" href="/DireccionesClientes/{{x+1}}">{{x+1}}</a></li>
-              {% endfor %}
+              
               {%if PosicionA < PaginasA %}
               <li class="page-item"><a class="page-link" href="/DireccionesClientes/{{PosicionA+1}}">Next</a></li>
               {% endif %}
             </ul>
           </nav>
-
+          <h1>Pagina{{PosicionA}}</h1>
         
     </div>
 </div>

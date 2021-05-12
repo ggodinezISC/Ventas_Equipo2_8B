@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
+from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
 import re,js2py
 app = Flask(__name__)
 app.secret_key = 'ERP'
@@ -944,6 +944,364 @@ def eliminarMantenimiento(id):
     return redirect('/Mantenimientos/1')        
 #Fin Crud Mantenimiento
 
+#Inicio Crud Ventas
+@app.route('/Ventas/<int:id>')
+@login_required
+def consultaVentas(id):
+    cantA=0;cantB=0;
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    
+    
+    F = Venta()
+    F = F.consultaGeneral()
+    S = Sucursal()
+    S = S.consultaGeneral()
+    E = Empleado()
+    E = E.consultaGeneral()
+
+    return render_template('/Ventas/AdministrarVenta.html',Sucursales=S,Empleados=E,Ventas=F,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddVenta',methods=['POST'])
+@login_required
+def guardarVenta():
+    try:
+        D = Venta()
+        D.fecha = request.form['fecha']
+        D.subtotal = request.form['subtotal']
+        D.iva = request.form['iva']
+        D.total = request.form['total']
+        D.cantPagada = request.form['cantPagada']
+        D.comentarios = request.form['comentarios']
+        D.estatus = request.form['estatus']
+        D.tipo = request.form['tipo']
+        D.idCliente = request.form['idCliente']
+        D.idSucursal = request.form['idSucursal']
+        D.idEmpleado = request.form['idEmpleado']
+        
+        D.insertar()
+        return redirect('/Ventas/1')
+    except:
+        return 'No hay respuesta a tu peticion'
+
+@app.route('/EditVenta/<int:id>')
+@login_required
+def consultarVenta(id):
+    D = Venta()
+    D.idVenta = id
+    D = D.consultaIndividual()
+    
+    return render_template('DireccionesClientes/EditDireccion.html', Venta=D)
+
+@app.route('/Venta/modificar', methods=['POST'])
+@login_required
+def actualizarVenta():
+    try:
+        D = Venta()
+        D.idVenta = request.form['idVenta']
+        D.fecha = request.form['fecha']
+        D.subtotal = request.form['subtotal']
+        D.iva = request.form['iva']
+        D.total = request.form['total']
+        D.cantPagada = request.form['cantPagada']
+        D.comentarios = request.form['comentarios']
+        D.estatus = request.form['estatus']
+        D.tipo = request.form['tipo']
+        D.idCliente = request.form['idCliente']
+        D.idSucursal = request.form['idSucursal']
+        D.idEmpleado = request.form['idEmpleado']
+
+        
+        D.actualizar()
+        return redirect('/Ventas/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteVenta/<int:id>')
+@login_required
+def eliminarVenta(id):
+    D= Venta()
+    D.idVenta = id
+    D.eliminar()
+    return redirect('/Ventas/1')        
+#Fin Crud Ventas
+
+
+#Inicio Crud VentaDetalle
+@app.route('/VentaDetalle/<int:id>')
+@login_required
+def consultaVentaDe(id):
+    cantA=0;cantB=0;
+    D = VentasDetalle()
+    D = D.consultaGeneral()
+    
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    
+    return render_template('/VentasDetalle/AdministrarDetalle.html',Detalles=D,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddVentaDetalle',methods=['POST'])
+@login_required
+def guardarVentaDe():
+    try:
+        D = DireccionesClientes()
+        D.idVentaDetalle = request.form['IdCliente']
+        D.precioVenta = request.form['IdCiudad']
+        D.cantidad = request.form['Calle']
+        D.subtotal = request.form['Numero']
+        D.idVenta = request.form['Colonia']
+        D.estatus = request.form['CP']
+        D.insertar()
+        return redirect('/VentaDetalle/1')
+    except:
+        return 'No hay respuesta a tu peticion'
+
+@app.route('/EditVentaDetalle/<int:id>')
+@login_required
+def consultarVentaDe(id):
+    D = VentasDetalle()
+    D.idVentaDetalle = id
+    D = D.consultaIndividual()
+    return render_template('DireccionesClientes/EditDireccion.html', Detalle=D)
+
+@app.route('/VentaDetalle/modificar', methods=['POST'])
+@login_required
+def actualizarVentaDe():
+    try:
+        D = VentasDetalle()
+        D.idVentaDetalle = request.form['idVentaDetalle']
+        D.precioVenta = request.form['precioVenta']
+        D.cantidad = request.form['cantidad']
+        D.subtotal = request.form['subtotal']
+        D.idVenta = request.form['idVenta']
+        D.estatus = request.form['estatus']
+        
+        D.actualizar()
+        return redirect('/VentaDetalle/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteVentaDetalle/<int:id>')
+@login_required
+def eliminarVentaDe(id):
+    D= VentasDetalle()
+    D.idVentaDetalle = id
+    D.eliminar()
+    return redirect('/VentaDetalle/1')        
+#Fin Crud VentasDetalle
+
+#Inicio Crud Cobro
+@app.route('/Cobros/<int:id>')
+@login_required
+def consultaCobros(id):
+    cantA=0;cantB=0;
+    D = Cobro()
+    D = D.consultaGeneral()
+   
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    
+    return render_template('/Cobros/AdministrarCobro.html',Cobro=D,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddCobro',methods=['POST'])
+@login_required
+def guardarCobro():
+    try:
+        D = Cobro()
+        D.fecha = request.form['fecha']
+        D.importe = request.form['importe']
+        D.idVenta = request.form['idVenta']
+        D.estatus = request.form['estatus']
+        
+        D.insertar()
+        return redirect('/Cobros/1')
+    except:
+        return 'No hay respuesta a tu peticion'
+
+@app.route('/EditCobro/<int:id>')
+@login_required
+def consultarCobro(id):
+    D = Cobro()
+    D.idCobro = id
+    D = D.consultaIndividual()
+    return render_template('Cobros/EditCobro.html', Cobro=D)
+
+@app.route('/Cobros/modificar', methods=['POST'])
+@login_required
+def actualizarCobro():
+    try:
+        D = Cobro()
+        D.idCobro = request.form['idCobro']
+        D.fecha = request.form['fecha']
+        D.importe = request.form['importe']
+        D.idVenta = request.form['idVenta']
+        D.estatus = request.form['estatus']
+
+        
+        D.actualizar()
+        return redirect('/Cobros/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteCobro/<int:id>')
+@login_required
+def eliminarCobro(id):
+    D= Cobro()
+    D.idCobro = id
+    D.eliminar()
+    return redirect('/Cobros/1')        
+#Fin Crud Cobros
+
+#Inicio Crud Envios
+@app.route('/Envios/<int:id>')
+@login_required
+def consultaEnvios(id):
+    cantA=0;cantB=0;
+    D = Envio()
+    D = D.consultaGeneral()
+    
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/Envios/AdministrarEnvio.html',Direccion=D, PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddEnvio',methods=['POST'])
+@login_required
+def guardarEnvio():
+    try:
+        D = Envio()
+        D.fechaInicio = request.form['fechaInicio']
+        D.fechaFin = request.form['fechaFin']
+        D.idUnidadTransporte = request.form['idUnidadTransporte']
+        D.pesoTotal = request.form['pesoTotal']
+        D.estatus = request.form['estatus']
+        
+        D.insertar()
+        return redirect('/Envios/1')
+    except:
+        return 'No hay respuesta a tu peticion'
+
+@app.route('/EditEnvio/<int:id>')
+@login_required
+def consultarEnvio(id):
+    D = Envio()
+    D.idEnvio = id
+    D = D.consultaIndividual()
+    
+    return render_template('Envios/EditEnvio.html', Direccion=D)
+
+@app.route('/Envios/modificar', methods=['POST'])
+@login_required
+def actualizarEnvio():
+    try:
+        D = Envio()
+        D.idEnvio = request.form['idEnvio']
+        D.fechaInicio = request.form['fechaInicio']
+        D.fechaFin = request.form['fechaFin']
+        D.idUnidadTransporte = request.form['idUnidadTransporte']
+        D.pesoTotal = request.form['pesoTotal']
+        D.estatus = request.form['estatus']
+        D.actualizar()
+        return redirect('/Envios/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteEnvio/<int:id>')
+@login_required
+def eliminarEnvio(id):
+    D= Envio()
+    D.idEnvio = id
+    D.eliminar()
+    return redirect('/Envios/1')        
+#Fin Crud Envios
+
+#Inicio Crud DetallesEnvio
+@app.route('/DetallesEnvio/<int:id>')
+@login_required
+def consultaDetallesEn(id):
+    cantA=0;
+    D = DetalleEnvio()
+    D = D.consultaGeneral()
+    
+    for direc in D:
+        cantA+=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    return render_template('/DetallesEnvio/AdministrarDetalle.html',Direccion=D,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddDetalleEnvio',methods=['POST'])
+@login_required
+def guardarDetalleEn():
+    try:
+        D = DetalleEnvio()
+        D.idEnvio = request.form['idEnvio']
+        D.idVenta = request.form['idVenta']
+        D.idDireccion = request.form['idDireccion']
+        D.fechaEntregaPlaneada = request.form['fecha']
+        D.peso = request.form['peso']
+        D.estatus = request.form['estatus']
+        D.idContacto = request.form['idContacto']
+        D.insertar()
+        return redirect('/DetallesEnvio/1')
+    except:
+        return 'No hay respuesta a tu peticion'
+
+@app.route('/EditDetalleEnvio/<int:idventa>/<int:idenvio>')
+@login_required
+def consultarDetalleEn(idventa,idenvio):
+    D = DetalleEnvio()
+    D = D.consultaIndividual(idventa,idenvio)
+    
+    return render_template('DireccionesClientes/EditDireccion.html', Direccion=D)
+
+@app.route('/DetalleEnvio/modificar', methods=['POST'])
+@login_required
+def actualizarDetalleEn():
+    try:
+        D = DetalleEnvio()
+        D.idEnvio = request.form['idEnvio']
+        D.idVenta = request.form['idVenta']
+        D.idDireccion = request.form['idDireccion']
+        D.fechaEntregaPlaneada = request.form['fecha']
+        D.peso = request.form['peso']
+        D.estatus = request.form['estatus']
+        D.idContacto = request.form['idContacto']
+        D.insertar()
+
+        D.actualizar()
+        return redirect('/DetallesEnvio/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteDetalleEnvio/<int:idventa>/<int:idenvio>')
+@login_required
+def eliminarDetalleEn(idventa,idenvio):
+    D= DetalleEnvio()
+    D.eliminar(idventa,idenvio)
+    return redirect('/DetallesEnvio/1')        
+#Fin Crud DetallesEnvio
 
 @app.errorhandler(400)
 def error_400(e):

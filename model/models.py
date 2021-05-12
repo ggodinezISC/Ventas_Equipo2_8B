@@ -406,3 +406,264 @@ class History(db.Model):
         cli = self.query.get(self.IdHistorial)
         return cli
 
+class Venta(db.Model):
+    __tablename__ = 'Ventas'
+    idVenta  = Column(Integer, primary_key=True)
+    fecha    = Column(Date, nullable=False)
+    subtotal = Column(Float, nullable=False)
+    iva = Column(Float, nullable=False)
+    total = Column(Float, nullable=False)
+    cantPagada = Column(Float, nullable=False)
+    comentarios = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+    tipo = Column(String, nullable=False)
+    idCliente = Column(Integer, ForeignKey('Clientes.IdCliente'),nullable=False)
+    idSucursal = Column(Integer,ForeignKey('Sucursales.idSucursal'), nullable=False)
+    idEmpleado = Column(Integer,ForeignKey('Empleados.idEmpleado'), nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idVenta)
+        return cli
+
+class VentasDetalle(db.Model):
+    __tablename__ = 'VentaDetalle'
+    idVentaDetalle = Column(Integer, primary_key=True)
+    precioVenta = Column(Float, nullable=False)
+    cantidad = Column(Float, nullable=False)
+    subtotal = Column(Float, nullable=False)
+    idVenta = Column(Integer, ForeignKey('Ventas.idVenta'), nullable=False)
+    estatus = Column(String, nullable=False)
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idVentaDetalle)
+        return cli
+
+class Cobro(db.Model):
+    __tablename__ = 'Cobros'
+    idCobro = Column(Integer, primary_key=True)
+    fecha = Column(Date, nullable=False)
+    importe = Column(Float, nullable=False)
+    idVenta = Column(Integer,  ForeignKey('Ventas.idVenta') ,nullable=False)
+    estatus = Column(String, nullable=False)
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idCobro)
+        return cli
+
+class Envio(db.Model):
+    __tablename__ = 'Envios'
+
+    idEnvio = Column(Integer, primary_key=True)
+    fechaInicio = Column(Date, nullable=False)
+    fechaFin = Column(Date, nullable=False)
+    idUnidadTransporte = Column(Integer, ForeignKey('UnidadesTransporte.idUnidadTransporte') ,nullable=False)
+    pesoTotal = Column(Float, nullable=False)
+    estatus = Column(String, nullable=False)
+    
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idEnvio)
+        return cli
+
+class DetalleEvio(db.Model):
+    __tablename__ = 'DetallesEnvio'
+
+    idEnvio              = Column(Integer, ForeignKey('Envios.idEnvio'), primary_key=True)
+    idVenta              = Column(Integer, ForeignKey('Ventas.idVenta'), primary_key=True)
+    idDireccion          = Column(Integer,ForeignKey('DireccionesCliente.idDireccion'), nullable=False)
+    fechaEntregaPlaneada = Column(Date, nullable=False)
+    peso                 = Column(Float, nullable=False)
+    estatus              = Column(String, nullable=False)
+    idContacto           = Column(Integer, ForeignKey('ContactosCliente.idContacto') ,nullable=False)
+
+    
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self,idVenta,idEnvio):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idEnvio==idEnvio and cu.idVenta==idVenta):
+                cu.estatus="I"
+                db.session.merge(cu)
+                db.session.commit()
+        else:
+            return None
+        
+
+    def consultaIndividual(self,idVenta,idEnvio):
+         cult = self.query.all()
+         for cu in cult:
+            if(cu.idVenta==idVenta and cu.idEnvio==idEnvio):
+                return cu
+
+class Sucursal(db.Model):
+    __tablename__ = 'Sucursales'
+    idSucursal = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    telefono = Column(String, nullable=False)
+    direccion = Column(String, nullable=False)
+    colonia = Column(String, nullable=False)
+    codigoPostal = Column(String, nullable=False)
+    presupuesto = Column(Float, nullable=False)
+    estatus = Column(String, nullable=False)
+    idCiudad = Column(Integer, nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idSucursal)
+        return cli 
+
+class Empleado(db.Model):
+    __tablename__ = 'Empleados'
+    idEmpleado = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    apellidoPaterno = Column(String, nullable=False)
+    apellidoMaterno = Column(String, nullable=False)
+    sexo = Column(String, nullable=False)
+    fechaNacimiento = Column(Date, nullable=False)
+    curp = Column(String, nullable=False)
+    estadoCivil = Column(String, nullable=False)
+    fechaContratacion = Column(Date, nullable=False)
+    salarioDiario = Column(Float, nullable=False)
+    nss = Column(String, nullable=False)
+    diasVacaciones = Column(Integer, nullable=False)
+    diasPermiso = Column(Integer, nullable=False)
+    fotografia = Column(String, nullable=False)
+    direccion = Column(String, nullable=False)
+    colonia = Column(String, nullable=False)
+    codigoPostal= Column(String, nullable=False)
+    escolaridad = Column(String, nullable=False)
+    especialidad = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    tipo = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+    idDepartamento = Column(Integer, nullable=False)
+    idPuesto = Column(Integer, nullable=False)
+    idCiudad = Column(Integer, nullable=False)
+    idSucursal = Column(Integer, nullable=False)
+    idTurno = Column(Integer, nullable=False)
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idEmpleado)
+        return cli 

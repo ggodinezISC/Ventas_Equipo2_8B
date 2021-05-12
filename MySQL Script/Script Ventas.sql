@@ -4,6 +4,124 @@ use ERP;
 select * from Mantenimientos;
 select * from Historial;
 update Mantenimientos set tipo = "P" where idMantenimiento>0;
+/*==============================================================*/
+/* Table:Empleados											    */
+/*==============================================================*/
+Create Table Empleados(
+idEmpleado int  NOT NULL,
+nombre varchar(30) NOT NULL,
+apellidoPaterno varchar(30) NOT NULL,
+apellidoMaterno varchar(30) NOT NULL,
+sexo char NOT NULL,
+fechaNacimiento date NOT NULL,
+curp varchar(20) NOT NULL,
+estadoCivil varchar(20) NOT NULL,
+fechaContratacion date NOT NULL,
+salarioDiario float NOT NULL,
+nss varchar(10) NOT NULL,
+diasVacaciones int NOT NULL,
+diasPermiso int NOT NULL,
+fotografia VARCHAR(100) NOT NULL,
+direccion varchar(80) NOT NULL,
+colonia varchar(50) NOT NULL,
+codigoPostal varchar(5) NOT NULL,
+escolaridad varchar(80) NOT NULL,
+especialidad varchar(100) NOT NULL,
+email varchar(100) NOT NULL,
+pass varchar(20) NOT NULL,
+tipo varchar(10) NOT NULL,
+estatus char NOT NULL,
+idDepartamento int NOT NULL,
+idPuesto int NOT NULL,
+idCiudad int NOT NULL,
+idSucursal int NOT NULL,
+idTurno int NOT NULL,
+CONSTRAINT PK_Empleados PRIMARY KEY (idEmpleado)
+);
+/*==============================================================*/
+/* Table:Sucursales							             		*/
+/*==============================================================*/
+create table Sucursales (
+	idSucursal int  not null,
+	nombre varchar(50) not null,
+	telefono varchar(15) not null,
+	direccion varchar(80) not null,
+	colonia varchar(50) not null,
+	codigoPostal varchar(5) not null,
+	presupuesto float not null,
+	estatus char not null,
+	idCiudad int not null,
+	CONSTRAINT PK_Sucursales PRIMARY KEY (idSucursal)
+);
+/*==============================================================*/
+/* Table: Ventas                                    			*/
+/*==============================================================*/
+create table Ventas(
+idVenta int not null,
+fecha date not null,
+subtotal float not null,
+iva float not null,
+total float not null,
+cantPagada float not null,
+comentarios varchar(100),
+estatus char not null,
+tipo char not null,
+idCliente int not null,
+idSucursal int not null,
+idEmpleado int not null,
+CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
+);
+
+
+/*==============================================================*/
+/* Table: VentasDetalle                                         */
+/*==============================================================*/
+create table VentaDetalle(
+   idVentaDetalle int not null,
+   precioVenta float not null,
+   cantidad float not null,
+   subtotal float not null,
+   idVenta int not null,
+   estatus char not null,
+   CONSTRAINT pk_VentaDetalle PRIMARY KEY (idVentaDetalle) 
+);
+/*==============================================================*/
+/* Table: Cobros					                            */
+/*==============================================================*/
+create  table Cobros(
+idCobro int  not null,
+fecha date not null,
+importe float not null,
+idVenta int not null,
+estatus char not null,
+CONSTRAINT pk_Cobros PRIMARY KEY (idCobro)
+);
+/*==============================================================*/
+/* Table:Envios					             				  	*/
+/*==============================================================*/
+create table Envios(
+idEnvio int  not null,
+fechaInicio date not null,
+fechaFin date not null,
+idUnidadTransporte int not null,
+pesoTotal float not null,
+estatus char not null,
+CONSTRAINT pk_Envios PRIMARY KEY (idEnvio)
+);
+
+/*==============================================================*/
+/* Table: DetallesEnvio					                        */
+/*==============================================================*/
+create table DetallesEnvio(
+idEnvio int not null,
+idVenta int not null,
+idDireccion int not null,
+fechaEntregaPlaneada date not null,
+peso float not null,
+estatus char not null,
+idContacto int not null,
+CONSTRAINT pk_Detalles_Envio PRIMARY KEY (idEnvio,idVenta)
+);
 
 create table Historial
 (
@@ -186,17 +304,7 @@ CONSTRAINT pk_ContactosCliente PRIMARY KEY (idContacto)
 
 
 
-/*==============================================================*/
-/* Table: VentasDetalle                                         */
-/*==============================================================*/
-create table VentaDetalle(
-   idVentaDetalle int not null,
-   precioVenta float not null,
-   cantidad float not null,
-   subtotal float not null,
-   idVenta int not null,
-   CONSTRAINT pk_VentaDetalle PRIMARY KEY (idVentaDetalle) 
-);
+
 /*==============================================================*/
 /* Table: OfertasAsociacion                                     */
 /*==============================================================*/
@@ -206,25 +314,6 @@ idOferta int not null,
 estatus char not null,
 CONSTRAINT pk_OfertaAsociacion PRIMARY KEY (idAsosiacion,idOferta)
 );
-/*==============================================================*/
-/* Table: Ventas                                    			*/
-/*==============================================================*/
-create table Ventas(
-idVenta int not null,
-fecha date not null,
-subtotal float not null,
-iva float not null,
-total float not null,
-cantPagada float not null,
-comentarios varchar(100),
-estatus char not null,
-tipo char not null,
-idCliente int not null,
-idSucursal int not null,
-idEmpleado int not null,
-CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
-);
-
 
 /*==============================================================*/
 /* Table: Tripulacion				                            */
@@ -235,29 +324,7 @@ idEnvio int not null,
 rol varchar(50) not null,
 CONSTRAINT pk_Tripulacion PRIMARY KEY (idEmpleado,idEnvio,rol)
 );
-/*==============================================================*/
-/* Table: Cobro						                            */
-/*==============================================================*/
-create table Cobro(
-idCobro int  not null,
-fecha date not null,
-importe float not null,
-idVenta int not null,
-CONSTRAINT pk_Cobros PRIMARY KEY (idCobro)
-);
-/*==============================================================*/
-/* Table: DetallesEnvio					                        */
-/*==============================================================*/
-create table DetallesEnvio(
-idEnvio int not null,
-idVenta int not null,
-idDireccion int not null,
-fechaEntregaPlaneada date not null,
-peso float not null,
-estatus char not null,
-idContacto int not null,
-CONSTRAINT pk_Detalles_Envio PRIMARY KEY (idEnvio,idVenta)
-);
+
 
 
 /*==============================================================*/
@@ -274,18 +341,6 @@ idEmpleado int not null,
 idUnidadTransporte int not null,
 CONSTRAINT pk_Asesorias PRIMARY KEY (idAsesoria)
 );
-/*==============================================================*/
-/* Table:Envios					             				  	*/
-/*==============================================================*/
-create table Envios(
-idEnvio int  not null,
-fechaInicio date not null,
-fechaFin date not null,
-idUnidadTransporte int not null,
-pesoTotal float not null,
-CONSTRAINT pk_Envios PRIMARY KEY (idEnvio)
-);
-
 
 /*==============================================================*/
 /* Table:Laboratorios			             				    */
@@ -379,21 +434,7 @@ create table ExistenciasSucursal (
 	cantidad float not null,
 	CONSTRAINT PK_ExistenciasSucursal PRIMARY KEY (idPresentacion, idSucursal)
 );
-/*==============================================================*/
-/* Table:Sucursales							             		*/
-/*==============================================================*/
-create table Sucursales (
-	idSucursal int  not null,
-	nombre varchar(50) not null,
-	telefono varchar(15) not null,
-	direccion varchar(80) not null,
-	colonia varchar(50) not null,
-	codigoPostal varchar(5) not null,
-	presupuesto float not null,
-	estatus char not null,
-	idCiudad int not null,
-	CONSTRAINT PK_Sucursales PRIMARY KEY (idSucursal)
-);
+
 /*==============================================================*/
 /* Table:ImagenesProducto							            */
 /*==============================================================*/
@@ -566,40 +607,7 @@ dias varchar(30) NOT NULL,
 CONSTRAINT PK_Turnos PRIMARY KEY (idTurno)
 );
 
-/*==============================================================*/
-/* Table:Empleados											    */
-/*==============================================================*/
-Create Table Empleados(
-idEmpleado int  NOT NULL,
-nombre varchar(30) NOT NULL,
-apellidoPaterno varchar(30) NOT NULL,
-apellidoMaterno varchar(30) NOT NULL,
-sexo char NOT NULL,
-fechaNacimiento date NOT NULL,
-curp varchar(20) NOT NULL,
-estadoCivil varchar(20) NOT NULL,
-fechaContratacion date NOT NULL,
-salarioDiario float NOT NULL,
-nss varchar(10) NOT NULL,
-diasVacaciones int NOT NULL,
-diasPermiso int NOT NULL,
-fotografia blob NOT NULL,
-direccion varchar(80) NOT NULL,
-colonia varchar(50) NOT NULL,
-codigoPostal varchar(5) NOT NULL,
-escolaridad varchar(80) NOT NULL,
-especialidad varchar(100) NOT NULL,
-email varchar(100) NOT NULL,
-pass varchar(20) NOT NULL,
-tipo varchar(10) NOT NULL,
-estatus char NOT NULL,
-idDepartamento int NOT NULL,
-idPuesto int NOT NULL,
-idCiudad int NOT NULL,
-idSucursal int NOT NULL,
-idTurno int NOT NULL,
-CONSTRAINT PK_Empleados PRIMARY KEY (idEmpleado)
-);
+
 /*==============================================================*/
 /* Table:Asistencias											*/
 /*==============================================================*/
@@ -753,11 +761,127 @@ GRANT ALL PRIVILEGES ON ERP.UnidadesTransporte TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Ciudades TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Estados TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Historial TO 'Admin'@'localhost';
-/*======================================================================================================*/
-/*======================================================================================================*/
-/*======================================================================================================*/
-/*======================================================================================================*/
 
+GRANT ALL PRIVILEGES ON ERP.Ventas TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.VentasDetalle TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Envios TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Cobros TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.DetallesEnvio TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Sucursales TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Empleados TO 'Admin'@'localhost';
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*======================================================================================================*/
+/*======================================================================================================*/
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (1,"Sucursal1","3511234567","Azucena1","LindaVista1","12345",1000.0,"A",1);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (2,"Sucursal2","3511234502","Azucena2","LindaVista2","12346",1000.0,"A",2);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (3,"Sucursal13","3511234503","Azucena3","LindaVista3","12347",1000.0,"A",3);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (4,"Sucursal4","3511234504","Azucena4","LindaVista4","12348",1000.0,"A",4);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (5,"Sucursal5","3511234505","Azucena5","LindaVista5","12349",1000.0,"A",5);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (6,"Sucursal6","3511234506","Azucena6","LindaVista6","12310",1000.0,"A",6);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (8,"Sucursal8","3511234508","Azucena8","LindaVista8","12312",1000.0,"A",8);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (9,"Sucursal9","3511234509","Azucena9","LindaVista9","12314",1000.0,"A",9);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (10,"Sucursal10","35112345610","Azucena10","LindaVista10","12315",1000.0,"A",10);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (11,"Sucursal11","3511234511","Azucena11","LindaVista11","12316",1000.0,"A",11);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (12,"Sucursal12","3511234512","Azucena12","LindaVista12","12317",1000.0,"A",12);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (13,"Sucursal13","3511234513","Azucena13","LindaVista13","12318",1000.0,"A",13);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (14,"Sucursal14","3511234514","Azucena14","LindaVista14","12319",1000.0,"A",14);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (15,"Sucursal15","3511234515","Azucena15","LindaVista15","12320",1000.0,"A",15);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (16,"Sucursal16","3511234516","Azucena16","LindaVista16","12321",1000.0,"A",16);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (17,"Sucursal17","3511234517","Azucena17","LindaVista17","12322",1000.0,"A",17);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (18,"Sucursal18","3511234518","Azucena18","LindaVista18","12323",1000.0,"A",18);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (19,"Sucursal19","3511234519","Azucena19","LindaVista19","12324",1000.0,"A",19);
+insert into Sucursales 
+(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
+values (20,"Sucursal20","3511234520","Azucena20","LindaVista20","12325",1000.0,"A",20);
 INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
 VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041660","memogodi@gmail.com","Hola.123#$","A","A");
+
+
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (1,"Empleado1","AP1","AM1","H","1999-01-10","ABCD123456HMNDLL01","S","2020-05-11",200,
+"ADBC123456",10,10,"1.jpg","direccion1 #1","colonia1","12345","Licenciatura","Redes",
+"email1@gmail.com", "PASS1","Vendedor","A",1,1,1,1,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (2,"Empleado2","AP2","AM2","H","1999-01-10","ABCD123456HMNDLL02","S","2020-05-11",200,
+"ADBC123456",10,10,"2.jpg","direccion2 #2","colonia2","22345","Licenciatura","Redes",
+"email2@gmail.com", "PASS2","Vendedor","A",1,1,2,1,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (3,"Empleado3","AP3","AM3","H","1999-01-10","ABCD123456HMNDLL03","S","2020-05-11",200,
+"ADBC123456",10,10,"3.jpg","direccion3 #3","colonia3","32345","Licenciatura","Redes",
+"email3@gmail.com", "PASS3","Vendedor","A",1,1,3,1,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (4,"Empleado4","AP4","AM4","H","1999-01-10","ABCD123456HMNDLL04","S","2020-05-11",200,
+"ADBC123456",10,10,"5.jpg","direccion3 #3","colonia3","42345","Licenciatura","Redes",
+"email5@gmail.com", "PASS4","Vendedor","A",1,1,4,1,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (5,"Empleado5","AP5","AM5","H","1999-01-10","ABCD123456HMNDLL05","S","2020-05-11",200,
+"ADBC123456",10,10,"4.jpg","direccion3 #3","colonia3","52345","Licenciatura","Redes",
+"email5@gmail.com", "PASS5","Vendedor","A",1,1,5,1,1);
+
+
+
+
+
 SHOW TABLES FROM ERP;

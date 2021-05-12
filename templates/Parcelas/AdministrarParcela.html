@@ -108,19 +108,17 @@
             </tbody>
         </table>
         <nav aria-label="Page navigation example">
-            <ul class="pagination">
+            <ul  class="pagination">
                 {%if PosicionA > 1 %}
               <li class="page-item"><a class="page-link" href="/Parcelas/{{PosicionA-1}}">Previous</a></li>
               {% endif %}
-              {% for x in range(PaginasA) %}
-              <li class="page-item" selected><a class="page-link" href="/Parcelas/{{x+1}}">{{x+1}}</a></li>
-              {% endfor %}
+              
               {%if PosicionA < PaginasA %}
               <li class="page-item"><a class="page-link" href="/Parcelas/{{PosicionA+1}}">Next</a></li>
               {% endif %}
             </ul>
           </nav>
-        
+          <h1 align="center">Pagina: {{PosicionA}}</h1>
     </div>
 </div>
 
