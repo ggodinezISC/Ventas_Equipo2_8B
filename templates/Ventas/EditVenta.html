@@ -1,58 +1,90 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Mantenimiento/modificar" method="POST">
+        <form action="/Venta/modificar" method="POST">
 
 
             <div class="form-group">
-                <input type="number" value="{{Mantenimiento.idMantenimiento}}"  id="IdMantenimiento" name="IdMantenimiento" placeholder="IdMantenimiento" class="form-control" readonly required>
+                <input type="number" value="{{Venta.idVenta}}"  id="idVenta" name="idVenta" placeholder="idVenta" class="form-control" readonly required>
             </div>
             
             <div class="form-group">
-                <select class="form-control" name="IdUnidad" id="IdUnidad">
-                
-                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.Transporte.marca}} -- {{Mantenimiento.Transporte.modelo}}</option>
+                <select class="form-control" name="idCliente" id="idCliente">
+                {% for cliente in Clientes %}
+                    {%if cliente.Estatus=="A"%}
+                      <option value="{{cliente.IdCliente}}">{{cliente.Nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Venta.idCliente}}" selected>{{Venta.idCliente}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="Teller" maxlength="100" class="form-control" readonly required>
-            </div>
-            <div class="form-group">
-                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" readonly required>
-            </div>
-            
-            <div class="form-group">
-                <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Mantenimiento.tipo=="C"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Completo</option>
+                <select class="form-control" name="idSucursal" id="idSucursal">
+                {% for Sucursal in Sucursales %}
+                    {%if Sucursal.estatus=="A"%}
+                      <option value="{{Sucursal.idSucursal}}" >{{Sucursal.nombre}}</option>
                     {%endif%}
-                    {%if Mantenimiento.tipo=="P"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Parcial</option>
+                {% endfor %}
+                <option value="{{Venta.idSucursal}}" selected>{{Venta.idSucursal}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="idEmpleado" id="idEmpleado">
+                {% for Empleado in Empleados %}
+                    {%if Empleado.estatus=="A"%}
+                      <option value="{{Empleado.idEmpleado}}" >{{Empleado.nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Venta.idEmpleado}}" selected>{{Venta.idEmpleado}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="date" value="{{Venta.fecha}}"  id="fecha" name="fecha" placeholder="Fecha" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Venta.subtotal}}"  id="subtotal" name="subtotal" placeholder="subtotal" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Venta.iva}}" id="iva"  name="iva" placeholder="IVA" maxlength="100" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <input type="text" value="{{Venta.total}}" id="total"  name="total" placeholder="Total" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text"value="{{Venta.cantPagada}}"id="cantPagada" name="cantPagada" placeholder="Cantidad Pagada" maxlength="200" class="form-control" maxlength="15" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Venta.comentarios}}" id="comentarios" name="comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="tipo" id="tipo">
+                    {%if Venta.tipo=="A"%}
+                    <option value="B" selected>Tipo B</option>
+                      <option value="{{Venta.tipo}}" selected>Tipo A</option>
+                    {%endif%}
+                    {%if Venta.tipo=="B"%}
+                    <option value="A" selected>Tipo A</option>
+                      <option value="{{Venta.tipo}}" selected>Tipo B</option>
                     {%endif%}
                 </select>
             </div>
 
             <div class="form-group">
-                <select class="form-control" name="Estatus" id="Estatus">
-                    {%if Mantenimiento.estatus=="A"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Activo</option>
+                <select class="form-control" name="estatus" id="estatus">
+                    {%if Venta.estatus=="A"%}
+                      <option value="{{Venta.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
                     {%endif%}
-                    {%if Mantenimiento.estatus=="I"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Inactivo</option>
+                    {%if Venta.estatus=="I"%}
+                      <option value="{{Venta.estatus}}" selected>Inactivo</option>
                       <option value="A" >Activo</option>
                     {%endif%}
                 </select>

@@ -1,0 +1,48 @@
+{% extends 'Layout.html'%} {% block body %}
+<div class="col-md-8 offset-md-2">
+    <div class="card card-body">
+        <form action="/Cobro/modificar" method="POST">
+
+
+            <div class="form-group">
+                <input type="number" value="{{Cobro.idCobro}}"  id="idCobro" name="idCobro" placeholder="IdCobro" class="form-control" readonly required>
+            </div>
+            
+            <div class="form-group">
+                <select class="form-control" name="idVenta" id="idVenta">
+                
+                <option value="{{Cobro.idVenta}}" selected>{{Cobro.idVenta}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="date" value="{{Cobro.fecha}}"  id="fecha" name="fecha" placeholder="Fecha" class="form-control"  required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Cobro.importe}}" id="importe" name="importe" placeholder="Importe" class="form-control"  required>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" name="estatus" id="estatus">
+                    {%if Cobro.estatus=="A"%}
+                      <option value="{{Cobro.estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                    {%endif%}
+                    {%if Cobro.estatus=="I"%}
+                      <option value="{{Cobro.estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                    {%endif%}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block">
+                    Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

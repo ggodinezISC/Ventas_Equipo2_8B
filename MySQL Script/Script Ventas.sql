@@ -8,7 +8,7 @@ update Mantenimientos set tipo = "P" where idMantenimiento>0;
 /* Table:Empleados											    */
 /*==============================================================*/
 Create Table Empleados(
-idEmpleado int  NOT NULL,
+idEmpleado int auto_increment NOT NULL,
 nombre varchar(30) NOT NULL,
 apellidoPaterno varchar(30) NOT NULL,
 apellidoMaterno varchar(30) NOT NULL,
@@ -28,7 +28,7 @@ codigoPostal varchar(5) NOT NULL,
 escolaridad varchar(80) NOT NULL,
 especialidad varchar(100) NOT NULL,
 email varchar(100) NOT NULL,
-pass varchar(20) NOT NULL,
+passwor varchar(20) NOT NULL,
 tipo varchar(10) NOT NULL,
 estatus char NOT NULL,
 idDepartamento int NOT NULL,
@@ -42,7 +42,7 @@ CONSTRAINT PK_Empleados PRIMARY KEY (idEmpleado)
 /* Table:Sucursales							             		*/
 /*==============================================================*/
 create table Sucursales (
-	idSucursal int  not null,
+	idSucursal int auto_increment not null,
 	nombre varchar(50) not null,
 	telefono varchar(15) not null,
 	direccion varchar(80) not null,
@@ -57,7 +57,7 @@ create table Sucursales (
 /* Table: Ventas                                    			*/
 /*==============================================================*/
 create table Ventas(
-idVenta int not null,
+idVenta int auto_increment not null,
 fecha date not null,
 subtotal float not null,
 iva float not null,
@@ -77,7 +77,7 @@ CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
 /* Table: VentasDetalle                                         */
 /*==============================================================*/
 create table VentaDetalle(
-   idVentaDetalle int not null,
+   idVentaDetalle int auto_increment not null,
    precioVenta float not null,
    cantidad float not null,
    subtotal float not null,
@@ -88,8 +88,8 @@ create table VentaDetalle(
 /*==============================================================*/
 /* Table: Cobros					                            */
 /*==============================================================*/
-create  table Cobros(
-idCobro int  not null,
+create table Cobros(
+idCobro int auto_increment not null,
 fecha date not null,
 importe float not null,
 idVenta int not null,
@@ -100,7 +100,7 @@ CONSTRAINT pk_Cobros PRIMARY KEY (idCobro)
 /* Table:Envios					             				  	*/
 /*==============================================================*/
 create table Envios(
-idEnvio int  not null,
+idEnvio int auto_increment not null,
 fechaInicio date not null,
 fechaFin date not null,
 idUnidadTransporte int not null,
@@ -113,7 +113,7 @@ CONSTRAINT pk_Envios PRIMARY KEY (idEnvio)
 /* Table: DetallesEnvio					                        */
 /*==============================================================*/
 create table DetallesEnvio(
-idEnvio int not null,
+idEnvio int auto_increment not null,
 idVenta int not null,
 idDireccion int not null,
 fechaEntregaPlaneada date not null,
@@ -763,11 +763,12 @@ GRANT ALL PRIVILEGES ON ERP.Estados TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Historial TO 'Admin'@'localhost';
 
 GRANT ALL PRIVILEGES ON ERP.Ventas TO 'Admin'@'localhost';
-GRANT ALL PRIVILEGES ON ERP.VentasDetalle TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.VentaDetalle TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Envios TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Cobros TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.DetallesEnvio TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Sucursales TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Empleados TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Empleados TO 'Admin'@'localhost';
 /*======================================================================================================*/
 /*======================================================================================================*/
@@ -838,7 +839,7 @@ VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
 fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
-codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (1,"Empleado1","AP1","AM1","H","1999-01-10","ABCD123456HMNDLL01","S","2020-05-11",200,
 "ADBC123456",10,10,"1.jpg","direccion1 #1","colonia1","12345","Licenciatura","Redes",
@@ -847,7 +848,7 @@ values (1,"Empleado1","AP1","AM1","H","1999-01-10","ABCD123456HMNDLL01","S","202
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
 fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
-codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (2,"Empleado2","AP2","AM2","H","1999-01-10","ABCD123456HMNDLL02","S","2020-05-11",200,
 "ADBC123456",10,10,"2.jpg","direccion2 #2","colonia2","22345","Licenciatura","Redes",
@@ -856,7 +857,7 @@ values (2,"Empleado2","AP2","AM2","H","1999-01-10","ABCD123456HMNDLL02","S","202
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
 fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
-codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (3,"Empleado3","AP3","AM3","H","1999-01-10","ABCD123456HMNDLL03","S","2020-05-11",200,
 "ADBC123456",10,10,"3.jpg","direccion3 #3","colonia3","32345","Licenciatura","Redes",
@@ -865,7 +866,7 @@ values (3,"Empleado3","AP3","AM3","H","1999-01-10","ABCD123456HMNDLL03","S","202
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
 fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
-codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (4,"Empleado4","AP4","AM4","H","1999-01-10","ABCD123456HMNDLL04","S","2020-05-11",200,
 "ADBC123456",10,10,"5.jpg","direccion3 #3","colonia3","42345","Licenciatura","Redes",
@@ -874,7 +875,7 @@ values (4,"Empleado4","AP4","AM4","H","1999-01-10","ABCD123456HMNDLL04","S","202
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
 fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
-codigoPostal, escolaridad, especialidad, email,pass, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (5,"Empleado5","AP5","AM5","H","1999-01-10","ABCD123456HMNDLL05","S","2020-05-11",200,
 "ADBC123456",10,10,"4.jpg","direccion3 #3","colonia3","52345","Licenciatura","Redes",

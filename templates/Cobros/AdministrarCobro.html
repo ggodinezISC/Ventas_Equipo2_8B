@@ -14,10 +14,7 @@
         {% endfor %} {% endif %} {% endwith %}
 
         <div class="card card-body">
-            <form action="/AddVentaDetalle" method="POST">
-
-                
-                
+            <form action="/AddCobro" method="POST">
                 <div class="form-group">
                     <select class="form-control" name="idVenta" id="idVenta">
                     {% for cliente in Ventas %}
@@ -29,17 +26,14 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text"  id="precioVenta" name="precioVenta" placeholder="Precio Venta" class="form-control" required>
+                    <input type="date"  id="fecha" name="fecha" placeholder="Fecha" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text"  id="cantidad" name="cantidad" placeholder="Catidad" class="form-control" required>
+                    <input type="text"  id="importe" name="importe" placeholder="Importe" class="form-control" required>
                 </div>
 
-                <div class="form-group">
-                    <input type="text" id="subtotal"  name="subtotal" placeholder="Sub Total" maxlength="100" class="form-control" required>
-                </div>
-                
+               
                 <div class="form-group">
                     <select class="form-control" name="estatus" id="estatus">
                         <option value="A" selected>Activo</option>
@@ -56,37 +50,35 @@
     </div>
 
     <div class="col-md-7">
-        <p>Detalles de las ventas</p>
+        <p>Cobros</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
-                    <td>IdDetallesVenta</td>
+                    <td>IdCobro</td>
                     <td>IdVenta</td>
-                    <td>Precio Venta</td>
-                    <td>Cantidad</td>
-                    <td>SubTotal</td>
+                    <td>Fecha</td>
+                    <td>Importe</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cli in Detalles %}
-                {%if (cli.idVentaDetalle) <= (PosicionA*5) and (cli.idVentaDetalle) >= ((PosicionA*5)-4)%}
+                {% for cli in Cobro %}
+                {%if (cli.idCobro) <= (PosicionA*5) and (cli.idCobro) >= ((PosicionA*5)-4)%}
                 <tr>
-                    <td>{{cli.idVentaDetalle}}       </td>
+                    <td>{{cli.idCobro}}       </td>
                     <td>{{cli.idVenta}}</td>
-                    <td>{{cli.precioVenta}}       </td>
-                    <td>{{cli.cantidad}}       </td>
-                    <td>{{cli.subtotal}}       </td>
+                    <td>{{cli.fecha}}       </td>
+                    <td>{{cli.importe}}       </td>
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>
                         <td>
-                        <a href="/EditVentaDetalle/{{cli.idVentaDetalle}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteVentaDetalle/{{cli.idVentaDetalle}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditCobro/{{cli.idCobro}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteCobro/{{cli.idCobro}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                         </td>
                         {%else%}
                         <td style="background-color:#FF0000">Inactivo</td>
                         <td>
-                            <a href="/EditVentaDetalle/{{cli.idVentaDetalle}}" class="btn btn-warning btn-block">Editar</a>
+                            <a href="/EditCobro/{{cli.idCobro}}" class="btn btn-warning btn-block">Editar</a>
                             
                         </td>
                         {%endif%}
@@ -99,11 +91,11 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 {%if PosicionA > 1 %}
-              <li class="page-item"><a class="page-link" href="/VentaDetalle/{{PosicionA-1}}">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="/Cobros/{{PosicionA-1}}">Previous</a></li>
               {% endif %}
               
               {%if PosicionA < PaginasA %}
-              <li class="page-item"><a class="page-link" href="/VentaDetalle/{{PosicionA+1}}">Next</a></li>
+              <li class="page-item"><a class="page-link" href="/Cobros/{{PosicionA+1}}">Next</a></li>
               {% endif %}
             </ul>
           </nav>

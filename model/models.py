@@ -409,6 +409,9 @@ class History(db.Model):
 class Venta(db.Model):
     __tablename__ = 'Ventas'
     idVenta  = Column(Integer, primary_key=True)
+    idCliente = Column(Integer, ForeignKey('Clientes.IdCliente'),nullable=False)
+    idSucursal = Column(Integer,ForeignKey('Sucursales.idSucursal'), nullable=False)
+    idEmpleado = Column(Integer,ForeignKey('Empleados.idEmpleado'), nullable=False)
     fecha    = Column(Date, nullable=False)
     subtotal = Column(Float, nullable=False)
     iva = Column(Float, nullable=False)
@@ -417,9 +420,7 @@ class Venta(db.Model):
     comentarios = Column(String, nullable=False)
     estatus = Column(String, nullable=False)
     tipo = Column(String, nullable=False)
-    idCliente = Column(Integer, ForeignKey('Clientes.IdCliente'),nullable=False)
-    idSucursal = Column(Integer,ForeignKey('Sucursales.idSucursal'), nullable=False)
-    idEmpleado = Column(Integer,ForeignKey('Empleados.idEmpleado'), nullable=False)
+    
 
     def insertar(self):
         db.session.add(self)
@@ -478,7 +479,7 @@ class VentasDetalle(db.Model):
 class Cobro(db.Model):
     __tablename__ = 'Cobros'
     idCobro = Column(Integer, primary_key=True)
-    fecha = Column(Date, nullable=False)
+    fecha   = Column(Date, nullable=False)
     importe = Column(Float, nullable=False)
     idVenta = Column(Integer,  ForeignKey('Ventas.idVenta') ,nullable=False)
     estatus = Column(String, nullable=False)
@@ -508,7 +509,6 @@ class Cobro(db.Model):
 
 class Envio(db.Model):
     __tablename__ = 'Envios'
-
     idEnvio = Column(Integer, primary_key=True)
     fechaInicio = Column(Date, nullable=False)
     fechaFin = Column(Date, nullable=False)
@@ -539,9 +539,8 @@ class Envio(db.Model):
         cli = self.query.get(self.idEnvio)
         return cli
 
-class DetalleEvio(db.Model):
+class DetalleEnvio(db.Model):
     __tablename__ = 'DetallesEnvio'
-
     idEnvio              = Column(Integer, ForeignKey('Envios.idEnvio'), primary_key=True)
     idVenta              = Column(Integer, ForeignKey('Ventas.idVenta'), primary_key=True)
     idDireccion          = Column(Integer,ForeignKey('DireccionesCliente.idDireccion'), nullable=False)
@@ -636,7 +635,7 @@ class Empleado(db.Model):
     escolaridad = Column(String, nullable=False)
     especialidad = Column(String, nullable=False)
     email = Column(String, nullable=False)
-    password = Column(String, nullable=False)
+    passwor = Column(String, nullable=False)
     tipo = Column(String, nullable=False)
     estatus = Column(String, nullable=False)
     idDepartamento = Column(Integer, nullable=False)

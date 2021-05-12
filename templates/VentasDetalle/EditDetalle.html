@@ -1,58 +1,43 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Mantenimiento/modificar" method="POST">
+        <form action="/VentaDetalle/modificar" method="POST">
 
 
             <div class="form-group">
-                <input type="number" value="{{Mantenimiento.idMantenimiento}}"  id="IdMantenimiento" name="IdMantenimiento" placeholder="IdMantenimiento" class="form-control" readonly required>
+                <input type="number"  value="{{Detalle.idVentaDetalle}}"  id="idVentaDetalle" name="idVentaDetalle" placeholder="IdMantenimiento" class="form-control" readonly required>
             </div>
             
             <div class="form-group">
-                <select class="form-control" name="IdUnidad" id="IdUnidad">
-                
-                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.Transporte.marca}} -- {{Mantenimiento.Transporte.modelo}}</option>
+                <select class="form-control" name="idVenta" id="idVenta">
+                {% for cliente in Ventas %}
+                    {%if cliente.estatus=="A"%}
+                      <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}}</option>
+                    {%endif%}
+                {% endfor %}
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" readonly required>
+                <input type="text"  value="{{Detalle.precioVenta}}" id="precioVenta" name="precioVenta" placeholder="Precio Venta" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" readonly required>
+                <input type="text"  value="{{Detalle.cantidad}}"  id="cantidad" name="cantidad" placeholder="Catidad" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="Teller" maxlength="100" class="form-control" readonly required>
-            </div>
-            <div class="form-group">
-                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" readonly required>
+                <input type="text" value="{{Detalle.subtotal}}" id="subtotal"  name="subtotal" placeholder="Sub Total" maxlength="100" class="form-control" required>
             </div>
             
             <div class="form-group">
-                <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Mantenimiento.tipo=="C"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Completo</option>
-                    {%endif%}
-                    {%if Mantenimiento.tipo=="P"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Parcial</option>
-                    {%endif%}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <select class="form-control" name="Estatus" id="Estatus">
-                    {%if Mantenimiento.estatus=="A"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Activo</option>
+                <select class="form-control" name="estatus" id="estatus">
+                    {%if Detalle.estatus=="A"%}
+                      <option value="{{Detalle.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
                     {%endif%}
-                    {%if Mantenimiento.estatus=="I"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Inactivo</option>
+                    {%if Detalle.estatus=="I"%}
+                      <option value="{{Detalle.estatus}}" selected>Inactivo</option>
                       <option value="A" >Activo</option>
                     {%endif%}
                 </select>

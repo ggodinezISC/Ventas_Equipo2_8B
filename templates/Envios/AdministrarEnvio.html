@@ -14,47 +14,31 @@
         {% endfor %} {% endif %} {% endwith %}
 
         <div class="card card-body">
-            <form action="/AddMantenimiento" method="POST">
-
-                
-                
+            <form action="/AddEnvio" method="POST">
                 <div class="form-group">
-                    <select class="form-control" name="IdUnidad" id="IdUnidad">
+                    <select class="form-control" name="idUnidadTransporte" id="idUnidadTransporte">
                     {% for cliente in Unidades %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idUnidadTransporte}}" selected>{{cliente.marca}} -- {{cliente.modelo}}</option>
+                          <option value="{{cliente.idUnidadTransporte}}" selected>{{cliente.idUnidadTransporte}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <input type="date"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" required>
+                    <input type="date"  id="fechaInicio" name="fechaInicio" placeholder="FechaInicio" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="date"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" required>
+                    <input type="date"  id="fechaFin" name="fechaFin" placeholder="FechaIFinal" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="Taller"  name="Taller" placeholder="Taller" maxlength="100" class="form-control" required>
+                    <input type="text" id="pesoTotal"  name="pesoTotal" placeholder="Peso Total en Kilogramos" maxlength="100" class="form-control" required>
                 </div>
+                
                 <div class="form-group">
-                    <input type="number" id="Costo"  name="Costo" placeholder="Costo" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required>
-                </div>
-
-                <div class="form-group">
-                    <select class="form-control" name="Tipo" id="Tipo">
-                        <option value="C" selected>Completo</option>
-                        <option value="P" selected>Parcial</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select class="form-control" name="Estatus" id="Estatus">
+                    <select class="form-control" name="estatus" id="estatus">
                         <option value="A" selected>Activo</option>
                     </select>
                 </div>
@@ -69,43 +53,37 @@
     </div>
 
     <div class="col-md-7">
-        <p>Mantenimientos</p>
+        <p>Envios</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
-                    <td>IdMantenimiento</td>
+                    <td>IdEnvio</td>
                     <td>UnidadTransporte</td>
                     <td>Fecha Inicio</td>
                     <td>Fecha Fin</td>
-                    <td>Taller</td>
-                    <td>Costo</td>
-                    <td>Comentarios</td>
-                    <td>Tipo</td>
+                    <td>Peso Total</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cli in Mantenimientos %}
-                {%if (cli.idMantenimiento) <= (PosicionA*5) and (cli.idMantenimiento) >= ((PosicionA*5)-4)%}
+                {% for cli in Direccion %}
+                {%if (cli.idEnvio) <= (PosicionA*5) and (cli.idEnvio) >= ((PosicionA*5)-4)%}
                 <tr>
-                    <td>{{cli.idMantenimiento}}       </td>
-                    <td>{{cli.Transporte.marca}} -- {{cli.Transporte.modelo}}</td>
+                    <td>{{cli.idEnvio}}       </td>
+                    <td>{{cli.idUnidadTransporte}}</td>
                     <td>{{cli.fechaInicio}}       </td>
                     <td>{{cli.fechaFin}}       </td>
-                    <td>{{cli.taller}}       </td>
-                    <td>{{cli.costo}}       </td>
-                    <td>{{cli.comentarios}}       </td>
-                    <td>{{cli.tipo}}       </td>
+                    <td>{{cli.pesoTotal}}       </td>
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>
                         <td>
-                        <a href="/EditMantenimiento/{{cli.idMantenimiento}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteMantenimiento/{{cli.idMantenimiento}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditEnvio/{{cli.idEnvio}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteEnvio/{{cli.idEnvio}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                         </td>
                         {%else%}
                         <td style="background-color:#FF0000">Inactivo</td>
                         <td>
-                            <a href="/EditMantenimiento/{{cli.idMantenimiento}}" class="btn btn-warning btn-block">Editar</a>
+                            <a href="/EditEnvio/{{cli.idEnvio}}" class="btn btn-warning btn-block">Editar</a>
                             
                         </td>
                         {%endif%}
@@ -118,11 +96,11 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 {%if PosicionA > 1 %}
-              <li class="page-item"><a class="page-link" href="/Mantenimientos/{{PosicionA-1}}">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="/Envios/{{PosicionA-1}}">Previous</a></li>
               {% endif %}
               
               {%if PosicionA < PaginasA %}
-              <li class="page-item"><a class="page-link" href="/Mantenimientos/{{PosicionA+1}}">Next</a></li>
+              <li class="page-item"><a class="page-link" href="/Envios/{{PosicionA+1}}">Next</a></li>
               {% endif %}
             </ul>
           </nav>

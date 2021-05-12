@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
+from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEnvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
 import re,js2py
 app = Flask(__name__)
 app.secret_key = 'ERP'
@@ -948,8 +948,10 @@ def eliminarMantenimiento(id):
 @app.route('/Ventas/<int:id>')
 @login_required
 def consultaVentas(id):
-    cantA=0;cantB=0;
-    for direc in D:
+    V = Venta()
+    V = V.consultaGeneral()
+    cantA=0;
+    for direc in V:
         cantA+=1
     if(cantA%5!=0):
         cantA= int(cantA/5)
@@ -958,20 +960,23 @@ def consultaVentas(id):
         cantA= int(cantA/5)
     
     
-    F = Venta()
+    F = Cliente()
     F = F.consultaGeneral()
     S = Sucursal()
     S = S.consultaGeneral()
     E = Empleado()
     E = E.consultaGeneral()
 
-    return render_template('/Ventas/AdministrarVenta.html',Sucursales=S,Empleados=E,Ventas=F,PaginasA=cantA,PosicionA=id)
+    return render_template('/Ventas/AdministrarVenta.html',Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVenta',methods=['POST'])
 @login_required
 def guardarVenta():
     try:
         D = Venta()
+        D.idCliente = request.form['idCliente']
+        D.idSucursal = request.form['idSucursal']
+        D.idEmpleado = request.form['idEmpleado']
         D.fecha = request.form['fecha']
         D.subtotal = request.form['subtotal']
         D.iva = request.form['iva']
@@ -980,10 +985,6 @@ def guardarVenta():
         D.comentarios = request.form['comentarios']
         D.estatus = request.form['estatus']
         D.tipo = request.form['tipo']
-        D.idCliente = request.form['idCliente']
-        D.idSucursal = request.form['idSucursal']
-        D.idEmpleado = request.form['idEmpleado']
-        
         D.insertar()
         return redirect('/Ventas/1')
     except:
@@ -995,8 +996,13 @@ def consultarVenta(id):
     D = Venta()
     D.idVenta = id
     D = D.consultaIndividual()
-    
-    return render_template('DireccionesClientes/EditDireccion.html', Venta=D)
+    F = Cliente()
+    F = F.consultaGeneral()
+    S = Sucursal()
+    S = S.consultaGeneral()
+    E = Empleado()
+    E = E.consultaGeneral()
+    return render_template('Ventas/EditVenta.html',Sucursales=S,Empleados=E,Clientes=F,Venta=D)
 
 @app.route('/Venta/modificar', methods=['POST'])
 @login_required
@@ -1036,10 +1042,11 @@ def eliminarVenta(id):
 @app.route('/VentaDetalle/<int:id>')
 @login_required
 def consultaVentaDe(id):
-    cantA=0;cantB=0;
+    cantA=0;
     D = VentasDetalle()
     D = D.consultaGeneral()
-    
+    C = Venta()
+    C = C.consultaGeneral()
     for direc in D:
         cantA+=1
     if(cantA%5!=0):
@@ -1048,19 +1055,18 @@ def consultaVentaDe(id):
     else:
         cantA= int(cantA/5)
     
-    return render_template('/VentasDetalle/AdministrarDetalle.html',Detalles=D,PaginasA=cantA,PosicionA=id)
+    return render_template('/VentasDetalle/AdministrarDetalle.html',Detalles=D,Ventas=C,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVentaDetalle',methods=['POST'])
 @login_required
 def guardarVentaDe():
     try:
-        D = DireccionesClientes()
-        D.idVentaDetalle = request.form['IdCliente']
-        D.precioVenta = request.form['IdCiudad']
-        D.cantidad = request.form['Calle']
-        D.subtotal = request.form['Numero']
-        D.idVenta = request.form['Colonia']
-        D.estatus = request.form['CP']
+        D = VentasDetalle()
+        D.precioVenta = request.form['precioVenta']
+        D.cantidad = request.form['cantidad']
+        D.subtotal = request.form['subtotal']
+        D.idVenta = request.form['idVenta']
+        D.estatus = request.form['estatus']
         D.insertar()
         return redirect('/VentaDetalle/1')
     except:
@@ -1072,7 +1078,9 @@ def consultarVentaDe(id):
     D = VentasDetalle()
     D.idVentaDetalle = id
     D = D.consultaIndividual()
-    return render_template('DireccionesClientes/EditDireccion.html', Detalle=D)
+    C = Venta()
+    C = C.consultaGeneral()
+    return render_template('VentasDetalle/EditDetalle.html', Ventas=C, Detalle=D)
 
 @app.route('/VentaDetalle/modificar', methods=['POST'])
 @login_required
@@ -1104,9 +1112,12 @@ def eliminarVentaDe(id):
 @app.route('/Cobros/<int:id>')
 @login_required
 def consultaCobros(id):
-    cantA=0;cantB=0;
+    cantA=0;
     D = Cobro()
     D = D.consultaGeneral()
+
+    V = Venta()
+    V = V.consultaGeneral()
    
     for direc in D:
         cantA+=1
@@ -1116,22 +1127,18 @@ def consultaCobros(id):
     else:
         cantA= int(cantA/5)
     
-    return render_template('/Cobros/AdministrarCobro.html',Cobro=D,PaginasA=cantA,PosicionA=id)
+    return render_template('/Cobros/AdministrarCobro.html',Cobro=D,Ventas=V,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddCobro',methods=['POST'])
 @login_required
 def guardarCobro():
-    try:
-        D = Cobro()
-        D.fecha = request.form['fecha']
-        D.importe = request.form['importe']
-        D.idVenta = request.form['idVenta']
-        D.estatus = request.form['estatus']
-        
-        D.insertar()
-        return redirect('/Cobros/1')
-    except:
-        return 'No hay respuesta a tu peticion'
+    D = Cobro()
+    D.fecha = request.form['fecha']
+    D.importe = request.form['importe']
+    D.idVenta = request.form['idVenta']
+    D.estatus = request.form['estatus']
+    D.insertar()
+    return redirect('/Cobros/1')
 
 @app.route('/EditCobro/<int:id>')
 @login_required
@@ -1141,7 +1148,7 @@ def consultarCobro(id):
     D = D.consultaIndividual()
     return render_template('Cobros/EditCobro.html', Cobro=D)
 
-@app.route('/Cobros/modificar', methods=['POST'])
+@app.route('/Cobro/modificar', methods=['POST'])
 @login_required
 def actualizarCobro():
     try:
@@ -1171,9 +1178,11 @@ def eliminarCobro(id):
 @app.route('/Envios/<int:id>')
 @login_required
 def consultaEnvios(id):
-    cantA=0;cantB=0;
+    cantA=0;
     D = Envio()
     D = D.consultaGeneral()
+    U = UnidadesTransportes()
+    U = U.consultaGeneral()
     
     for direc in D:
         cantA+=1
@@ -1182,7 +1191,7 @@ def consultaEnvios(id):
         cantA+=1 
     else:
         cantA= int(cantA/5)
-    return render_template('/Envios/AdministrarEnvio.html',Direccion=D, PaginasA=cantA,PosicionA=id)
+    return render_template('/Envios/AdministrarEnvio.html',Direccion=D,Unidades=U, PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddEnvio',methods=['POST'])
 @login_required
@@ -1206,10 +1215,12 @@ def consultarEnvio(id):
     D = Envio()
     D.idEnvio = id
     D = D.consultaIndividual()
+    U = UnidadesTransportes()
+    U = U.consultaGeneral()
     
-    return render_template('Envios/EditEnvio.html', Direccion=D)
+    return render_template('Envios/EditEnvio.html', Direccion=D, Unidades=U)
 
-@app.route('/Envios/modificar', methods=['POST'])
+@app.route('/Envio/modificar', methods=['POST'])
 @login_required
 def actualizarEnvio():
     try:
@@ -1235,12 +1246,23 @@ def eliminarEnvio(id):
 #Fin Crud Envios
 
 #Inicio Crud DetallesEnvio
-@app.route('/DetallesEnvio/<int:id>')
+@app.route('/DetallesEnvio/<int:idenvio>/<int:idventa>')
 @login_required
-def consultaDetallesEn(id):
+def consultaDetallesEn(idenvio,idventa):
     cantA=0;
     D = DetalleEnvio()
     D = D.consultaGeneral()
+
+    E = Envio()
+    E = E.consultaGeneral()
+    V = Venta()
+    V = V.consultaGeneral()
+
+    C = DireccionesClientes()
+    C = C.consultaGeneral()
+
+    H = ContactosClientes()
+    H = H.consultaGeneral()
     
     for direc in D:
         cantA+=1
@@ -1249,7 +1271,9 @@ def consultaDetallesEn(id):
         cantA+=1 
     else:
         cantA= int(cantA/5)
-    return render_template('/DetallesEnvio/AdministrarDetalle.html',Direccion=D,PaginasA=cantA,PosicionA=id)
+    D = D.consultaIndividual(idenvio,idventa)
+
+    return render_template('/DetallesEnvio/AdministrarDetalle.html',Contactos=D,Direccion=D,Direcciones=C,Envios=E,Ventas=V, PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddDetalleEnvio',methods=['POST'])
 @login_required
