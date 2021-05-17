@@ -1246,9 +1246,9 @@ def eliminarEnvio(id):
 #Fin Crud Envios
 
 #Inicio Crud DetallesEnvio
-@app.route('/DetallesEnvio/<int:idenvio>/<int:idventa>')
+@app.route('/DetallesEnvio/<int:id>')
 @login_required
-def consultaDetallesEn(idenvio,idventa):
+def consultaDetallesEn(id):
     cantA=0;
     D = DetalleEnvio()
     D = D.consultaGeneral()
@@ -1271,9 +1271,8 @@ def consultaDetallesEn(idenvio,idventa):
         cantA+=1 
     else:
         cantA= int(cantA/5)
-    D = D.consultaIndividual(idenvio,idventa)
 
-    return render_template('/DetallesEnvio/AdministrarDetalle.html',Contactos=D,Direccion=D,Direcciones=C,Envios=E,Ventas=V, PaginasA=cantA,PosicionA=id)
+    return render_template('/DetallesEnvio/AdministrarDetalle.html',Contactos=H,Direccion=D,Direcciones=C,Envios=E,Ventas=V, PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddDetalleEnvio',methods=['POST'])
 @login_required
@@ -1283,10 +1282,10 @@ def guardarDetalleEn():
         D.idEnvio = request.form['idEnvio']
         D.idVenta = request.form['idVenta']
         D.idDireccion = request.form['idDireccion']
+        D.idContacto = request.form['idContacto']
         D.fechaEntregaPlaneada = request.form['fecha']
         D.peso = request.form['peso']
         D.estatus = request.form['estatus']
-        D.idContacto = request.form['idContacto']
         D.insertar()
         return redirect('/DetallesEnvio/1')
     except:
@@ -1298,7 +1297,13 @@ def consultarDetalleEn(idventa,idenvio):
     D = DetalleEnvio()
     D = D.consultaIndividual(idventa,idenvio)
     
-    return render_template('DireccionesClientes/EditDireccion.html', Direccion=D)
+    C = DireccionesClientes()
+    C = C.consultaGeneral()
+
+    H = ContactosClientes()
+    H = H.consultaGeneral()
+
+    return render_template('DetallesEnvio/EditDetalle.html',Mantenimiento=D, Direcciones=C,Contactos=H)
 
 @app.route('/DetalleEnvio/modificar', methods=['POST'])
 @login_required
@@ -1312,7 +1317,6 @@ def actualizarDetalleEn():
         D.peso = request.form['peso']
         D.estatus = request.form['estatus']
         D.idContacto = request.form['idContacto']
-        D.insertar()
 
         D.actualizar()
         return redirect('/DetallesEnvio/1')

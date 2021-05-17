@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="idVenta" id="idVenta">
-                    {% for cliente in Envios %}
+                    {% for cliente in Ventas %}
                         {%if cliente.estatus=="A"%}
                           <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}}</option>
                         {%endif%}
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" name="idVenta" id="idVenta">
+                    <select class="form-control" name="idDireccion" id="idDireccion">
                     {% for cliente in Direcciones %}
                         {%if cliente.estatus=="A"%}
                           <option value="{{cliente.idDireccion}}" selected>{{cliente.idDireccion}}</option>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" name="idVenta" id="idVenta">
+                    <select class="form-control" name="idContacto" id="idContacto">
                     {% for cliente in Contactos %}
                         {%if cliente.estatus=="A"%}
                           <option value="{{cliente.idContacto}}" selected>{{cliente.idContacto}}</option>
@@ -59,11 +59,16 @@
 
 
                 <div class="form-group">
-                    <input type="date"  id="fechaEntregaPlaneada" name="fechaEntregaPlaneada" placeholder="Fecha Entrega Planeada" class="form-control" required>
+                    <input type="date"  id="fecha" name="fecha" placeholder="Fecha Entrega Planeada" class="form-control" required>
                 </div>
 
                 <div class="form-group">
                     <input type="text" id="peso"  name="peso" placeholder="Peso" maxlength="100" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" name="estatus" id="estatus">
+                          <option value="A" selected>Activo</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -92,26 +97,24 @@
             </thead>
             <tbody>
                 {% for cli in Direccion %}
-                {%if (cli.IdEnvio) <= (PosicionA*5) and (cli.idEnvio) >= ((PosicionA*5)-4)%}
+                {%if (cli.idEnvio + cli.idVenta) <= (PosicionA*5) and (cli.idEnvio + cli.idVenta) >= ((PosicionA*5)-4)%}
                 <tr>
-                    <td>{{cli.idMantenimiento}}       </td>
-                    <td>{{cli.Transporte.marca}} -- {{cli.Transporte.modelo}}</td>
-                    <td>{{cli.fechaInicio}}       </td>
-                    <td>{{cli.fechaFin}}       </td>
-                    <td>{{cli.taller}}       </td>
-                    <td>{{cli.costo}}       </td>
-                    <td>{{cli.comentarios}}       </td>
-                    <td>{{cli.tipo}}       </td>
+                    <td>{{cli.idVenta}}</td>
+                    <td>{{cli.idEnvio}}</td>
+                    <td>{{cli.idDireccion}}       </td>
+                    <td>{{cli.idContacto}}       </td>
+                    <td>{{cli.fechaEntregaPlaneada}}       </td>
+                    <td>{{cli.peso}}       </td>
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>
                         <td>
-                        <a href="/EditMantenimiento/{{cli.idMantenimiento}}" class="btn btn-warning btn-block">Editar</a>
-                        <a href="/DeleteMantenimiento/{{cli.idMantenimiento}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        <a href="/EditDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                         </td>
                         {%else%}
                         <td style="background-color:#FF0000">Inactivo</td>
                         <td>
-                            <a href="/EditMantenimiento/{{cli.idMantenimiento}}" class="btn btn-warning btn-block">Editar</a>
+                            <a href="/EditDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-warning btn-block">Editar</a>
                             
                         </td>
                         {%endif%}

@@ -562,7 +562,7 @@ class DetalleEnvio(db.Model):
         db.session.merge(self)
         db.session.commit()
 
-    def eliminar(self,idVenta,idEnvio):
+    def eliminar(self,idEnvio,idVenta):
         cult = self.query.all()
         for cu in cult:
             if(cu.idEnvio==idEnvio and cu.idVenta==idVenta):

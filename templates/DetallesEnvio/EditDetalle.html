@@ -1,52 +1,51 @@
 {% extends 'Layout.html'%} {% block body %}
 <div class="col-md-8 offset-md-2">
     <div class="card card-body">
-        <form action="/Mantenimiento/modificar" method="POST">
-
-
-            <div class="form-group">
-                <input type="number" value="{{Mantenimiento.idMantenimiento}}"  id="IdMantenimiento" name="IdMantenimiento" placeholder="IdMantenimiento" class="form-control" readonly required>
-            </div>
+        <form action="/DetalleEnvio/modificar" method="POST">
             
             <div class="form-group">
-                <select class="form-control" name="IdUnidad" id="IdUnidad">
-                
-                <option value="{{Mantenimiento.idUnidadTransporte}}" selected>{{Mantenimiento.Transporte.marca}} -- {{Mantenimiento.Transporte.modelo}}</option>
+                <select class="form-control" name="idEnvio" id="idEnvio">
+                      <option value="{{Mantenimiento.idEnvio}}" selected>{{Mantenimiento.idEnvio}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="idVenta" id="idVenta">
+                      <option value="{{Mantenimiento.idVenta}}" selected>{{Mantenimiento.idVenta}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaInicio}}"  id="FechaI" name="FechaI" placeholder="FechaInicio" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="date" value="{{Mantenimiento.fechaFin}}"  id="FechaF" name="FechaF" placeholder="FechaIFinal" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Mantenimiento.taller}}" id="Taller"  name="Taller" placeholder="Teller" maxlength="100" class="form-control" readonly required>
-            </div>
-            <div class="form-group">
-                <input type="number" value="{{Mantenimiento.costo}}" id="Costo"  name="Costo" placeholder="Costo" class="form-control" readonly required>
-            </div>
-
-            <div class="form-group">
-                <input type="text" value="{{Mantenimiento.comentarios}}" id="Comentarios" name="Comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" readonly required>
-            </div>
-            
-            <div class="form-group">
-                <select class="form-control" name="Tipo" id="Tipo">
-                    {%if Mantenimiento.tipo=="C"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Completo</option>
+                <select class="form-control" name="idDireccion" id="idDireccion">
+                {% for cliente in Direcciones %}
+                    {%if cliente.estatus=="A"%}
+                      <option value="{{cliente.idDireccion}}" >{{cliente.idDireccion}}</option>
                     {%endif%}
-                    {%if Mantenimiento.tipo=="P"%}
-                      <option value="{{Mantenimiento.tipo}}" selected>Parcial</option>
-                    {%endif%}
+                {% endfor %}
+                <option value="{{Mantenimiento.idDireccion}}" selected>{{Mantenimiento.idDireccion}}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <select class="form-control" name="Estatus" id="Estatus">
+                <select class="form-control" name="idContacto" id="idContacto">
+                {% for cliente in Contactos %}
+                    {%if cliente.estatus=="A"%}
+                      <option value="{{cliente.idContacto}}" >{{cliente.idContacto}}</option>
+                    {%endif%}
+                {% endfor %}
+                <option value="{{Mantenimiento.idDireccion}}" selected>{{Mantenimiento.idDireccion}}</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <input type="date" value="{{Mantenimiento.fechaEntregaPlaneada}}"  id="fecha" name="fecha" placeholder="Fecha Entrega Planeada" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" value="{{Mantenimiento.peso}}" id="peso"  name="peso" placeholder="Peso" maxlength="100" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="estatus" id="estatus">
                     {%if Mantenimiento.estatus=="A"%}
                       <option value="{{Mantenimiento.estatus}}" selected>Activo</option>
                       <option value="I">Inactivo</option>
