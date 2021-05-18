@@ -15,7 +15,7 @@
                       <option value="{{cliente.IdCliente}}">{{cliente.Nombre}}</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Venta.idCliente}}" selected>{{Venta.idCliente}}</option>
+                <option value="{{Venta.idCliente}}" selected>{{Venta.Cliente.Nombre}}</option>
                 </select>
             </div>
 
@@ -26,7 +26,7 @@
                       <option value="{{Sucursal.idSucursal}}" >{{Sucursal.nombre}}</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Venta.idSucursal}}" selected>{{Venta.idSucursal}}</option>
+                <option value="{{Venta.idSucursal}}" selected>{{Venta.Sucursal.nombre}}</option>
                 </select>
             </div>
 
@@ -37,7 +37,7 @@
                       <option value="{{Empleado.idEmpleado}}" >{{Empleado.nombre}}</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Venta.idEmpleado}}" selected>{{Venta.idEmpleado}}</option>
+                <option value="{{Venta.idEmpleado}}" selected>{{Venta.Empleado.nombre}} {{Venta.Empleado.apellidoPaterno}}</option>
                 </select>
             </div>
 
@@ -66,13 +66,13 @@
 
             <div class="form-group">
                 <select class="form-control" name="tipo" id="tipo">
-                    {%if Venta.tipo=="A"%}
-                    <option value="B" selected>Tipo B</option>
-                      <option value="{{Venta.tipo}}" selected>Tipo A</option>
+                    {%if Venta.tipo=="C"%}
+                    <option value="P" >Pagos</option>
+                      <option value="{{Venta.tipo}}" selected>Contado</option>
                     {%endif%}
-                    {%if Venta.tipo=="B"%}
-                    <option value="A" selected>Tipo A</option>
-                      <option value="{{Venta.tipo}}" selected>Tipo B</option>
+                    {%if Venta.tipo=="P"%}
+                    <option value="C" >Contado</option>
+                      <option value="{{Venta.tipo}}" selected>Pagos</option>
                     {%endif%}
                 </select>
             </div>

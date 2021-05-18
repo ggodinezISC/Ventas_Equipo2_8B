@@ -61,7 +61,7 @@
                     <td>UnidadTransporte</td>
                     <td>Fecha Inicio</td>
                     <td>Fecha Fin</td>
-                    <td>Peso Total</td>
+                    <td>Peso en Toneladas</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
@@ -70,7 +70,7 @@
                 {%if (cli.idEnvio) <= (PosicionA*5) and (cli.idEnvio) >= ((PosicionA*5)-4)%}
                 <tr>
                     <td>{{cli.idEnvio}}       </td>
-                    <td>{{cli.idUnidadTransporte}}</td>
+                    <td>{{cli.Unidad.marca}}  {{ cli.Unidad.modelo}}</td>
                     <td>{{cli.fechaInicio}}       </td>
                     <td>{{cli.fechaFin}}       </td>
                     <td>{{cli.pesoTotal}}       </td>

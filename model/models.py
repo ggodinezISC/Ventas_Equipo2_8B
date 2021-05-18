@@ -420,6 +420,9 @@ class Venta(db.Model):
     comentarios = Column(String, nullable=False)
     estatus = Column(String, nullable=False)
     tipo = Column(String, nullable=False)
+    Cliente=relationship('Cliente', foreign_keys=[idCliente])
+    Sucursal=relationship('Sucursal', foreign_keys=[idSucursal])
+    Empleado=relationship('Empleado', foreign_keys=[idEmpleado])
     
 
     def insertar(self):
@@ -452,6 +455,7 @@ class VentasDetalle(db.Model):
     subtotal = Column(Float, nullable=False)
     idVenta = Column(Integer, ForeignKey('Ventas.idVenta'), nullable=False)
     estatus = Column(String, nullable=False)
+    Venta=relationship('Venta', foreign_keys=[idVenta])
 
 
     def insertar(self):
@@ -515,6 +519,7 @@ class Envio(db.Model):
     idUnidadTransporte = Column(Integer, ForeignKey('UnidadesTransporte.idUnidadTransporte') ,nullable=False)
     pesoTotal = Column(Float, nullable=False)
     estatus = Column(String, nullable=False)
+    Unidad=relationship('UnidadesTransportes', foreign_keys=[idUnidadTransporte])
     
 
     def insertar(self):
@@ -548,6 +553,9 @@ class DetalleEnvio(db.Model):
     peso                 = Column(Float, nullable=False)
     estatus              = Column(String, nullable=False)
     idContacto           = Column(Integer, ForeignKey('ContactosCliente.idContacto') ,nullable=False)
+    Venta=relationship('Venta', foreign_keys=[idVenta])
+    Direccion=relationship('DireccionesClientes', foreign_keys=[idDireccion])
+    Contacto=relationship('ContactosClientes', foreign_keys=[idContacto])
 
     
     def insertar(self):

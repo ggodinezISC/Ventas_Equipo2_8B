@@ -12,7 +12,7 @@
                 <select class="form-control" name="idVenta" id="idVenta">
                 {% for cliente in Ventas %}
                     {%if cliente.estatus=="A"%}
-                      <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}}</option>
+                      <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}} {{cliente.Cliente.Nombre}}</option>
                     {%endif%}
                 {% endfor %}
                 </select>

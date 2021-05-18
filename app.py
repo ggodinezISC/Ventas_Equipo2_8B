@@ -649,10 +649,13 @@ def guardarParcela():
 @app.route('/EditParcela/<int:id>')
 @login_required
 def consultarParcela(id):
-    D = Parcela()
+    D = Parcela()    
     D.idParcela = id
     D = D.consultaIndividual()
-    return render_template('Parcelas/EditParcela.html', Parcela=D)
+
+    F = DireccionesClientes()
+    F=F.consultaGeneral()
+    return render_template('Parcelas/EditParcela.html', Parcela=D,Direcciones=F)
 
 @app.route('/Parcelas/modificar', methods=['POST'])
 @login_required
@@ -972,23 +975,20 @@ def consultaVentas(id):
 @app.route('/AddVenta',methods=['POST'])
 @login_required
 def guardarVenta():
-    try:
-        D = Venta()
-        D.idCliente = request.form['idCliente']
-        D.idSucursal = request.form['idSucursal']
-        D.idEmpleado = request.form['idEmpleado']
-        D.fecha = request.form['fecha']
-        D.subtotal = request.form['subtotal']
-        D.iva = request.form['iva']
-        D.total = request.form['total']
-        D.cantPagada = request.form['cantPagada']
-        D.comentarios = request.form['comentarios']
-        D.estatus = request.form['estatus']
-        D.tipo = request.form['tipo']
-        D.insertar()
-        return redirect('/Ventas/1')
-    except:
-        return 'No hay respuesta a tu peticion'
+     D = Venta()
+     D.idCliente = request.form['idCliente']
+     D.idSucursal = request.form['idSucursal']
+     D.idEmpleado = request.form['idEmpleado']
+     D.fecha = request.form['fecha']
+     D.subtotal = request.form['subtotal']
+     D.iva = request.form['iva']
+     D.cantPagada = request.form['cantPagada']
+     D.total = ( (float (D.iva)/100)*float(D.subtotal) )+ float(D.subtotal)
+     D.comentarios = request.form['comentarios']
+     D.estatus = request.form['estatus']
+     D.tipo = request.form['tipo']
+     D.insertar()
+     return redirect('/Ventas/1')
 
 @app.route('/EditVenta/<int:id>')
 @login_required

@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="peso"  name="peso" placeholder="Peso" maxlength="100" class="form-control" required>
+                    <input type="text" id="peso"  name="peso" placeholder="Peso en Toneladas" maxlength="100" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="estatus" id="estatus">
@@ -87,11 +87,11 @@
             <thead>
                 <tr>
                     <td>IdEnvio</td>
-                    <td>IdVenta</td>
-                    <td>IdDireccion</td>
-                    <td>IdContacto</td>
+                    <td>Venta al Cliente</td>
+                    <td>Direccion</td>
+                    <td>Contacto</td>
                     <td>FechaEntrega</td>
-                    <td>Peso</td>
+                    <td>Peso en Toneladas</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
@@ -100,9 +100,9 @@
                 {%if (cli.idEnvio + cli.idVenta) <= (PosicionA*5) and (cli.idEnvio + cli.idVenta) >= ((PosicionA*5)-4)%}
                 <tr>
                     <td>{{cli.idVenta}}</td>
-                    <td>{{cli.idEnvio}}</td>
-                    <td>{{cli.idDireccion}}       </td>
-                    <td>{{cli.idContacto}}       </td>
+                    <td>{{cli.Venta.Cliente.Nombre}}</td>
+                    <td>{{cli.Direccion.calle}} #{{cli.Direccion.numero}} Col. {{cli.Direccion.colonia}}, {{cli.Direccion.Ciudad.nombre}} {{cli.Direccion.Ciudad.Estado.nombre}}.   </td>
+                    <td>{{cli.Contacto.nombre}}       </td>
                     <td>{{cli.fechaEntregaPlaneada}}       </td>
                     <td>{{cli.peso}}       </td>
                     {%if cli.estatus=="A"%}

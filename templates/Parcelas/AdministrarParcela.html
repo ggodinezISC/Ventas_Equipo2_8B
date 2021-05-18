@@ -40,7 +40,7 @@
                     <select class="form-control" name="IdDireccion" id="IdDireccion">
                     {% for cli in Direccion %}
                         {%if cli.estatus=="A"%}
-                          <option value="{{cli.idDireccion}}" selected>{{cli.Cliente.Nombre}} --{{cli.Ciudad.nombre}} --{{cli.tipo}} </option>
+                          <option value="{{cli.idDireccion}}" selected>{{cli.calle}} #{{cli.numero}} Col. {{cli.colonia}}, {{cli.Ciudad.nombre}} {{cli.Ciudad.Estado.nombre}}. </option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -74,7 +74,7 @@
                     <td>IdParcela</td>
                     <td>Cliente</td>
                     <td>Cultivo</td>
-                    <td>Direccion-Regitrada</td>
+                    <td>Direccion</td>
                     <td>Extension en hectáreas</td>
                     <td>Estatus</td>
                 </tr>
@@ -86,7 +86,7 @@
                     <td>{{cli.idParcela}}       </td>
                     <td>{{cli.Cliente.Nombre}}       </td>
                     <td>{{cli.Cultivo.Nombre}}       </td>
-                    <td>{{cli.Cliente.Nombre}} --{{cli.Direccion.Ciudad.nombre}} --{{cli.Direccion.tipo}} </td>
+                    <td>{{cli.Direccion.calle}} #{{cli.Direccion.numero}} Col. {{cli.Direccion.colonia}}, {{cli.Direccion.Ciudad.nombre}} {{cli.Direccion.Ciudad.Estado.nombre}}. </td>
                     <td>{{cli.extension}}       </td>
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>

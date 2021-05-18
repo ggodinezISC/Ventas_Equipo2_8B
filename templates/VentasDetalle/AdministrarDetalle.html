@@ -61,7 +61,7 @@
             <thead>
                 <tr>
                     <td>IdDetallesVenta</td>
-                    <td>IdVenta</td>
+                    <td>Venta al Cliente</td>
                     <td>Precio Venta</td>
                     <td>Cantidad</td>
                     <td>SubTotal</td>
@@ -73,7 +73,7 @@
                 {%if (cli.idVentaDetalle) <= (PosicionA*5) and (cli.idVentaDetalle) >= ((PosicionA*5)-4)%}
                 <tr>
                     <td>{{cli.idVentaDetalle}}       </td>
-                    <td>{{cli.idVenta}}</td>
+                    <td>{{cli.Venta.Cliente.Nombre}}</td>
                     <td>{{cli.precioVenta}}       </td>
                     <td>{{cli.cantidad}}       </td>
                     <td>{{cli.subtotal}}       </td>

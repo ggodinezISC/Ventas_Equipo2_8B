@@ -12,10 +12,10 @@
                 <select class="form-control" name="idUnidadTransporte" id="idUnidadTransporte">
                 {% for cliente in Unidades %}
                     {%if cliente.estatus=="A"%}
-                      <option value="{{cliente.idUnidadTransporte}}">{{cliente.idUnidadTransporte}}</option>
+                      <option value="{{cliente.idUnidadTransporte}}">{{cliente.modelo}} {{cliente.marca}}</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Direccion.idUnidadTransporte}}" selected>{{Direccion.idUnidadTransporte}}</option>
+                <option value="{{Direccion.idUnidadTransporte}}" selected>{{Direccion.Unidad.modelo}} {{Direccion.Unidad.marca}}</option>
                 </select>
             </div>
 
