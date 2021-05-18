@@ -10,7 +10,7 @@
             <div class="form-group">
                 <select class="form-control" name="IdCliente" id="IdCliente">
                     {%for cli in Clientes%}
-                    <option value="{{cli.idDireccion}}" >{{cli.calle}} #{{cli.numero}} Col. {{cli.colonia}}, {{cli.Ciudad.nombre}} {{cli.Ciudad.Estado.nombre}}.</option>
+                    <option value="{{cli.IdCliente}}" >{{cli.Nombre}}.</option>
                     {%endfor%}
                 <option value="{{Parcela.Cliente.IdCliente}}" selected>{{Parcela.Cliente.Nombre}}</option>
                 </select>
@@ -18,7 +18,9 @@
             
             <div class="form-group">
                 <select class="form-control" name="IdCultivo" id="IdCultivo">
-                
+                    {%for cli in Cultivos%}
+                    <option value="{{cli.IdCultivo}}" >{{cli.Nombre}}</option>
+                    {%endfor%}
                 <option value="{{Parcela.Cultivo.IdCultivo}}" selected>{{Parcela.Cultivo.Nombre}}</option>
                 </select>
             </div>

@@ -655,7 +655,13 @@ def consultarParcela(id):
 
     F = DireccionesClientes()
     F=F.consultaGeneral()
-    return render_template('Parcelas/EditParcela.html', Parcela=D,Direcciones=F)
+    
+    G = Cliente()
+    G=G.consultaGeneral()
+    
+    H = Cultivo()
+    H=H.consultaGeneral()
+    return render_template('Parcelas/EditParcela.html', Parcela=D,Direcciones=F,Clientes=G,Cultivos=H)
 
 @app.route('/Parcelas/modificar', methods=['POST'])
 @login_required
