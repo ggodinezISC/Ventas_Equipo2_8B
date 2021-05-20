@@ -124,7 +124,11 @@
                     <td>{{cli.total}}       </td>
                     <td>{{cli.cantPagada}}       </td>
                     <td>{{cli.comentarios}}       </td>
-                    <td>{{cli.tipo}}       </td>
+                    {%if cli.tipo=="C"%}
+                    <td>Contado      </td>
+                    {%else%}
+                    <td>Crédito      </td>
+                    {%endif%}
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>
                         <td>

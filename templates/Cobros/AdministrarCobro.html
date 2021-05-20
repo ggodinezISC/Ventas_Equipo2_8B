@@ -18,8 +18,8 @@
                 <div class="form-group">
                     <select class="form-control" name="idVenta" id="idVenta">
                     {% for cliente in Ventas %}
-                        {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}}</option>
+                        {%if cliente.estatus=="A" and cliente.cantPagada < cliente.total%}
+                          <option value="{{cliente.idVenta}}" selected>{{cliente.Cliente.Nombre}} Debe: {{cliente.total-cliente.cantPagada}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -55,7 +55,7 @@
             <thead>
                 <tr>
                     <td>IdCobro</td>
-                    <td>IdVenta</td>
+                    <td>Cliente</td>
                     <td>Fecha</td>
                     <td>Importe</td>
                     <td>Estatus</td>
@@ -66,7 +66,7 @@
                 {%if (cli.idCobro) <= (PosicionA*5) and (cli.idCobro) >= ((PosicionA*5)-4)%}
                 <tr>
                     <td>{{cli.idCobro}}       </td>
-                    <td>{{cli.idVenta}}</td>
+                    <td>{{cli.Venta.Cliente.Nombre}}</td>
                     <td>{{cli.fecha}}       </td>
                     <td>{{cli.importe}}       </td>
                     {%if cli.estatus=="A"%}

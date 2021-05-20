@@ -10,18 +10,18 @@
             </div>
             <div class="form-group">
                 <select class="form-control" name="idVenta" id="idVenta">
-                      <option value="{{Mantenimiento.idVenta}}" selected>{{Mantenimiento.idVenta}}</option>
+                      <option value="{{Mantenimiento.idVenta}}" selected>{{Mantenimiento.Venta.Cliente.Nombre}}</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <select class="form-control" name="idDireccion" id="idDireccion">
-                {% for cliente in Direcciones %}
-                    {%if cliente.estatus=="A"%}
-                      <option value="{{cliente.idDireccion}}" >{{cliente.idDireccion}}</option>
+                {% for cli in Direcciones %}
+                    {%if cli.estatus=="A"%}
+                      <option value="{{cli.idDireccion}}" >{{cli.calle}} #{{cli.numero}} Col. {{cli.colonia}}, {{cli.Ciudad.nombre}} {{cli.Ciudad.Estado.nombre}}.</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Mantenimiento.idDireccion}}" selected>{{Mantenimiento.idDireccion}}</option>
+                <option value="{{Mantenimiento.idDireccion}}" selected>{{Mantenimiento.Direccion.calle}} #{{Mantenimiento.Direccion.numero}} Col. {{Mantenimiento.Direccion.colonia}}, {{Mantenimiento.Direccion.Ciudad.nombre}} {{Mantenimiento.Direccion.Ciudad.Estado.nombre}}.</option>
                 </select>
             </div>
 
@@ -29,10 +29,10 @@
                 <select class="form-control" name="idContacto" id="idContacto">
                 {% for cliente in Contactos %}
                     {%if cliente.estatus=="A"%}
-                      <option value="{{cliente.idContacto}}" >{{cliente.idContacto}}</option>
+                      <option value="{{cliente.idContacto}}" >{{cliente.nombre}}</option>
                     {%endif%}
                 {% endfor %}
-                <option value="{{Mantenimiento.idDireccion}}" selected>{{Mantenimiento.idDireccion}}</option>
+                <option value="{{Mantenimiento.idContacto}}" selected>{{Mantenimiento.Contacto.nombre}}</option>
                 </select>
             </div>
 

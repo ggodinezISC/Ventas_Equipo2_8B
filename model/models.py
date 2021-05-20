@@ -487,6 +487,7 @@ class Cobro(db.Model):
     importe = Column(Float, nullable=False)
     idVenta = Column(Integer,  ForeignKey('Ventas.idVenta') ,nullable=False)
     estatus = Column(String, nullable=False)
+    Venta=relationship('Venta', foreign_keys=[idVenta])
 
 
     def insertar(self):

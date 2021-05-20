@@ -22,7 +22,7 @@
                     <select class="form-control" name="idEnvio" id="idEnvio">
                     {% for cliente in Envios %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idEnvio}}" selected>{{cliente.idEnvio}}</option>
+                          <option value="{{cliente.idEnvio}}" selected>{{cliente.Unidad.marca}} {{cliente.Unidad.modelo}} Fecha Inicio:{{cliente.fechaInicio}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -31,7 +31,7 @@
                     <select class="form-control" name="idVenta" id="idVenta">
                     {% for cliente in Ventas %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idVenta}}" selected>{{cliente.idVenta}}</option>
+                          <option value="{{cliente.idVenta}}" selected>{{cliente.Cliente.Nombre}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -41,7 +41,7 @@
                     <select class="form-control" name="idDireccion" id="idDireccion">
                     {% for cliente in Direcciones %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idDireccion}}" selected>{{cliente.idDireccion}}</option>
+                          <option value="{{cliente.idDireccion}}" selected>{{cliente.calle}} #{{cliente.numero}} Col. {{cliente.colonia}}, {{cliente.Ciudad.nombre}} {{cliente.Ciudad.Estado.nombre}}.</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -51,7 +51,7 @@
                     <select class="form-control" name="idContacto" id="idContacto">
                     {% for cliente in Contactos %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idContacto}}" selected>{{cliente.idContacto}}</option>
+                          <option value="{{cliente.idContacto}}" selected>{{cliente.nombre}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>

@@ -33,10 +33,26 @@
                     {%if Unidad.tipo=="P"%}
                       <option value="{{Unidad.tipo}}" selected>Pesado</option>
                       <option value="L">Ligero</option>
+                      <option value="E" >Pesado</option>
+                      <option value="T" >Personal, para empleados</option>
                     {%endif%}
                     {%if Unidad.tipo=="L"%}
                       <option value="{{Unidad.tipo}}" selected>Ligero</option>
                       <option value="P" >Pesado</option>
+                      <option value="E" >Envio</option>
+                      <option value="T" >Personal, para empleados</option>
+                    {%endif%}
+                    {%if Unidad.tipo=="E"%}
+                      <option value="{{Unidad.tipo}}" selected>Envio</option>
+                      <option value="P" >Pesado</option>
+                      <option value="L" >Ligero</option>
+                      <option value="T" >Personal, para empleados</option>
+                    {%endif%}
+                    {%if Unidad.tipo=="T"%}
+                      <option value="{{Unidad.tipo}}" selected>Personal</option>
+                      <option value="P" >Pesado</option>
+                      <option value="L" >Ligero</option>
+                      <option value="E" >Envio</option>
                     {%endif%}
                 </select>
             </div>

@@ -18,8 +18,8 @@
                 <div class="form-group">
                     <select class="form-control" name="idUnidadTransporte" id="idUnidadTransporte">
                     {% for cliente in Unidades %}
-                        {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idUnidadTransporte}}" selected>{{cliente.idUnidadTransporte}}</option>
+                        {%if cliente.estatus=="A"and cliente.tipo=="E" %}
+                          <option value="{{cliente.idUnidadTransporte}}" selected> Unidad Envio: {{cliente.modelo}} {{cliente.marca}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="pesoTotal"  name="pesoTotal" placeholder="Peso Total en Kilogramos" maxlength="100" class="form-control" required>
+                    <input type="text" id="pesoTotal"  name="pesoTotal" placeholder="Peso Total en Toneladas" maxlength="100" class="form-control" required>
                 </div>
                 
                 <div class="form-group">

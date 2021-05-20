@@ -993,6 +993,11 @@ def guardarVenta():
      D.comentarios = request.form['comentarios']
      D.estatus = request.form['estatus']
      D.tipo = request.form['tipo']
+     if(float(D.cantPagada)>=float(D.total)):
+         D.cantPagada=D.total
+         D.tipo="C"
+     else:
+        D.tipo="P"
      D.insertar()
      return redirect('/Ventas/1')
 
@@ -1138,12 +1143,22 @@ def consultaCobros(id):
 @app.route('/AddCobro',methods=['POST'])
 @login_required
 def guardarCobro():
+    
     D = Cobro()
     D.fecha = request.form['fecha']
     D.importe = request.form['importe']
     D.idVenta = request.form['idVenta']
     D.estatus = request.form['estatus']
+
+    F=Venta()
+    F.idVenta=D.idVenta
+    F= F.consultaIndividual()
+    if(float(D.importe)>=(F.total-F.cantPagada)):
+        F.cantPagada=F.total
+    else:
+        F.cantPagada+=float(D.importe)
     D.insertar()
+    F.actualizar()
     return redirect('/Cobros/1')
 
 @app.route('/EditCobro/<int:id>')
