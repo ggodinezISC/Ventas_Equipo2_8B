@@ -36,7 +36,21 @@ def login():
             c.insertar()
             return redirect('/')
         else:
-            return render_template('Errores/error500.html',mensaje='Datos incorrectos de inicio')
+            C = Empleado()
+            C = C.validar(request.form['inputEmail'], request.form['inputPassword'])
+            if C != None:
+                login_user(C)
+                cult = History()
+                c = History()
+                cult=cult.consultaGeneral()
+                for a in cult:
+                    if(str(a.Email)==current_user.email):
+                        return redirect('/')           
+                
+                c.Nombre= current_user.nombre
+                c.Email=current_user.email
+                c.insertar()
+                return redirect('/')
     except:
         abort(500)
 

@@ -5,6 +5,77 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
+class Empleado(UserMixin,db.Model):
+    __tablename__ = 'Empleados'
+    idEmpleado = Column(Integer, primary_key=True)
+    Nombre = Column(String, nullable=False)
+    apellidoPaterno = Column(String, nullable=False)
+    apellidoMaterno = Column(String, nullable=False)
+    sexo = Column(String, nullable=False)
+    fechaNacimiento = Column(Date, nullable=False)
+    curp = Column(String, nullable=False)
+    estadoCivil = Column(String, nullable=False)
+    fechaContratacion = Column(Date, nullable=False)
+    salarioDiario = Column(Float, nullable=False)
+    nss = Column(String, nullable=False)
+    diasVacaciones = Column(Integer, nullable=False)
+    diasPermiso = Column(Integer, nullable=False)
+    fotografia = Column(String, nullable=False)
+    direccion = Column(String, nullable=False)
+    colonia = Column(String, nullable=False)
+    codigoPostal= Column(String, nullable=False)
+    escolaridad = Column(String, nullable=False)
+    especialidad = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    passwor = Column(String, nullable=False)
+    tipo = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+    idDepartamento = Column(Integer, nullable=False)
+    idPuesto = Column(Integer, nullable=False)
+    idCiudad = Column(Integer, nullable=False)
+    idSucursal = Column(Integer, nullable=False)
+    idTurno = Column(Integer, nullable=False)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        cli = self.query.all()
+        return cli
+    
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+    
+    def eliminar(self):
+        cli = self.consultaIndividual()
+        cli.estatus="I"
+        db.session.merge(cli)
+        db.session.commit()
+    
+    def consultaIndividual(self):
+        cli = self.query.get(self.idEmpleado)
+        return cli
+
+    def validarPassword(self, Password):
+        pwd = self.query.filter_by(passwor=Password).first()
+        return pwd
+    
+    def is_authenticated(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.idEmpleado
+    def validar(self, Email, Password):
+        cli = Empleado.query.filter_by(email=Email).first()
+        if cli != None:
+            if cli.validarPassword(Password):
+                return cli
+        else:
+            return None
+
 class Cliente(UserMixin,db.Model):
     __tablename__ = 'Clientes'
     IdCliente = Column(Integer, primary_key=True)
@@ -622,56 +693,4 @@ class Sucursal(db.Model):
         cli = self.query.get(self.idSucursal)
         return cli 
 
-class Empleado(db.Model):
-    __tablename__ = 'Empleados'
-    idEmpleado = Column(Integer, primary_key=True)
-    nombre = Column(String, nullable=False)
-    apellidoPaterno = Column(String, nullable=False)
-    apellidoMaterno = Column(String, nullable=False)
-    sexo = Column(String, nullable=False)
-    fechaNacimiento = Column(Date, nullable=False)
-    curp = Column(String, nullable=False)
-    estadoCivil = Column(String, nullable=False)
-    fechaContratacion = Column(Date, nullable=False)
-    salarioDiario = Column(Float, nullable=False)
-    nss = Column(String, nullable=False)
-    diasVacaciones = Column(Integer, nullable=False)
-    diasPermiso = Column(Integer, nullable=False)
-    fotografia = Column(String, nullable=False)
-    direccion = Column(String, nullable=False)
-    colonia = Column(String, nullable=False)
-    codigoPostal= Column(String, nullable=False)
-    escolaridad = Column(String, nullable=False)
-    especialidad = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    passwor = Column(String, nullable=False)
-    tipo = Column(String, nullable=False)
-    estatus = Column(String, nullable=False)
-    idDepartamento = Column(Integer, nullable=False)
-    idPuesto = Column(Integer, nullable=False)
-    idCiudad = Column(Integer, nullable=False)
-    idSucursal = Column(Integer, nullable=False)
-    idTurno = Column(Integer, nullable=False)
 
-
-    def insertar(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def consultaGeneral(self):
-        MAN = self.query.all()
-        return MAN
-
-    def actualizar(self):
-        db.session.merge(self)
-        db.session.commit()
-
-    def eliminar(self):
-        est = self.consultaIndividual()
-        est.estatus="I"
-        db.session.merge(est)
-        db.session.commit()
-
-    def consultaIndividual(self):
-        cli = self.query.get(self.idEmpleado)
-        return cli 
