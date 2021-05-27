@@ -1,22 +1,6 @@
-
 create  database ERP;
 use ERP;
 
-/*==============================================================*/
-/* Table:Ofertas				             					*/
-/*==============================================================*/
-create table Ofertas (
-	idOferta int auto_increment  not null,
-	nombre varchar(50) not null,
-	descripcion varchar(100) not null,
-	porDescuento float not null,
-	fechaInicio date not null,
-	fechaFin date not null,
-	canMinProductos int not null,
-	estatus char not null,
-	idPresentacion int not null,
-	CONSTRAINT PK_Ofertas PRIMARY KEY (idOferta)
-);
 /*==============================================================*/
 /* Table:Productos				             					*/
 /*==============================================================*/
@@ -34,6 +18,28 @@ create table Productos (
 	CONSTRAINT PK_Productos PRIMARY KEY (idProducto)
 );
 /*==============================================================*/
+/* Table:UnidadesMedida				             				*/
+/*==============================================================*/
+create table UnidadesMedida (
+	idUnidad int  not null,
+	nombre varchar(80) not null,
+	siglas varchar(20) not null,
+	estatus char not null,
+	CONSTRAINT PK_UnidadMedida PRIMARY KEY (idUnidad)
+);
+/*==============================================================*/
+/* Table:Empaques				             				    */
+/*==============================================================*/
+create table Empaques (
+	idEmpaque int not null,
+	nombre varchar(80) not null,
+	capacidad float not null,
+	estatus char not null,
+	idUnidad int not null,
+	CONSTRAINT PK_Empaques PRIMARY KEY (idEmpaque)
+);
+
+/*==============================================================*/
 /* Table:PresentacionesProducto				             		*/
 /*==============================================================*/
 create table PresentacionesProducto (
@@ -45,15 +51,33 @@ create table PresentacionesProducto (
 	idEmpaque int not null,
 	CONSTRAINT PK_PresentacionesProducto PRIMARY KEY (idPresentacion)
 );
+
+/*==============================================================*/
+/* Table:Ofertas				             					*/
+/*==============================================================*/
+create table Ofertas (
+	idOferta int auto_increment  not null,
+	nombre varchar(50) not null,
+	descripcion varchar(100) not null,
+	porDescuento float not null,
+	fechaInicio date not null,
+	fechaFin date not null,
+	canMinProductos int not null,
+	estatus char not null,
+	idPresentacion int not null,
+	CONSTRAINT PK_Ofertas PRIMARY KEY (idOferta)
+);
+
 /*==============================================================*/
 /* Table:ExistenciasSucursal				             		*/
 /*==============================================================*/
 create table ExistenciasSucursal (
-	idPresentacion int auto_increment  not null,
+	idPresentacion int not null,
 	idSucursal int not null,
 	cantidad float not null,
 	CONSTRAINT PK_ExistenciasSucursal PRIMARY KEY (idPresentacion, idSucursal)
 );
+
 /*==============================================================*/
 /* Table:Laboratorios			             				    */
 /*==============================================================*/
@@ -459,27 +483,7 @@ CONSTRAINT pk_Asesorias PRIMARY KEY (idAsesoria)
 );
 
 
-/*==============================================================*/
-/* Table:Empaques				             				    */
-/*==============================================================*/
-create table Empaques (
-	idEmpaque int not null,
-	nombre varchar(80) not null,
-	capacidad float not null,
-	estatus char not null,
-	idUnidad int not null,
-	CONSTRAINT PK_Empaques PRIMARY KEY (idEmpaque)
-);
-/*==============================================================*/
-/* Table:UnidadesMedida				             				*/
-/*==============================================================*/
-create table UnidadesMedida (
-	idUnidad int  not null,
-	nombre varchar(80) not null,
-	siglas varchar(20) not null,
-	estatus char not null,
-	CONSTRAINT PK_UnidadMedida PRIMARY KEY (idUnidad)
-);
+
 
 
 /*==============================================================*/
@@ -580,6 +584,7 @@ nombre varchar(50) NOT NULL,
 estatus char NOT NULL,
 CONSTRAINT PK_FormasPago PRIMARY KEY (idFormaPago)
 );
+
 /*==============================================================*/
 /* Table:Periodos									            */
 /*==============================================================*/
@@ -736,9 +741,8 @@ alter table ContactosCliente add constraint FK_CC_Cliente foreign key (IdCliente
 alter table Mantenimientos add constraint FK_Mantenimientos_UniTransporte foreign key (idUnidadTransporte)
       references UnidadesTransporte (idUnidadTransporte);
 
-
-
-
+alter table Empleados add constraint FK_Sucursal_Emple foreign key (idSucursal)
+      references Sucursales (idSucursal);
 
 
 /*======================================================================================================*/
@@ -787,6 +791,9 @@ GRANT ALL PRIVILEGES ON ERP.PresentacionesProducto TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.ExistenciasSucursal TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Laboratorios TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Categorias TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.UnidadesMedida TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Empaques TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.FormasPago TO 'Admin'@'localhost';
 
 
 /*======================================================================================================*/
@@ -808,51 +815,7 @@ values (4,"Sucursal 4","3511234504","Azucena4","LindaVista4","12348",1000.0,"A",
 insert into Sucursales 
 (idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
 values (5,"Sucursal 5","3511234505","Azucena5","LindaVista5","12349",1000.0,"A",5);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (6,"Sucursal 6","3511234506","Azucena6","LindaVista6","12310",1000.0,"A",6);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (7,"Sucursal 7","3511234507","Azucena 7","LindaVista8","12312",1000.0,"A",7);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (8,"Sucursal 8","3511234508","Azucena 8","LindaVista9","12314",1000.0,"A",8);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (9,"Sucursal 9","3511294509","Azucena 9","LindaVista 9","12914",1000.0,"A",9);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (10,"Sucursal 10","35112345610","Azucena 10","LindaVista 10","12315",1000.0,"A",10);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (11,"Sucursal 11","3511234511","Azucena 11","LindaVista 11","12316",1000.0,"A",11);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (12,"Sucursal 12","3511234512","Azucena 12","LindaVista 12","12317",1000.0,"A",12);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (13,"Sucursal 13","3511234513","Azucena 13","LindaVista 13","12318",1000.0,"A",13);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (14,"Sucursal 14","3511234514","Azucena 14","LindaVista 14","12319",1000.0,"A",14);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (15,"Sucursal 15","3511234515","Azucena 15","LindaVista 15","12320",1000.0,"A",15);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (16,"Sucursal 16","3511234516","Azucena 16","LindaVista 16","12321",1000.0,"A",16);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (17,"Sucursal 17","3511234517","Azucena 17","LindaVista 17","12322",1000.0,"A",17);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (18,"Sucursal 18","3511234518","Azucena18","LindaVista 18","12323",1000.0,"A",18);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (19,"Sucursal 19","3511234519","Azucena 19","LindaVista 19","12324",1000.0,"A",19);
-insert into Sucursales 
-(idSucursal, nombre, telefono , direccion ,colonia ,codigoPostal ,presupuesto ,estatus, idCiudad) 
-values (20,"Sucursal 20","3511234520","Azucena 20","LindaVista 20","12325",1000.0,"A",20);
+
 
 insert into Empleados 
 (idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
@@ -904,6 +867,109 @@ INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(2,"Fertilizantes","A
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(3,"Fungicidas","A");
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(4,"Acaricidas","A");
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(5,"Insecticidas","A");
+
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (1,"ABSSA","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (2,"AMVAC","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (3,"BIOIBÉRICA","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (4,"CAMPO LIMPIO","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (5,"COMPO","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (6,"FORCROP","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (7,"GREENHOW","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (8,"IQC","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (9,"BAYER","México","A");
+INSERT INTO Laboratorios (idLaboratorio, nombre, origen, estatus) VALUES (10,"GENOMA LAB","México","A");
+
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (1,"Paraquat","Herbicida Líquido","Endotal amina", "Rojo", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate las malas hierbas y las gramíneas en los cultivos de soja, maní, arroz y otras leguminosas de semilla grande",'D',1,1);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (2,"Bromoxynil","Herbicida Líquido","Diquat", "Rojo", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate las malas hierbas y las gramíneas en los cultivos de soja, maní, arroz y otras leguminosas de semilla grande",'D',2,1);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (3,"Diclofop-metil","Herbicida Líquido","Propanil", "Amarillo", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate las malas hierbas y las gramíneas en los cultivos de soja, maní, arroz y otras leguminosas de semilla grande",'D',3,1);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (4,"Sal sódica","Herbicida Líquido","Glufosinato", "Amarillo", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate las malas hierbas y las gramíneas en los cultivos de soja, maní, arroz y otras leguminosas de semilla grande",'D',4,1);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (5,"Glifosato","Herbicida Líquido","Sulfometuron-metil", "Verde", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate las malas hierbas y las gramíneas en los cultivos de soja, maní, arroz y otras leguminosas de semilla grande",'D',5,1);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (6,"Aidrina","Insecticida Líquido","HHDN Octalene", "Verde", "Se aplica sobre las tierra", "Combate los insectos del suelo",'D',1,5);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (7,"Carboxina","Fungicida Líquido","D-735 DCMO Vitavax", "Amarillo", "Se aplica sobre las hojas o tallos de la hierba mala", "Combate el carbón de la cebada, avena, trigo y plantones",'D',2,3);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (8,"Apache","Acaricida Líquido","Abamectina", "Verde", "Se aplica sobre las hojas para eliminar acaros", "Combate los acaros en hojas y semillas",'D',3,4);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (9,"Cal dolomítica","Fertilizante en polvo","Magnesio", "Rojo", "Se aplica sobre las semillas o raices", "Permite que las semillas y raices crezcan grandes y fuertes",'D',4,2);
+INSERT INTO PRODUCTOS (idProducto,nombre,descripcion,ingredienteActivo,bandaToxicologica,aplicacion,uso,estatus,idLaboratorio,idCategoria) 
+VALUES (10,"Cal agrícola","Fertilizane en polvo"," Piedra Caliza", "Verde", "Se aplica sobre las semillas o raices", "Permite que las semillas y raices crezcan grandes y fuertes",'D',5,2);
+
+INSERT INTO UnidadesMedida (idUnidad,nombre,siglas,estatus)
+values(1,"Litros","L","A");
+INSERT INTO UnidadesMedida (idUnidad,nombre,siglas,estatus)
+values(2,"Kilogramos","KG","A");
+INSERT INTO UnidadesMedida (idUnidad,nombre,siglas,estatus)
+values(3,"Toneladas","TON","A");
+
+INSERT INTO Empaques (idEmpaque,nombre,capacidad,estatus,idUnidad)
+VALUES (1,"Botella de Plástico","1","A",1);
+INSERT INTO Empaques (idEmpaque,nombre,capacidad,estatus,idUnidad)
+VALUES (2,"Bulto","50","A",2);
+INSERT INTO Empaques (idEmpaque,nombre,capacidad,estatus,idUnidad)
+VALUES (3,"Bulto","20","A",2);
+INSERT INTO Empaques (idEmpaque,nombre,capacidad,estatus,idUnidad)
+VALUES (4,"Mayoreo","1","A",3);
+INSERT INTO Empaques (idEmpaque,nombre,capacidad,estatus,idUnidad)
+VALUES (5,"Mayoreo","1000","A",1);
+
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(1,100,150,5,1,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(2,100,160,5,2,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(3,90,170,5,3,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(4,110,180,5,4,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(5,100,150,5,5,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(6,120,170,5,6,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(7,80,120,5,7,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(8,100,200,5,8,1);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(9,100,200,5,9,2);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(10,70,150,5,9,3);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(11,100,200,5,10,2);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(12,80,160,5,10,3);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(13,4000,8000,5,9,4);
+INSERT INTO PresentacionesProducto(idPresentacion,precioCompra,precioVenta,puntoReorden,idProducto,idEmpaque)
+VALUES(14,100000,150000,5,1,5);
+
+INSERT INTO Ofertas(idOferta,nombre,descripcion,porDescuento,fechaInicio,fechaFin,canMinProductos,estatus,idPresentacion)
+			VALUES (1,"Oferta Mayoreo por Tonelada","10% de descuento por tonelada",10,"2021-05-27","2021-06-14",1,"A",13);
+INSERT INTO Ofertas(idOferta,nombre,descripcion,porDescuento,fechaInicio,fechaFin,canMinProductos,estatus,idPresentacion)
+			VALUES (2,"Mayoreo por Mil Litros","12% de descuento por cada mil litros",12,"2021-06-27","2021-06-14",1,"A",14);
+
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (1,1,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (2,1,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (3,2,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (4,2,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (5,3,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (6,3,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (7,4,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (8,4,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (9,5,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (10,5,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (11,6,10);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (12,6,10);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (13,7,7);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (14,7,7);
+
+INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(1,"Efectivo","A");
+INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(2,"Tarjeta","A");
+INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(3,"Transferencia","A");
 
 INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
 VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041660","memogodi@gmail.com","Hola.123#$","A","A");
