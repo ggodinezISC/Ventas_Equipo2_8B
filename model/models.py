@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, Float
 from flask_login import UserMixin
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, selectin_polymorphic
 
 db = SQLAlchemy()
 
@@ -76,7 +76,7 @@ class Empleado(UserMixin,db.Model):
         else:
             return None
 
-class Cliente(UserMixin,db.Model):
+class Cliente(UserMixin, db.Model):
     __tablename__ = 'Clientes'
     IdCliente = Column(Integer, primary_key=True)
     Nombre = Column(String, nullable=False)
@@ -109,7 +109,7 @@ class Cliente(UserMixin,db.Model):
     def consultaIndividual(self):
         cli = self.query.get(self.IdCliente)
         return cli
-
+    
     def validarPassword(self, Password):
         pwd = self.query.filter_by(Password=Password).first()
         return pwd
@@ -659,6 +659,64 @@ class DetalleEnvio(db.Model):
             if(cu.idVenta==idVenta and cu.idEnvio==idEnvio):
                 return cu
 
+class Laboratorio(db.Model):
+    __tablename__ = 'Laboratorios'
+    idLaboratorio = Column(Integer, primary_key=True)
+    nombre = Column(String, primary_key=True)
+    origen = Column(String, primary_key=True)
+    estatus = Column(String, primary_key=True)
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idLaboratorio)
+        return cli 
+
+class Categoria(db.Model):
+    __tablename__ = 'Categorias'
+    idCategoria = Column(Integer, primary_key=True)
+    nombre  = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idCategoria)
+        return cli 
+
 class Sucursal(db.Model):
     __tablename__ = 'Sucursales'
     idSucursal = Column(Integer, primary_key=True)
@@ -669,7 +727,7 @@ class Sucursal(db.Model):
     codigoPostal = Column(String, nullable=False)
     presupuesto = Column(Float, nullable=False)
     estatus = Column(String, nullable=False)
-    idCiudad = Column(Integer, nullable=False)
+    idCiudad = Column(Integer,  ForeignKey('Ciudades.idCiudad'), nullable=False)
 
     def insertar(self):
         db.session.add(self)
@@ -692,5 +750,211 @@ class Sucursal(db.Model):
     def consultaIndividual(self):
         cli = self.query.get(self.idSucursal)
         return cli 
+
+class Producto(db.Model):
+    __tablename__ = 'Productos'
+    idProducto = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    descripcion  = Column(String, nullable=False)
+    ingredienteActivo = Column(String, nullable=False)
+    bandaToxicologica = Column(String, nullable=False)
+    aplicacion = Column(String, nullable=False)
+    uso = Column(String, nullable=False)
+    estatus  = Column(String, nullable=False)
+    idLaboratorio  = Column(Integer, ForeignKey('Laboratorios.idLaboratorio'), nullable=False)
+    idCategoria  = Column(Integer, ForeignKey('Categorias.idCategoria'), nullable=False)
+    
+    Categoria = relationship('Categoria', foreign_keys=[idCategoria])
+    Laboratorio = relationship('Laboratorio', foreign_keys=[idLaboratorio])
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idProducto)
+        return cli 
+
+class UnidadMedida(db.Model):
+    __tablename__ = 'UnidadesMedida'
+    idUnidad = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    siglas  = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idUnidad)
+        return cli 
+
+class Empaque(db.Model):
+    __tablename__ = 'Empaques'
+    idEmpaque = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    capacidad = Column(Float, nullable=False)
+    estatus = Column(String, nullable=False)
+    idUnidad = Column(Integer, ForeignKey('UnidadesMedida.idUnidad'), nullable=False)
+    Unidad=relationship('UnidadMedida', foreign_keys=[idUnidad])
+    
+
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idEmpaque)
+        return cli 
+
+class PresentacionProducto(db.Model):
+    __tablename__ = 'PresentacionesProducto'
+    idPresentacion = Column(Integer, primary_key=True)
+    precioCompra = Column(Float, nullable=False)
+    precioVenta = Column(Float, nullable=False)
+    puntoReorden = Column(Float, nullable=False)
+    idProducto = Column(Integer, ForeignKey('Productos.idProducto'), nullable=False)
+    idEmpaque  = Column(Integer, ForeignKey('Empaques.idEmpaque'), nullable=False)
+    Producto=relationship('Producto', foreign_keys=[idProducto])
+    Empaque=relationship('Empaque', foreign_keys=[idEmpaque])
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idPresentacion)
+        return cli 
+
+class Oferta(db.Model):
+    __tablename__ = 'Ofertas'
+    idOferta = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    descripcion  = Column(String, nullable=False)
+    porDescuento  = Column(Float, nullable=False)
+    fechaInicio = Column(Date, nullable=False)
+    fechaFin = Column(Date, nullable=False)
+    canMinProductos = Column(Integer, nullable=False)
+    estatus = Column(String, nullable=False)
+    idPresentacion = Column(Integer, ForeignKey('PresentacionesProducto.idPresentacion'), nullable=False)
+
+    
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idOferta)
+        return cli 
+
+class ExistenciaSucursal(db.Model):
+    __tablename__ = 'ExistenciasSucursal'
+    idPresentacion = Column(Integer, ForeignKey('PresentacionesProducto.idPresentacion'), primary_key=True)
+    idSucursal = Column(Integer, ForeignKey('Sucursales.idSucursal'), primary_key=True)
+    cantidad = Column(Integer, nullable=False)
+    Presentacion = relationship('PresentacionProducto', foreign_keys=[idPresentacion])
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self,presentacion,sucursal):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idPresentacion==presentacion and cu.idSucursal==sucursal):
+                cu.cantidad=0
+                db.session.merge(cu)
+                db.session.commit()
+        else:
+            return None
+
+    def consultaIndividual(self,presentacion,sucursal):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idPresentacion==presentacion and cu.idSucursal==sucursal):
+                return cu
+        else:
+            return None
 
 

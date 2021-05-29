@@ -1,8 +1,8 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEnvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento
-import re,js2py
+from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEnvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento,Producto, UnidadMedida,Empaque, PresentacionProducto,Oferta,ExistenciaSucursal,Laboratorio,Categoria
+
 app = Flask(__name__)
 app.secret_key = 'ERP'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Admin:hola.123@localhost/ERP'
@@ -19,40 +19,21 @@ def load_user(Id):
 
 @app.route('/login',methods=['POST'])
 def login():
-    try:
-        c = Cliente()
-        c = c.validar(request.form['inputEmail'], request.form['inputPassword'])
-        if c != None:
-            login_user(c)
-            cult = History()
-            c = History()
-            cult=cult.consultaGeneral()
-            for a in cult:
-                if(str(a.Email)==current_user.Email):
-                    return redirect('/')           
-            
-            c.Nombre= current_user.Nombre
-            c.Email=current_user.Email
-            c.insertar()
-            return redirect('/')
-        else:
-            C = Empleado()
-            C = C.validar(request.form['inputEmail'], request.form['inputPassword'])
-            if C != None:
-                login_user(C)
-                cult = History()
-                c = History()
-                cult=cult.consultaGeneral()
-                for a in cult:
-                    if(str(a.Email)==current_user.email):
-                        return redirect('/')           
+    C = Empleado()
+    C = C.validar(request.form['inputEmail'], request.form['inputPassword'])
+    if C != None:
+        login_user(C)
+        cult = History()
+        c = History()
+        cult=cult.consultaGeneral()
+        for a in cult:
+            if(str(a.Email)==current_user.email):
+                return redirect('/')           
                 
-                c.Nombre= current_user.nombre
-                c.Email=current_user.email
-                c.insertar()
-                return redirect('/')
-    except:
-        abort(500)
+        c.Nombre= current_user.Nombre
+        c.Email=current_user.email
+        c.insertar()
+        return redirect('/')
 
 @app.route('/cerrarSesion')
 @login_required
@@ -75,18 +56,15 @@ def hosto(id):
 
 @app.route('/')
 def inicio():
-    try:
-        if current_user.is_authenticated and (current_user.Estatus=="A"):
-            cult = History()
-            cult=cult.consultaGeneral()
+    if current_user.is_authenticated :
+        cult = History()
+        cult=cult.consultaGeneral()
             
-            return render_template('index.html',Historial=cult)
-        else:
-            if current_user.is_authenticated:
-                logout_user()
-            return render_template('Login.html')
-    except:
-        abort(500)
+        return render_template('index.html',Historial=cult)
+    else:
+        if current_user.is_authenticated:
+            logout_user()
+        return render_template('Login.html')
 
 #Inicio Crud Asociaciones
 @app.route('/Asociaciones')
@@ -973,6 +951,7 @@ def eliminarMantenimiento(id):
 def consultaVentas(id):
     V = Venta()
     V = V.consultaGeneral()
+
     cantA=0;
     for direc in V:
         cantA+=1
@@ -982,15 +961,17 @@ def consultaVentas(id):
     else:
         cantA= int(cantA/5)
     
-    
+    D = ExistenciaSucursal()
+    D = D.consultaGeneral()
     F = Cliente()
     F = F.consultaGeneral()
     S = Sucursal()
     S = S.consultaGeneral()
     E = Empleado()
-    E = E.consultaGeneral()
+    E.idEmpleado=current_user.IdCliente
+    E = E.consultaIndividual()
 
-    return render_template('/Ventas/AdministrarVenta.html',Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
+    return render_template('/Ventas/AdministrarVenta.html',Existencias=D, Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVenta',methods=['POST'])
 @login_required
@@ -1068,19 +1049,20 @@ def eliminarVenta(id):
 @login_required
 def consultaVentaDe(id):
     cantA=0;
-    D = VentasDetalle()
+    D = ExistenciaSucursal()
     D = D.consultaGeneral()
     C = Venta()
     C = C.consultaGeneral()
     for direc in D:
-        cantA+=1
+        cantA +=1
     if(cantA%5!=0):
         cantA= int(cantA/5)
-        cantA+=1 
+        cantA+=1     
+            
     else:
         cantA= int(cantA/5)
     
-    return render_template('/VentasDetalle/AdministrarDetalle.html',Detalles=D,Ventas=C,PaginasA=cantA,PosicionA=id)
+    return render_template('/VentasDetalle/AdministrarDetalle.html',Existencias=D,Ventas=C,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVentaDetalle',methods=['POST'])
 @login_required

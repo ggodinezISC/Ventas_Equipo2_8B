@@ -9,10 +9,21 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/PanelAdministracion.css') }}">
     <script src="{{url_for('static',filename='JS/global.js')}}" ></script>
+    <script>
+        function CalcularFecha()
+        {
+            var f = new Date();
+            dia= f.getDate();
+            mes= f.getMonth()+1;
+            año= f.getYear()+1900;
+            fecha=año+"/"+mes+"/"+dia;
+            document.getElementById("fecha").setAttribute("value",fecha); 
+        }
+    </script>
     
 </head>
 
-<body>
+<body onload="CalcularFecha()">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark  ">
         <div class="container-fluid">
@@ -55,7 +66,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/EliminarProductos.js') }}"></script>
 
     <div class="row">
         <div class="col-md-5">
@@ -87,7 +97,7 @@
                     <div class="form-group">
                         <select class="form-control" name="idSucursal" id="idSucursal">
                         {% for Sucursal in Sucursales %}
-                            {%if Sucursal.estatus=="A"%}
+                            {%if (Sucursal.idSucursal==Empleados.idSucursal)  %}
                               <option value="{{Sucursal.idSucursal}}" selected>{{Sucursal.nombre}}</option>
                             {%endif%}
                         {% endfor %}
@@ -96,16 +106,14 @@
     
                     <div class="form-group">
                         <select class="form-control" name="idEmpleado" id="idEmpleado">
-                        {% for Empleado in Empleados %}
-                            {%if Empleado.estatus=="A"%}
-                              <option value="{{Empleado.idEmpleado}}" selected>{{Empleado.nombre}}</option>
+                            {%if Empleados.estatus=="A"%}
+                              <option value="{{Empleados.idEmpleado}}" selected>{{Empleados.Nombre}}</option>
                             {%endif%}
-                        {% endfor %}
                         </select>
                     </div>
     
                     <div class="form-group">
-                        <input type="date"  id="fecha" name="fecha" placeholder="Fecha" class="form-control" required>
+                        <input type="text"  id="fecha" name="fecha" placeholder="Fecha" class="form-control"readonly required>
                     </div>
     
                     <div class="form-group">
@@ -147,6 +155,63 @@
             </div>
         </div>
     
+        <div class="col-md-7">
+            <p>Productos</p>
+            <table class="table table-striped table-bordered bg-white table-sm">
+                <thead>
+                    <tr>
+                        <td>IdProducto</td>
+                        <td>IdLaboratorio</td>
+                        <td>IdCategoria</td>
+                        <td>Nombre</td>
+                        <td>Descripción</td>
+                        <td>Ingrediente A.</td>
+                        <td>Banda Tox.</td>
+                        <td>Aplicación</td>
+                        <td>Uso</td>
+                        <td>Presentacion</td>
+                        <td>Cantidad Disponible</td>
+                        <td>Precio Venta</td>
+                        <td>Estatus</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cli in Existencias %}
+                    {%if (cli.idSucursal==Empleados.idSucursal)  %}
+                    <tr>
+                        <td>{{cli.Presentacion.Producto.idProducto}}       </td>
+                        <td>{{cli.Presentacion.Producto.Laboratorio.nombre}}</td>
+                        <td>{{cli.Presentacion.Producto.Categoria.nombre}}  </td>
+                        <td>{{cli.Presentacion.Producto.nombre}}       </td>
+                        <td>{{cli.Presentacion.Producto.descripcion}}       </td>
+                        <td>{{cli.Presentacion.Producto.ingredienteActivo}}       </td>
+                        <td>{{cli.Presentacion.Producto.bandaToxicologica}}       </td>
+                        <td>{{cli.Presentacion.Producto.aplicacion}}       </td>
+                        <td>{{cli.Presentacion.Producto.uso}}       </td>
+                        <td>{{cli.Presentacion.Empaque.nombre}}: {{cli.Presentacion.Empaque.capacidad}} {{cli.Presentacion.Empaque.Unidad.nombre}}       </td>
+                        <td>{{cli.cantidad}}       </td>
+                        <td>{{cli.Presentacion.precioVenta}}       </td>
+                        {%if cli.Presentacion.Producto.estatus=="D"%}
+                            <td>Activo      </td>
+                            <td>
+                            <a href="/EditVenta/{{cli.Presentacion.Producto.idProducto}}" class="btn btn-warning btn-block">Editar</a>
+                            <a href="/DeleteVenta/{{cli.Presentacion.Producto.idProducto}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                            </td>
+                            {%else%}
+                            <td style="background-color:#FF0000">Inactivo</td>
+                            <td>
+                                <a href="/EditVenta/{{cli.Presentacion.Producto.idProducto}}" class="btn btn-warning btn-block">Editar</a>
+                                
+                            </td>
+                            {%endif%}
+                    </tr>
+                    {%endif%}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
         <div class="col-md-7">
             <p>Ventas</p>
             <table class="table table-striped table-bordered bg-white table-sm">

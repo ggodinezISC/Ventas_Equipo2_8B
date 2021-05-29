@@ -975,3 +975,4 @@ VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041
 
 SHOW TABLES FROM ERP;
 
+use ERP;
