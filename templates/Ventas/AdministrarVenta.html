@@ -19,6 +19,13 @@
             fecha=año+"/"+mes+"/"+dia;
             document.getElementById("fecha").setAttribute("value",fecha); 
         }
+        function añadirProducto(id)
+        {
+            document.getElementById(id).setAttribute("value",id+1);
+            document.getElementById(id).setAttribute("value",id+1);
+            document.getElementById(id).innerHTML=id+"kjkjk";
+            alert(id+1);
+        }
     </script>
     
 </head>
@@ -81,9 +88,6 @@
     
             <div class="card card-body" >
                 <form action="/AddVenta" method="POST" >
-    
-                    
-                    
                     <div class="form-group">
                         <select class="form-control" name="idCliente" id="idCliente">
                         {% for cliente in Clientes %}
@@ -96,7 +100,7 @@
     
                     <div class="form-group">
                         <select class="form-control" name="idSucursal" id="idSucursal">
-                        {% for Sucursal in Sucursales %}
+                            {% for Sucursal in Sucursales %}
                             {%if (Sucursal.idSucursal==Empleados.idSucursal)  %}
                               <option value="{{Sucursal.idSucursal}}" selected>{{Sucursal.nombre}}</option>
                             {%endif%}
@@ -172,6 +176,7 @@
                         <td>Presentacion</td>
                         <td>Cantidad Disponible</td>
                         <td>Precio Venta</td>
+                        <td>Carrito:</td>
                         <td>Estatus</td>
                     </tr>
                 </thead>
@@ -191,10 +196,20 @@
                         <td>{{cli.Presentacion.Empaque.nombre}}: {{cli.Presentacion.Empaque.capacidad}} {{cli.Presentacion.Empaque.Unidad.nombre}}       </td>
                         <td>{{cli.cantidad}}       </td>
                         <td>{{cli.Presentacion.precioVenta}}       </td>
+                        <td>
+                            <select class="cantidad" name="nieve">
+                            <option value="0">Cantidad: 0</option>
+                            <option value="1">Cantidad: 1</option>
+                            <option value="2">Cantidad: 2</option>
+                            <option value="3">Cantidad: 3</option>
+                            <option value="4">Cantidad: 4</option>
+                            <option value="5">Cantidad: 5</option>
+                        </select>
+                    </td>
                         {%if cli.Presentacion.Producto.estatus=="D"%}
                             <td>Activo      </td>
                             <td>
-                            <a href="/EditVenta/{{cli.Presentacion.Producto.idProducto}}" class="btn btn-warning btn-block">Editar</a>
+                            <a onclick="añadirProducto(cli.Presentacion.Producto.idProducto)" class="btn btn-warning btn-block">Añadir 1</a>
                             <a href="/DeleteVenta/{{cli.Presentacion.Producto.idProducto}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                             </td>
                             {%else%}
@@ -209,10 +224,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
-
-        <div class="col-md-7">
             <p>Ventas</p>
             <table class="table table-striped table-bordered bg-white table-sm">
                 <thead>
@@ -281,6 +292,11 @@
                 </ul>
               </nav>
               <h1 align="center">Pagina: {{PosicionA}}</h1>
+        </div>
+    </div>
+
+        <div class="col-md-7">
+            
     
         </div>
     </div>
