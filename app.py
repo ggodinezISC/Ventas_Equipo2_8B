@@ -955,6 +955,7 @@ def consultaVentas(id):
     cantA=0;
     for direc in V:
         cantA+=1
+    vent=cantA+1;
     if(cantA%5!=0):
         cantA= int(cantA/5)
         cantA+=1 
@@ -971,7 +972,7 @@ def consultaVentas(id):
     E.idEmpleado=current_user.IdCliente
     E = E.consultaIndividual()
 
-    return render_template('/Ventas/AdministrarVenta.html',Existencias=D, Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
+    return render_template('/Ventas/AdministrarVenta.html',Existencias=D,Venta=vent, Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVenta',methods=['POST'])
 @login_required
@@ -982,9 +983,9 @@ def guardarVenta():
      D.idEmpleado = request.form['idEmpleado']
      D.fecha = request.form['fecha']
      D.subtotal = request.form['subtotal']
-     D.iva = request.form['iva']
-     D.cantPagada = request.form['cantPagada']
-     D.total = ( (float (D.iva)/100)*float(D.subtotal) )+ float(D.subtotal)
+     D.iva = 16
+     D.cantPagada = 0
+     D.total = request.form['iva']
      D.comentarios = request.form['comentarios']
      D.estatus = request.form['estatus']
      D.tipo = request.form['tipo']
@@ -994,6 +995,17 @@ def guardarVenta():
      else:
         D.tipo="P"
      D.insertar()
+
+
+     M = VentasDetalle() 
+     M.precioVenta = request.form['iva']
+     M.cantidad = 0
+     M.subtotal = request.form['subtotal']
+     M.idVenta = request.form['idVenta']
+     M.estatus = request.form['estatus']
+     M.detalles = request.form['detalles']
+     M.insertar()
+
      return redirect('/Ventas/1')
 
 @app.route('/EditVenta/<int:id>')
@@ -1049,10 +1061,8 @@ def eliminarVenta(id):
 @login_required
 def consultaVentaDe(id):
     cantA=0;
-    D = ExistenciaSucursal()
+    D = VentasDetalle()
     D = D.consultaGeneral()
-    C = Venta()
-    C = C.consultaGeneral()
     for direc in D:
         cantA +=1
     if(cantA%5!=0):
@@ -1062,19 +1072,13 @@ def consultaVentaDe(id):
     else:
         cantA= int(cantA/5)
     
-    return render_template('/VentasDetalle/AdministrarDetalle.html',Existencias=D,Ventas=C,PaginasA=cantA,PosicionA=id)
+    return render_template('/VentasDetalle/AdministrarDetalle.html',Detalles=D,PaginasA=cantA,PosicionA=id)
 
 @app.route('/AddVentaDetalle',methods=['POST'])
 @login_required
 def guardarVentaDe():
     try:
-        D = VentasDetalle()
-        D.precioVenta = request.form['precioVenta']
-        D.cantidad = request.form['cantidad']
-        D.subtotal = request.form['subtotal']
-        D.idVenta = request.form['idVenta']
-        D.estatus = request.form['estatus']
-        D.insertar()
+       
         return redirect('/VentaDetalle/1')
     except:
         return 'No hay respuesta a tu peticion'

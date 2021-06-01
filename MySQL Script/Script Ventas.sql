@@ -71,10 +71,11 @@ create table Ofertas (
 /*==============================================================*/
 /* Table:ExistenciasSucursal				             		*/
 /*==============================================================*/
+
 create table ExistenciasSucursal (
 	idPresentacion int not null,
 	idSucursal int not null,
-	cantidad float not null,
+	cantidad int not null,
 	CONSTRAINT PK_ExistenciasSucursal PRIMARY KEY (idPresentacion, idSucursal)
 );
 
@@ -222,6 +223,7 @@ create table VentaDetalle(
    cantidad float not null,
    subtotal float not null,
    idVenta int not null,
+   detalles varchar(800) not null,
    estatus char not null,
    CONSTRAINT pk_VentaDetalle PRIMARY KEY (idVentaDetalle) 
 );
@@ -822,7 +824,7 @@ fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, 
 codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (1,"Empleado 1","AP1","AM1","H","1999-01-10","ABCD123456HMNDLL01","S","2020-05-11",200,
-"ADBC123456",10,10,"1.jpg","direccion1 #1","colonia1","12345","Licenciatura","Redes",
+"ADBC123456",10,10,"1.jpg","direccion1 #1","colonia 1","12345","Licenciatura","Redes",
 "email1@gmail.com", "PASS1","Vendedor","A",1,1,1,1,1);
 
 insert into Empleados 
@@ -831,7 +833,7 @@ fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, 
 codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (2,"Empleado 2","AP2","AM2","H","1999-01-10","ABCD123456HMNDLL02","S","2020-05-11",200,
-"ADBC123456",10,10,"2.jpg","direccion2 #2","colonia2","22345","Licenciatura","Redes",
+"ADBC123456",10,10,"2.jpg","direccion2 #2","colonia 2","22345","Licenciatura","Redes",
 "email2@gmail.com", "PASS2","Vendedor","A",1,1,2,1,1);
 
 insert into Empleados 
@@ -840,7 +842,7 @@ fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, 
 codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (3,"Empleado 3","AP3","AM3","H","1999-01-10","ABCD123456HMNDLL03","S","2020-05-11",200,
-"ADBC123456",10,10,"3.jpg","direccion3 #3","colonia3","32345","Licenciatura","Redes",
+"ADBC123456",10,10,"3.jpg","direccion3 #3","colonia 3","32345","Licenciatura","Redes",
 "email3@gmail.com", "PASS3","Vendedor","A",1,1,3,1,1);
 
 insert into Empleados 
@@ -849,7 +851,7 @@ fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, 
 codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (4,"Empleado 4","AP4","AM4","H","1999-01-10","ABCD123456HMNDLL04","S","2020-05-11",200,
-"ADBC123456",10,10,"5.jpg","direccion3 #3","colonia3","42345","Licenciatura","Redes",
+"ADBC123456",10,10,"4.jpg","direccion3 #3","colonia 4","42345","Licenciatura","Redes",
 "email4@gmail.com", "PASS4","Vendedor","A",1,1,4,1,1);
 
 insert into Empleados 
@@ -858,8 +860,18 @@ fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, 
 codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
 idSucursal,idTurno ) 
 values (5,"Empleado 5","AP5","AM5","H","1999-01-10","ABCD123456HMNDLL05","S","2020-05-11",200,
-"ADBC123456",10,10,"4.jpg","direccion3 #3","colonia3","52345","Licenciatura","Redes",
+"ADBC123456",10,10,"5.jpg","direccion3 #3","colonia 5","52345","Licenciatura","Redes",
 "email5@gmail.com", "PASS5","Vendedor","A",1,1,5,1,1);
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (6,"Empleado 6","AP6","AM6","H","1999-01-10","ABCD123456HMNDLL06","S","2020-05-11",200,
+"ADBC883456",10,10,"6.jpg","direccion3 #3","colonia 6","52345","Licenciatura","Redes",
+"email6@gmail.com", "PASS6","Vendedor","A",1,1,5,2,1);
+select * from VentaDetalle;
+
 
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(1,"Herbicidas","A");
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(2,"Fertilizantes","A");

@@ -526,6 +526,7 @@ class VentasDetalle(db.Model):
     subtotal = Column(Float, nullable=False)
     idVenta = Column(Integer, ForeignKey('Ventas.idVenta'), nullable=False)
     estatus = Column(String, nullable=False)
+    detalles = Column(String, nullable=False)
     Venta=relationship('Venta', foreign_keys=[idVenta])
 
 
@@ -863,6 +864,7 @@ class PresentacionProducto(db.Model):
     idEmpaque  = Column(Integer, ForeignKey('Empaques.idEmpaque'), nullable=False)
     Producto=relationship('Producto', foreign_keys=[idProducto])
     Empaque=relationship('Empaque', foreign_keys=[idEmpaque])
+
     def insertar(self):
         db.session.add(self)
         db.session.commit()

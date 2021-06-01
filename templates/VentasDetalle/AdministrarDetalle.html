@@ -13,58 +13,18 @@
         </div>
         {% endfor %} {% endif %} {% endwith %}
 
-        <div class="card card-body">
-            <form action="/AddVentaDetalle" method="POST">
-
-                
-                
-                <div class="form-group">
-                    <select class="form-control" name="idVenta" id="idVenta">
-                    {% for cliente in Ventas %}
-                        {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idVenta}}" selected>{{cliente.Cliente.Nombre}} en {{cliente.Sucursal.nombre}}</option>
-                        {%endif%}
-                    {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <input type="text"  id="precioVenta" name="precioVenta" placeholder="Precio Venta" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text"  id="cantidad" name="cantidad" placeholder="Catidad" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="subtotal"  name="subtotal" placeholder="Sub Total" maxlength="100" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <select class="form-control" name="estatus" id="estatus">
-                        <option value="A" selected>Activo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-block">
-                        Guardar
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
+        
 
     <div class="col-md-7">
         <p>Detalles de las ventas</p>
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
-                    <td>IdDetallesVenta</td>
+                    <td>IdDetalles</td>
                     <td>Venta al Cliente</td>
-                    <td>Precio Venta</td>
-                    <td>Cantidad</td>
                     <td>SubTotal</td>
+                    <td>Total</td>
+                    <td>Detalles</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
@@ -74,9 +34,9 @@
                 <tr>
                     <td>{{cli.idVentaDetalle}}       </td>
                     <td>{{cli.Venta.Cliente.Nombre}}</td>
-                    <td>{{cli.precioVenta}}       </td>
-                    <td>{{cli.cantidad}}       </td>
                     <td>{{cli.subtotal}}       </td>
+                    <td>{{cli.precioVenta}}       </td>                    
+                    <td>{{cli.detalles}}       </td>
                     {%if cli.estatus=="A"%}
                         <td>Activo      </td>
                         <td>
