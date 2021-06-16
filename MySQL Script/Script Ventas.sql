@@ -213,17 +213,16 @@ idEmpleado int not null,
 CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
 );
 
-
 /*==============================================================*/
 /* Table: VentasDetalle                                         */
 /*==============================================================*/
 create table VentaDetalle(
    idVentaDetalle int auto_increment not null,
+   idVenta int not null,
+   idPresentación int not null,
    precioVenta float not null,
    cantidad float not null,
    subtotal float not null,
-   idVenta int not null,
-   detalles varchar(800) not null,
    estatus char not null,
    CONSTRAINT pk_VentaDetalle PRIMARY KEY (idVentaDetalle) 
 );
@@ -978,6 +977,12 @@ INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (12,
 INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (13,7,7);
 INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (14,7,7);
 
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (10,1,15);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (11,1,10);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (12,1,10);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (13,1,7);
+INSERT INTO ExistenciasSucursal(idPresentacion, idSucursal,cantidad) VALUES (14,1,7);
+
 INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(1,"Efectivo","A");
 INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(2,"Tarjeta","A");
 INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(3,"Transferencia","A");
@@ -985,6 +990,16 @@ INSERT INTO FormasPago(idFormaPago,nombre,estatus) VALUES(3,"Transferencia","A")
 INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
 VALUES (1,"Guillermo Godinez Guillen","Sindicato",500.0,"GOGG112233RFC","3931041660","memogodi@gmail.com","Hola.123#$","A","A");
 
-SHOW TABLES FROM ERP;
+INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
+VALUES (2,"Ernesto Perez","Sindicato",1500.0,"PTER112233RFC","3931041671","neto@gmail.com","Hola.123#$","A","A");
 
-use ERP;
+INSERT INTO Clientes (IdCliente,Nombre,RazonSocial,LimiteCredito,Rfc,Telefono,Email,Password,Tipo,Estatus) 
+VALUES (3,"Mauro Castellanos Diaz","Sindicato",500.0,"CDMA112233RFC","3931041771","mauro@gmail.com","Hola.123#$","A","A");
+
+CREATE PROCEDURE Procedimiento_Venta_Detalle (IN idVentaDETalle int, idVENta int, idPREsentacion int,precioVENta float,CANtidad float,SUBtotal float,ESTatus char)
+	insert into VentaDetalle
+	(idVentaDetalle, idVenta, idPresentacion,precioVenta,cantidad,subtotal,estatus)
+	values(idVentaDETalle, idVENta, idPREsentacion,precioVENta,CANtidad,SUBtotal,ESTatus)
+;
+
+SHOW TABLES FROM ERP;
