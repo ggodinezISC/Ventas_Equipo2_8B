@@ -216,7 +216,7 @@ CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
 /*==============================================================*/
 /* Table: VentasDetalle                                         */
 /*==============================================================*/
-create drop table VentaDetalle(
+create  table VentaDetalle(
    idVentaDetalle int auto_increment not null,
    idVenta int not null,
    idPresentacion int not null,
@@ -796,6 +796,10 @@ GRANT ALL PRIVILEGES ON ERP.UnidadesMedida TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.Empaques TO 'Admin'@'localhost';
 GRANT ALL PRIVILEGES ON ERP.FormasPago TO 'Admin'@'localhost';
 
+GRANT ALL PRIVILEGES ON ERP.Tripulacion TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.OfertasAsociacion TO 'Admin'@'localhost';
+GRANT ALL PRIVILEGES ON ERP.Asesorias TO 'Admin'@'localhost';
+
 /*======================================================================================================*/
 /*======================================================================================================*/
 /*======================================================================================================*/
@@ -869,6 +873,35 @@ idSucursal,idTurno )
 values (6,"Empleado 6","AP6","AM6","H","1999-01-10","ABCD123456HMNDLL06","S","2020-05-11",200,
 "ADBC883456",10,10,"6.jpg","direccion3 #3","colonia 6","52345","Licenciatura","Redes",
 "email6@gmail.com", "PASS6","Vendedor","A",1,1,5,2,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (7,"Tripulante 1","AP7","AM7","H","1999-01-10","ABCD123456HMNDLI98","S","2020-05-11",200,
+"AKDC883456",10,10,"7.jpg","direccion7 #7","colonia 7","77345","Licenciatura","Redes",
+"email7@gmail.com", "PASS7","Tripulante","A",1,1,5,2,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (8,"Tripulante 2","AP8","AM8","H","1999-01-10","ABCD123456HMNDJL88","S","2020-05-11",200,
+"ADMC843456",10,10,"8.jpg","direccion 8 #8","colonia 8","58345","Licenciatura","Redes",
+"email8@gmail.com", "PASS8","Tripulante","A",1,1,5,2,1);
+
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (9,"Tripulante 3","AP9","AM9","H","1999-01-10","ABCD123456HMNDDF09","S","2020-05-11",200,
+"XRFC883456",10,10,"9.jpg","direccion 9 #9","colonia 9","91345","Licenciatura","Redes",
+"email9@gmail.com", "PASS9","Tripulante","A",1,1,5,2,1);
+
+
 
 
 
@@ -1002,10 +1035,10 @@ CREATE PROCEDURE Procedimiento_Venta_Detalle (IN idVentaDETalle int, idVENta int
 	values(idVentaDETalle, idVENta, idPREsentacion,precioVENta,CANtidad,SUBtotal,ESTatus)
 ;
 
-SHOW TABLES FROM ERP;
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (7,1,"Conductor");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (7,1,"Conductor");
 insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
 values(1,1,1,150,2,300,"A");
-
 insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
 values(2,2,2,160,6,960,"C");
 insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
@@ -1020,3 +1053,4 @@ update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=1;
 update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=2;
 update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=10;
 update ExistenciasSucursal set cantidad=cantidad-6 where idPresentacion=2;
+SHOW TABLES FROM ERP;

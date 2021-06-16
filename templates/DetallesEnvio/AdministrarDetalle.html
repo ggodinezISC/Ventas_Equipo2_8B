@@ -98,7 +98,7 @@
                     <select class="form-control" name="idVenta" id="idVenta">
                     {% for cliente in Ventas %}
                         {%if cliente.estatus=="A"%}
-                          <option value="{{cliente.idVenta}}" selected>{{cliente.Cliente.Nombre}}</option>
+                          <option value="{{cliente.idVenta}}" selected> Venta:{{cliente.idVenta}} {{cliente.Cliente.Nombre}}</option>
                         {%endif%}
                     {% endfor %}
                     </select>
@@ -168,10 +168,10 @@
             </thead>
             <tbody>
                 {% for cli in Direccion %}
-                {%if (cli.idEnvio + cli.idVenta) <= (PosicionA*5) and (cli.idEnvio + cli.idVenta) >= ((PosicionA*5)-4)%}
+                {%if (cli.idEnvio ) <= (PosicionA*5) and (cli.idEnvio ) >= ((PosicionA*5)-4)%}
                 <tr>
-                    <td>{{cli.idVenta}}</td>
-                    <td>{{cli.Venta.Cliente.Nombre}}</td>
+                    <td>{{cli.idEnvio}}</td>
+                    <td>ID:{{cli.Venta.idVenta}} Cliente:{{cli.Venta.Cliente.Nombre}}</td>
                     <td>{{cli.Direccion.calle}} #{{cli.Direccion.numero}} Col. {{cli.Direccion.colonia}}, {{cli.Direccion.Ciudad.nombre}} {{cli.Direccion.Ciudad.Estado.nombre}}.   </td>
                     <td>{{cli.Contacto.nombre}}, Tel:{{cli.Contacto.telefono}}       </td>
                     <td>{{cli.fechaEntregaPlaneada}}       </td>

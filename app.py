@@ -1342,7 +1342,10 @@ def consultarDetalleEn(idventa,idenvio):
     H = ContactosClientes()
     H = H.consultaGeneral()
 
-    return render_template('DetallesEnvio/EditDetalle.html',Mantenimiento=D, Direcciones=C,Contactos=H)
+    S = Venta()
+    S = S.consultaGeneral()
+
+    return render_template('DetallesEnvio/EditDetalle.html',Mantenimiento=D, Direcciones=C,Contactos=H,Ventas=S)
 
 @app.route('/DetalleEnvio/modificar', methods=['POST'])
 @login_required

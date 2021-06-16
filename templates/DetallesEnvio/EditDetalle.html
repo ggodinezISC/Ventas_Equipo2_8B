@@ -10,7 +10,10 @@
             </div>
             <div class="form-group">
                 <select class="form-control" name="idVenta" id="idVenta">
-                      <option value="{{Mantenimiento.idVenta}}" selected>{{Mantenimiento.Venta.Cliente.Nombre}}</option>
+                    {% for cli in Ventas %}
+                        <option value="{{cli.idVenta}}" > id:{{cli.idVenta}} cliente:{{cli.Cliente.Nombre}} </option>
+                    {% endfor %}
+                      <option value="{{Mantenimiento.idVenta}}" selected>{{Mantenimiento.idVenta}} {{Mantenimiento.Venta.Cliente.Nombre}} </option>
                 </select>
             </div>
 
@@ -46,14 +49,34 @@
             </div>
             <div class="form-group">
                 <select class="form-control" name="estatus" id="estatus">
-                    {%if Mantenimiento.estatus=="A"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Activo</option>
-                      <option value="I">Inactivo</option>
+
+                    {%if Mantenimiento.estatus=="T"%}
+                        <option value="{{Mantenimiento.estatus}}" selected>En ruta</option>
+                        <option value="E" >Entregado</option>
+                        <option value="R" >Recolectado</option>
+                        <option value="P" >Pendiente de Recolección</option>
                     {%endif%}
-                    {%if Mantenimiento.estatus=="I"%}
-                      <option value="{{Mantenimiento.estatus}}" selected>Inactivo</option>
-                      <option value="A" >Activo</option>
+                    {%if Mantenimiento.estatus=="E"%}
+                        <option value="{{Mantenimiento.estatus}}" selected>Entregado</option>
+                        <option value="T" >En Ruta</option>
+                        <option value="R" >Recolectado</option>
+                        <option value="P" >Pendiente de Recolección</option>
                     {%endif%}
+                    {%if Mantenimiento.estatus=="R"%}
+                        <option value="{{Mantenimiento.estatus}}" selected>Recolectado</option>
+                        <option value="E" >Entregado</option>
+                        <option value="T" >En Ruta</option>
+                        <option value="P" >Pendiente de Recolección</option>
+                    {%endif%}
+                    {%if Mantenimiento.estatus=="P"%}
+                        <option value="{{Mantenimiento.estatus}}" selected>Pendiente de Recolección</option>
+                        <option value="E" >Entregado</option>
+                        <option value="R" >Recolectado</option>
+                        <option value="T" >En Ruta</option>
+                    {%endif%}
+
+
+                    
                 </select>
             </div>
             
