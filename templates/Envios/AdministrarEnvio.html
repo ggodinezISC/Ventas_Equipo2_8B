@@ -39,7 +39,8 @@
                 
                 <div class="form-group">
                     <select class="form-control" name="estatus" id="estatus">
-                        <option value="A" selected>Activo</option>
+                        <option value="A" selected>Total</option>
+                        <option value="I" >Parcial</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -75,13 +76,13 @@
                     <td>{{cli.fechaFin}}       </td>
                     <td>{{cli.pesoTotal}}       </td>
                     {%if cli.estatus=="A"%}
-                        <td>Activo      </td>
+                        <td>Total      </td>
                         <td>
                         <a href="/EditEnvio/{{cli.idEnvio}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteEnvio/{{cli.idEnvio}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                         </td>
                         {%else%}
-                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td>Parcial</td>
                         <td>
                             <a href="/EditEnvio/{{cli.idEnvio}}" class="btn btn-warning btn-block">Editar</a>
                             

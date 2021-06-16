@@ -542,9 +542,7 @@ def guardarDireccion():
         D.codigoPostal = request.form['CP']
         D.tipo = request.form['Tipo']
         D.estatus = request.form['Estatus']
-        regex = "^(\d{5}$)"    
-        if(re.match(regex,str(D.codigoPostal))==None):
-            return  render_template('Errores/error500.html',mensaje='CP no válido')  
+        
         if(int(D.numero)<=0):
             return  render_template('Errores/error500.html',mensaje='Número no válido')
         D.insertar()
@@ -717,9 +715,7 @@ def guardarContacto():
         for cliente in d:
             if(str(cliente.email) == str(D.email) or str(cliente.telefono) == str(D.telefono) ):
                 return  render_template('Errores/error500.html',mensaje='Datos repetidos (Email o Teléfono)')
-        regex = "^(\d{10}$)"    
-        if(re.match(regex,str(D.telefono))==None):
-            return  render_template('Errores/error500.html',mensaje='teléfono no válido')  
+        
         D.insertar()
         return redirect('/ContactosClientes/1')
     except:
@@ -798,14 +794,7 @@ def guardarUnidad():
         for cliente in d:
             if(str(cliente.placas) == request.form['Placas'] ):
                 return  render_template('Errores/error500.html',mensaje='Datos repetidos (Placas)')
-
-        regex = "^(\d{3}-\D{4}$)"   
-        if(re.match(regex,str(D.placas))==None):
-            return  render_template('Errores/error500.html',mensaje='Placas no válidas LLL-DDDD')
-
-        regex = "^(\d{4}$)"   
-        if(re.match(regex,str(D.anio))==None):
-            return  render_template('Errores/error500.html',mensaje='año no válido DDDD')
+        
           
         
         if(int (D.capacidad)<=0):
@@ -839,13 +828,6 @@ def actualizarUnidad():
         D.estatus = request.form['Estatus']
         
 
-        regex = "^(\d{4}$)"   
-        if(re.match(regex,str(D.anio))==None):
-            return  render_template('Errores/error500.html',mensaje='año no válido DDDD')
-          
-        
-        if(int (D.capacidad)<=0):
-            return  render_template('Errores/error500.html',mensaje='capacidad no válida')  
         
 
         D.actualizar()
@@ -974,9 +956,41 @@ def consultaVentas(id):
 
     return render_template('/Ventas/AdministrarVenta.html',Existencias=D,Venta=vent, Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
 
+@app.route('/consultaVentas/<int:id>')
+@login_required
+def consultaVentass(id):
+    V = Venta()
+    V = V.consultaGeneral()
+
+    cantA=0;
+    for direc in V:
+        cantA+=1
+    vent=cantA+1;
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1 
+    else:
+        cantA= int(cantA/5)
+    
+    D = ExistenciaSucursal()
+    D = D.consultaGeneral()
+    F = Cliente()
+    F = F.consultaGeneral()
+    S = Sucursal()
+    S = S.consultaGeneral()
+    E = Empleado()
+    E.idEmpleado=current_user.IdCliente
+    E = E.consultaIndividual()
+
+    return render_template('/Ventas/AdministrarVentacopy.html',Existencias=D,Venta=vent, Ventas=V,Sucursales=S,Empleados=E,Clientes=F,PaginasA=cantA,PosicionA=id)
+
+
+
 @app.route('/AddVenta',methods=['POST'])
 @login_required
 def guardarVenta():
+
+     
      D = Venta()
      D.idCliente = request.form['idCliente']
      D.idSucursal = request.form['idSucursal']
@@ -996,15 +1010,15 @@ def guardarVenta():
         D.tipo="P"
      D.insertar()
 
-
-     M = VentasDetalle() 
-     M.precioVenta = request.form['iva']
-     M.cantidad = 0
-     M.subtotal = request.form['subtotal']
-     M.idVenta = request.form['idVenta']
-     M.estatus = request.form['estatus']
-     M.detalles = request.form['detalles']
-     M.insertar()
+     
+      ##M = VentasDetalle() 
+     ##M.precioVenta = request.form['iva']
+     ##M.idVenta = request.form['idVenta']
+     ##M.idPresentacion = request.form['idPresentacion']
+     ##M.cantidad = 0
+     ##M.subtotal = request.form['subtotal']
+     ##M.estatus = request.form['estatus']
+     ##M.insertar()
 
      return redirect('/Ventas/1')
 
@@ -1217,18 +1231,22 @@ def consultaEnvios(id):
 @app.route('/AddEnvio',methods=['POST'])
 @login_required
 def guardarEnvio():
-    try:
-        D = Envio()
-        D.fechaInicio = request.form['fechaInicio']
-        D.fechaFin = request.form['fechaFin']
-        D.idUnidadTransporte = request.form['idUnidadTransporte']
-        D.pesoTotal = request.form['pesoTotal']
-        D.estatus = request.form['estatus']
-        
-        D.insertar()
-        return redirect('/Envios/1')
-    except:
-        return 'No hay respuesta a tu peticion'
+     D = Envio()
+     D.fechaInicio = request.form['fechaInicio']
+     D.fechaFin = request.form['fechaFin']
+     D.idUnidadTransporte = request.form['idUnidadTransporte']
+     D.pesoTotal = request.form['pesoTotal']
+     D.estatus = request.form['estatus']
+
+     U = UnidadesTransportes()
+     U.idUnidadTransporte = request.form['idUnidadTransporte']
+     U = U.consultaIndividual()
+
+     if(int(D.pesoTotal) <= int(U.capacidad)):
+         D.insertar()
+         return redirect('/Envios/1')
+     else:
+         return redirect('/Envios/1')
 
 @app.route('/EditEnvio/<int:id>')
 @login_required

@@ -216,10 +216,10 @@ CONSTRAINT pk_Ventas PRIMARY KEY (idVenta)
 /*==============================================================*/
 /* Table: VentasDetalle                                         */
 /*==============================================================*/
-create table VentaDetalle(
+create drop table VentaDetalle(
    idVentaDetalle int auto_increment not null,
    idVenta int not null,
-   idPresentación int not null,
+   idPresentacion int not null,
    precioVenta float not null,
    cantidad float not null,
    subtotal float not null,
@@ -869,7 +869,7 @@ idSucursal,idTurno )
 values (6,"Empleado 6","AP6","AM6","H","1999-01-10","ABCD123456HMNDLL06","S","2020-05-11",200,
 "ADBC883456",10,10,"6.jpg","direccion3 #3","colonia 6","52345","Licenciatura","Redes",
 "email6@gmail.com", "PASS6","Vendedor","A",1,1,5,2,1);
-select * from VentaDetalle;
+
 
 
 INSERT INTO CATEGORIAS (idCategoria,nombre, estatus) Values(1,"Herbicidas","A");
@@ -1003,3 +1003,20 @@ CREATE PROCEDURE Procedimiento_Venta_Detalle (IN idVentaDETalle int, idVENta int
 ;
 
 SHOW TABLES FROM ERP;
+insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
+values(1,1,1,150,2,300,"A");
+
+insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
+values(2,2,2,160,6,960,"C");
+insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
+values(3,3,1,150,1,150,"A");
+insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
+values(4,3,2,160,1,160,"A");
+insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
+values(5,3,10,150,1,150,"A");
+
+update ExistenciasSucursal set cantidad=cantidad-2 where idPresentacion=1;
+update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=1;
+update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=2;
+update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=10;
+update ExistenciasSucursal set cantidad=cantidad-6 where idPresentacion=2;

@@ -115,11 +115,13 @@
         {
                 var resume_table = document.getElementById("hola");
 
-                for (var i = 1, row; row = resume_table.rows[i]; i++) {
-                for (var j = 0, col; col = row.cells[j]; j++) {
-                    alert("Columna "+col.innerText);
+                for (var i = 1, row; row = resume_table.rows[i]; i++) 
+                {
+                    for (var j = 0, col; col = row.cells[j]; j++) 
+                    {
+                        alert("Columna "+col.innerText);
+                    }
                 }
-}
         }
         
           
@@ -181,9 +183,9 @@
     <table align="center">
     <tr>
         <td>
-                <button href="/consultaVentas" class="btn btn-primary">
+                <a href="/consultaVentas/1" class="btn btn-primary">
                         ver ventas
-                </button>
+                </a>
                 
         </td>
          <td>
@@ -199,11 +201,11 @@
                         
     </nav>
 
-    <div class="row">
-        <div class="col-md-5">
+    <div class="row"  width="380px" >
+        <div class="form-group"  width="380px" >
     
             {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert"  width="400px" >
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -211,82 +213,119 @@
             </div>
             {% endfor %} {% endif %} {% endwith %}
     
-            <div class="card card-body" >
-                <form action="/AddVenta" method="POST" >
-
-                    <div class="form-group">
-                        <input type="text" value="{{Venta}}"  id="idVenta" name="idVenta" placeholder="venta" class="form-control"readonly required>
+            <div class="card card-body"   width="380px" >
+                <form action="/AddVenta" method="POST" width="380px"  >
+                    <table width="350px">
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" value="{{Venta}}"  id="idVenta" name="idVenta" placeholder="venta" class="form-control"readonly required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="idCliente" id="idCliente">
+                                        {% for cliente in Clientes %}
+                                                {%if cliente.Estatus=="A"%}
+                                                    <option value="{{cliente.IdCliente}}" selected>{{cliente.Nombre}}</option>
+                                                {%endif%}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="idSucursal" id="idSucursal">
+                                            {% for Sucursal in Sucursales %}
+                                                {%if (Sucursal.idSucursal==Empleados.idSucursal)  %}
+                                                    <option value="{{Sucursal.idSucursal}}" selected>{{Sucursal.nombre}}</option>
+                                                {%endif%}
+                                            {% endfor %}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="idEmpleado" id="idEmpleado">
+                                        {%if Empleados.estatus=="A"%}
+                                            <option value="{{Empleados.idEmpleado}}" selected>{{Empleados.Nombre}}</option>
+                                        {%endif%}
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text"  id="fecha" name="fecha" placeholder="Fecha" class="form-control"readonly required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text"  id="subtotal" name="subtotal" value="0" placeholder="subtotal" class="form-control" readonly required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input step="any" id="iva"  name="iva"  value="0" placeholder="IVA" maxlength="100" class="form-control"readonly required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" id="detalles" name="detalles" placeholder="Detalles Productos"  value="Una vez confirmado, no se podrán modificar productos" maxlength="500" class="form-control" maxlength="15" required readonly>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" id="comentarios" name="comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required >
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="estatus" id="estatus">
+                                        <option value="A" selected>Confirmada</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="tipo" id="tipo">
+                                        <option value="C" selected>Contado</option>
+                                        <option value="P" selected>Credito</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <button type="submit" id="aceptar" class="btn btn-success">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                         
-                    </div>
-
-                    <div class="form-group">
-                        <select class="form-control" name="idCliente" id="idCliente">
-                        {% for cliente in Clientes %}
-                            {%if cliente.Estatus=="A"%}
-                              <option value="{{cliente.IdCliente}}" selected>{{cliente.Nombre}}</option>
-                            {%endif%}
-                        {% endfor %}
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <select class="form-control" name="idSucursal" id="idSucursal">
-                            {% for Sucursal in Sucursales %}
-                            {%if (Sucursal.idSucursal==Empleados.idSucursal)  %}
-                              <option value="{{Sucursal.idSucursal}}" selected>{{Sucursal.nombre}}</option>
-                            {%endif%}
-                        {% endfor %}
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <select class="form-control" name="idEmpleado" id="idEmpleado">
-                            {%if Empleados.estatus=="A"%}
-                              <option value="{{Empleados.idEmpleado}}" selected>{{Empleados.Nombre}}</option>
-                            {%endif%}
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <input type="text"  id="fecha" name="fecha" placeholder="Fecha" class="form-control"readonly required>
-                    </div>
-    
-                    <div class="form-group">
-                        <input type="text"  id="subtotal" name="subtotal" value="0" placeholder="subtotal" class="form-control" readonly required>
-                    </div>
-    
-                    <div class="form-group">
-                        <input step="any" id="iva"  name="iva"  value="0" placeholder="IVA" maxlength="100" class="form-control"readonly required>
-                    </div>
-    
-                    <div class="form-group">
-                        <input type="text" id="detalles" name="detalles" placeholder="Detalles Productos"  value="Una vez confirmado, no se podrán modificar productos" maxlength="500" class="form-control" maxlength="15" required readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" id="comentarios" name="comentarios" placeholder="Comentarios" maxlength="200" class="form-control" maxlength="15" required >
-                    </div>
-    
-                    <div class="form-group">
-                        <select class="form-control" name="estatus" id="estatus">
-                            <option value="A" selected>Confirmada</option>
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <select class="form-control" name="tipo" id="tipo">
-                            <option value="C" selected>Contado</option>
-                            <option value="P" selected>Credito</option>
-                        </select>
-                    </div>
-
-
-                    <div class="form-group">
-                        <button type="submit" id="aceptar" class="btn btn-success">
-                            Guardar
-                        </button>
-
-                    </div>
+                    </table>
+                    
     
                 </form>
             </div>

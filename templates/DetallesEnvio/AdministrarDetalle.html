@@ -1,5 +1,72 @@
-{% extends 'Layout.html' %} {% block body%}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Administración</title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/PanelAdministracion.css') }}">
+    <script src="{{url_for('static',filename='JS/global.js')}}" ></script>
+    <script>
+        function CalcularFecha()
+        {
+            var f = new Date();
+            dia= f.getDate();
+            mes= f.getMonth()+1;
+            año= f.getYear()+1900;
+            fecha=año+"/"+mes+"/"+dia;
+            document.getElementById("fecha").setAttribute("value",fecha);
+            
+        }
+        
+    </script>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark  ">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Panel de Administración</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Asociaciones">Asociaciones</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Miembros">Miembros</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Cultivos">Cultivos</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Clientes">Clientes</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Estados/1">Estados</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Ciudades/1">Ciudades</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/DireccionesClientes/1">DireccionesClientes</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Parcelas/1">Parcelas</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/ContactosClientes/1">ContactosClientes</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/UnidadesTransporte/1">UnidadesTransporte</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Mantenimientos/1">Mantenimientos</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Ventas/1">Ventas</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/VentaDetalle/1">Ventas Detalles</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Cobros/1">Cobros</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/Envios/1">Envios</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/DetallesEnvio/1">Detalles Envios</a> {% endif %} {% if current_user.is_authenticated %}
+                    <a class="nav-link active" aria-current="page" href="/cerrarSesion">Cerrar Sesion</a> {% endif %}
+                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pt-4">
+        {% block body %} {% endblock %}
+    </div>
+
+
+    <!-- scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</nav>
+</head>
+
+<body onload="CalcularFecha()">
 
 <div class="row">
     <div class="col-md-5">
@@ -59,7 +126,7 @@
 
 
                 <div class="form-group">
-                    <input type="date"  id="fecha" name="fecha" placeholder="Fecha Entrega Planeada" class="form-control" required>
+                    <input type="text"  id="fecha" name="fecha" placeholder="Fecha Entrega Planeada" class="form-control" required>
                 </div>
 
                 <div class="form-group">
@@ -67,7 +134,11 @@
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="estatus" id="estatus">
-                          <option value="A" selected>Activo</option>
+                          <option value="P" >Pendiente de Recoleccion</option>
+                          <option value="R" >Recolectado</option>
+                          <option value="T" >En Ruta</option>
+                          <option value="C" >Cancelado</option>
+                          <option value="E" >Entregado</option>
                     </select>
                 </div>
                 
@@ -90,7 +161,7 @@
                     <td>Venta al Cliente</td>
                     <td>Direccion</td>
                     <td>Contacto</td>
-                    <td>FechaEntrega</td>
+                    <td>FechaEntrega Estimada</td>
                     <td>Peso en Toneladas</td>
                     <td>Estatus</td>
                 </tr>
@@ -102,17 +173,28 @@
                     <td>{{cli.idVenta}}</td>
                     <td>{{cli.Venta.Cliente.Nombre}}</td>
                     <td>{{cli.Direccion.calle}} #{{cli.Direccion.numero}} Col. {{cli.Direccion.colonia}}, {{cli.Direccion.Ciudad.nombre}} {{cli.Direccion.Ciudad.Estado.nombre}}.   </td>
-                    <td>{{cli.Contacto.nombre}}       </td>
+                    <td>{{cli.Contacto.nombre}}, Tel:{{cli.Contacto.telefono}}       </td>
                     <td>{{cli.fechaEntregaPlaneada}}       </td>
                     <td>{{cli.peso}}       </td>
-                    {%if cli.estatus=="A"%}
-                        <td>Activo      </td>
+                    {%if cli.estatus!="C"%}
+                    {%if cli.estatus=="T"%}
+                        <td>En ruta      </td>
+                    {%endif%}
+                    {%if cli.estatus=="E"%}
+                        <td>Entregado      </td>
+                    {%endif%}
+                    {%if cli.estatus=="R"%}
+                        <td>Recolectado      </td>
+                    {%endif%}
+                    {%if cli.estatus=="P"%}
+                        <td>Pendiente de Recoleccion      </td>
+                    {%endif%}
                         <td>
                         <a href="/EditDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
                         </td>
                         {%else%}
-                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td style="background-color:#FF0000">Cancelado</td>
                         <td>
                             <a href="/EditDetalleEnvio/{{cli.idEnvio}}/{{cli.idVenta}}" class="btn btn-warning btn-block">Editar</a>
                             
@@ -140,4 +222,4 @@
     </div>
 </div>
 
-{% endblock %}
+</html>

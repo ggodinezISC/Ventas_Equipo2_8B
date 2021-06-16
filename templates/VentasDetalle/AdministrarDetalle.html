@@ -20,11 +20,12 @@
         <table class="table table-striped table-bordered bg-white table-sm">
             <thead>
                 <tr>
-                    <td>IdDetalles</td>
+                    <td>IdDetallesVenta</td>
                     <td>Venta al Cliente</td>
-                    <td>SubTotal</td>
-                    <td>Total</td>
-                    <td>Detalles</td>
+                    <td>PresentaciónProducto</td>
+                    <td>Precio Unitario</td>
+                    <td>Cantidad Productos</td>
+                    <td>Subtotal</td>
                     <td>Estatus</td>
                 </tr>
             </thead>
@@ -34,11 +35,12 @@
                 <tr>
                     <td>{{cli.idVentaDetalle}}       </td>
                     <td>{{cli.Venta.Cliente.Nombre}}</td>
-                    <td>{{cli.subtotal}}       </td>
-                    <td>{{cli.precioVenta}}       </td>                    
-                    <td>{{cli.detalles}}       </td>
-                    {%if cli.estatus=="A"%}
-                        <td>Activo      </td>
+                    <td>{{cli.Presentacion.Producto.nombre}} {{cli.Presentacion.Empaque.nombre}} {{cli.Presentacion.Empaque.capacidad}}  {{cli.Presentacion.Empaque.Unidad.siglas}}      </td>
+                    <td>{{cli.Presentacion.precioVenta}}       </td>                    
+                    <td>{{cli.cantidad}}</td>
+                    <td>{{cli.cantidad*cli.Presentacion.precioVenta}}       </td>
+                    {%if cli.estatus=="A" or cli.estatus=="C"%}
+                        <td>Confirmado      </td>
                         <td>
                         <a href="/EditVentaDetalle/{{cli.idVentaDetalle}}" class="btn btn-warning btn-block">Editar</a>
                         <a href="/DeleteVentaDetalle/{{cli.idVentaDetalle}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
