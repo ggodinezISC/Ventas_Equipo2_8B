@@ -1,0 +1,52 @@
+{% extends 'Layout.html'%} {% block body %}
+<div class="col-md-8 offset-md-2">
+    <div class="card card-body">
+        <form action="/OfertasAsociacion/modificar" method="POST">
+
+            
+            <div class="form-group">
+                    <select class="form-control" name="idAsociacion" id="idAsociacion">
+                            {% for cliente in Empleado %}
+                                    {%if cliente.estatus=="A" and cliente.tipo=="Tripulante" %}
+                                        <option value="{{cliente.IdAsociacion}}" >{{cliente.Nombre}}</option>
+                                    {%endif%}
+                            {% endfor %}    
+                            <option value="{{Tripulacion.idAsosiacion}}" selected>{{Tripulacion.Asociacion.Nombre}}</option>                
+                    </select>
+                </div>
+                
+                
+                <div class="form-group">
+                    <select class="form-control" name="idOferta" id="idOferta">
+                            {% for cliente in Envio %}
+                                    {%if cliente.estatus=="A"%}
+                                        <option value="{{cliente.idOferta}}">{{cliente.nombre}}</option>
+                                    {%endif%}
+                            {% endfor %}     
+                            <option value="{{Tripulacion.idOferta}}" selected>Oferta: {{Tripulacion.Oferta.descripcion}}</option>               
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                <select class="form-control" name="estatus" id="estatus">
+                    {%if Tripulacion.estatus=="A"%}
+                      <option value="{{Tripulacion.estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                    {%endif%}
+                    {%if Tripulacion.estatus=="I"%}
+                      <option value="{{Tripulacion.estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                    {%endif%}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block">
+                    Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

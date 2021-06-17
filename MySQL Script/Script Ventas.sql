@@ -472,7 +472,7 @@ CONSTRAINT pk_Tripulacion PRIMARY KEY (idEmpleado,idEnvio,rol)
 /* Table: Asesorias						                		*/
 /*==============================================================*/
 create table Asesorias(
-idAsesoria int not null,
+idAsesoria int auto_increment not null,
 fecha date not null,
 comentarios varchar(200) not null,
 estatus char not null,
@@ -900,6 +900,14 @@ idSucursal,idTurno )
 values (9,"Tripulante 3","AP9","AM9","H","1999-01-10","ABCD123456HMNDDF09","S","2020-05-11",200,
 "XRFC883456",10,10,"9.jpg","direccion 9 #9","colonia 9","91345","Licenciatura","Redes",
 "email9@gmail.com", "PASS9","Tripulante","A",1,1,5,2,1);
+insert into Empleados 
+(idEmpleado, nombre, apellidoPaterno , apellidoMaterno , sexo, fechaNacimiento , curp, estadoCivil, 
+fechaContratacion, salarioDiario, nss, diasVacaciones, diasPermiso, fotografia, direccion , colonia, 
+codigoPostal, escolaridad, especialidad, email,passwor, tipo, estatus, idDepartamento, idPuesto, idCiudad, 
+idSucursal,idTurno ) 
+values (10,"Tripulante 4","AP10","AM10","H","1999-01-10","LSCD123456HMNDDF09","S","2020-05-11",200,
+"XRVU883456",10,10,"10.jpg","direccion 10 #10","colonia 10","10945","Licenciatura","Redes",
+"email10@gmail.com", "PASS10","Tripulante","A",1,1,5,2,1);
 
 
 
@@ -1035,8 +1043,16 @@ CREATE PROCEDURE Procedimiento_Venta_Detalle (IN idVentaDETalle int, idVENta int
 	values(idVentaDETalle, idVENta, idPREsentacion,precioVENta,CANtidad,SUBtotal,ESTatus)
 ;
 
-insert into Tripulacion (idEmpleado,idEnvio,rol) values (7,1,"Conductor");
-insert into Tripulacion (idEmpleado,idEnvio,rol) values (7,1,"Conductor");
+
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (5,1,"Conductor");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (6,2,"Conductor");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (7,3,"Conductor");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (8,1,"Copiloto");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (9,2,"Copiloto");
+insert into Tripulacion (idEmpleado,idEnvio,rol) values (4,3,"Copiloto");
+alter table Tripulacion add estatus char not null;
+update Tripulacion set estatus="A" where idEmpleado>0;
+
 insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
 values(1,1,1,150,2,300,"A");
 insert into VentaDetalle(idVentaDetalle, idVenta, idPresentación,precioVenta,cantidad,subtotal,estatus)
@@ -1054,3 +1070,4 @@ update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=2;
 update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=10;
 update ExistenciasSucursal set cantidad=cantidad-6 where idPresentacion=2;
 SHOW TABLES FROM ERP;
+select * from UnidadesTransporte;

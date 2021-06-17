@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from model.models import db, Venta,Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEnvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento,Producto, UnidadMedida,Empaque, PresentacionProducto,Oferta,ExistenciaSucursal,Laboratorio,Categoria
+from model.models import db, Venta,Tripulantes,OfertaAsociacion, Asesoria, Sucursal,Empleado, VentasDetalle, Cobro, Envio, DetalleEnvio,  Cliente, Cultivo,Asociacion,Miembro,Estado,Ciudad,DireccionesClientes,History,Parcela,ContactosClientes,UnidadesTransportes,Mantenimiento,Producto, UnidadMedida,Empaque, PresentacionProducto,Oferta,ExistenciaSucursal,Laboratorio,Categoria
 
 app = Flask(__name__)
 app.secret_key = 'ERP'
@@ -1074,9 +1074,10 @@ def eliminarVenta(id):
 @app.route('/VentaDetalle/<int:id>')
 @login_required
 def consultaVentaDe(id):
-    cantA=0;
     D = VentasDetalle()
     D = D.consultaGeneral()
+    cantA=0;
+   
     for direc in D:
         cantA +=1
     if(cantA%5!=0):
@@ -1373,6 +1374,232 @@ def eliminarDetalleEn(idventa,idenvio):
     return redirect('/DetallesEnvio/1')        
 #Fin Crud DetallesEnvio
 
+#Inicio Crud Tripulacion
+@app.route('/Tripulacion/<int:id>')
+@login_required
+def consultaTrip(id):
+
+    cantA=0;
+    
+    m = Tripulantes()
+    m = m.consultaGeneral()
+    for direc in m:
+        cantA +=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1     
+    else:
+        cantA= int(cantA/5)
+
+    c = Empleado()
+    c = c.consultaGeneral()
+
+    d = Envio()
+    d = d.consultaGeneral()
+
+    return render_template('/Tripulacion/AdministrarTripulacion.html',Tripulacion=m,Empleado=c,Envio=d,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddTripulante',methods=['POST'])
+@login_required
+def guardarTrip():
+    try:
+        m = Tripulantes()
+        m.idEmpleado = request.form['idEmpleado']
+        m.idEnvio = request.form['idEnvio']
+        m.rol = request.form['rol']
+        m.estatus = request.form['estatus']
+        m.insertar()
+        return redirect(url_for('consultaTrip'))
+    except:
+        return  render_template('Errores/error500.html',mensaje='Campos Vacíos o Repetidos')
+
+@app.route('/EditTripulante/<int:idcli>/<int:idaso>')
+@login_required
+def consultarTrip(idcli,idaso):
+    m = Tripulantes()
+    m = m.consultaIndividual(idcli,idaso)
+
+    c = Empleado()
+    c = c.consultaGeneral()
+
+    d = Envio()
+    d = d.consultaGeneral()
+    
+    return render_template('Tripulacion/EditTripulacion.html', Tripulacion=m,Empleado=c,Envio=d)
+
+@app.route('/Tripulacion/modificar', methods=['POST'])
+@login_required
+def actualizarTrip():
+    try:
+        m = Tripulantes()
+        m.idEmpleado = request.form['idEmpleado']
+        m.idEnvio = request.form['idEnvio']
+        m.rol = request.form['rol']
+        m.estatus = request.form['estatus']
+        m.actualizar()
+        return redirect('/Tripulacion/1')
+    except:
+        return  render_template('Errores/error500.html',mensaje='No se actualizó')
+
+@app.route('/DeleteTripulante/<int:idcli>/<int:idaso>')
+@login_required
+def eliminarTrip(idcli,idaso):
+    m = Tripulantes()
+    m = m.eliminar(idcli,idaso)
+    return redirect('/Tripulacion/1')       
+#Fin Crud Tripulacion
+
+
+#Inicio Crud OfertasAsociacion
+@app.route('/OfertasAsociacion/<int:id>')
+@login_required
+def consultaOfe(id):
+    cantA=0;
+    m = OfertaAsociacion()
+    m = m.consultaGeneral()
+    for direc in m:
+        cantA +=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1     
+    else:
+        cantA= int(cantA/5)
+
+    c = Asociacion()
+    c = c.consultaGeneral()
+
+    d = Oferta()
+    d = d.consultaGeneral()
+
+    return render_template('/OfertaAsociacion/AdministrarOferta.html',OfertasA=m,Asociacion=c,Oferta=d,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddOfeAso',methods=['POST'])
+@login_required
+def guardarOfe():
+    try:
+        m = OfertaAsociacion()
+        m.idOferta = request.form['idOferta']
+        m.idAsosiacion = request.form['idAsociacion']
+        m.estatus = request.form['estatus']
+        m.insertar()
+        return redirect('/OfertasAsociacion/1')
+    except:
+        return  render_template('Errores/error500.html',mensaje='Campos Vacíos o Repetidos')
+
+@app.route('/EditOfeAso/<int:idcli>/<int:idaso>')
+@login_required
+def consultarOFe(idcli,idaso):
+    m = OfertaAsociacion()
+    m = m.consultaIndividual(idcli,idaso)
+
+    c = Asociacion()
+    c = c.consultaGeneral()
+
+    d = Oferta()
+    d = d.consultaGeneral()
+    
+    return render_template('OfertaAsociacion/EditOferta.html', Tripulacion=m,Empleado=c,Envio=d)
+
+@app.route('/OfertasAsociacion/modificar', methods=['POST'])
+@login_required
+def actualizarOfe():
+    try:
+        m = OfertaAsociacion()
+        m.idOferta = request.form['idOferta']
+        m.idAsosiacion = request.form['idAsociacion']
+        m.estatus = request.form['estatus']
+        m.actualizar()
+        return redirect('/OfertasAsociacion/1')
+    except:
+        return  render_template('Errores/error500.html',mensaje='No se actualizó')
+
+@app.route('/DeleteOfeAso/<int:idcli>/<int:idaso>')
+@login_required
+def eliminarOfe(idcli,idaso):
+    m = OfertaAsociacion()
+    m = m.eliminar(idcli,idaso)
+    return redirect('/OfertasAsociacion/1')       
+#Fin Crud Tripulacion
+consultaTrip
+
+#Inicio Crud Asesorias
+@app.route('/Asesorias/<int:id>')
+@login_required
+def consultaAse(id):
+    D = Asesoria()
+    D = D.consultaGeneral()
+
+    E = Empleado()
+    E = E.consultaGeneral()
+
+    F = Parcela()
+    F = F.consultaGeneral()
+
+    G = UnidadesTransportes()
+    G = G.consultaGeneral()
+    
+    cantA=0;
+   
+    for direc in D:
+        cantA +=1
+    if(cantA%5!=0):
+        cantA= int(cantA/5)
+        cantA+=1            
+    else:
+        cantA= int(cantA/5)
+    return render_template('/Asesorias/AdministrarAsesoria.html',Asesorias=D,Empleados=E,Parcelas=F,Unidades=G,PaginasA=cantA,PosicionA=id)
+
+@app.route('/AddAse',methods=['POST'])
+@login_required
+def guardarAse():
+     m = Asesoria()
+     m.idParcela = request.form['idParcela']
+     m.idEmpleado = request.form['idEmpleado']
+     m.idUnidadTransporte = request.form['idUnidadTransporte']
+     m.fecha = request.form['fecha']
+     m.comentarios = request.form['comentarios']
+     m.costo = request.form['costo']
+     m.estatus = request.form['estatus']
+     m.insertar()
+     return redirect('/Asesorias/1')
+
+@app.route('/EditAse/<int:id>')
+@login_required
+def consultarAse(id):
+    D = VentasDetalle()
+    D.idVentaDetalle = id
+    D = D.consultaIndividual()
+    C = Venta()
+    C = C.consultaGeneral()
+    return render_template('Asesorias/EditAsesoria.html', Ventas=C, Detalle=D)
+
+@app.route('/Asesoria/modificar', methods=['POST'])
+@login_required
+def actualizarAse():
+    try:
+        m = Asesoria()
+        m.idParcela = request.form['idParcela']
+        m.idEmpleado = request.form['idEmpleado']
+        m.idUnidadTransporte = request.form['idUnidadTransporte']
+        m.fecha = request.form['fecha']
+        m.comentarios = request.form['comentarios']
+        m.costo = request.form['costo']
+        m.estatus = request.form['estatus']
+        
+        m.actualizar()
+        return redirect('/Asesorias/1')
+    except:
+        return 'No se actualizó la información'
+
+@app.route('/DeleteAse/<int:id>')
+@login_required
+def eliminarAse(id):
+    D= Asesoria()
+    D.idAsesoria = id
+    D.eliminar()
+    return redirect('/Asesorias/1')        
+#Fin Crud VentasDetalle
+
 @app.errorhandler(400)
 def error_400(e):
     return render_template('Errores/error404.html',mensaje='La pagina que buscas No Existe en esta plataforma'),400
@@ -1388,4 +1615,3 @@ def error_500(e):
 if __name__ == '__main__':
     db.init_app(app)
     app.run(debug=True)
-

@@ -1,3 +1,4 @@
+from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, Float
 from flask_login import UserMixin
@@ -960,4 +961,116 @@ class ExistenciaSucursal(db.Model):
         else:
             return None
 
+class Tripulantes(db.Model):
+    __tablename__ = 'Tripulacion'
+    idEmpleado = Column(Integer, ForeignKey('Empleados.idEmpleado'), primary_key=True)
+    idEnvio = Column(Integer, ForeignKey('Envios.idEnvio'), primary_key=True)
+    rol = Column(String, nullable=False)
+    estatus = Column(String, nullable=False)
+    Empleado = relationship('Empleado', foreign_keys=[idEmpleado])
+    Envio = relationship('Envio', foreign_keys=[idEnvio])
 
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self,Empleado,Envio):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idEmpleado==Empleado and cu.idEnvio==Envio):
+                cu.estatus="I"
+                db.session.merge(cu)
+                db.session.commit()
+        else:
+            return None
+
+    def consultaIndividual(self,Empleado,Envio):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idEmpleado==Empleado and cu.idEnvio==Envio):
+                return cu
+        else:
+            return None
+
+class OfertaAsociacion(db.Model):
+    __tablename__ = 'OfertasAsociacion'
+    idAsosiacion = Column(Integer, ForeignKey('Asociaciones.IdAsociacion'), primary_key=True)
+    idOferta = Column(Integer, ForeignKey('Ofertas.idOferta'), primary_key=True)
+    estatus = Column(String, nullable=False)
+    Asociacion = relationship('Asociacion', foreign_keys=[idAsosiacion])
+    Oferta = relationship('Oferta', foreign_keys=[idOferta])
+
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self, Asociacion, Oferta):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idAsosiacion==Asociacion and cu.idOferta==Oferta):
+                cu.estatus="I"
+                db.session.merge(cu)
+                db.session.commit()
+        else:
+            return None
+
+    def consultaIndividual(self,Asociacion, Oferta):
+        cult = self.query.all()
+        for cu in cult:
+            if(cu.idAsosiacion==Asociacion and cu.idOferta==Oferta):
+                return cu
+        else:
+            return None
+
+class Asesoria(db.Model):
+    __tablename__ = 'Asesorias'
+    idAsesoria = Column(Integer, primary_key=True)
+    idParcela = Column(Integer, ForeignKey('Parcelas.idParcela'), nullable=False)
+    idEmpleado = Column(Integer,ForeignKey('Empleados.idEmpleado'), nullable=False)
+    idUnidadTransporte = Column(Integer, ForeignKey('UnidadesTransporte.idUnidadTransporte') ,nullable=False)
+    fecha = Column(Date, nullable=False)
+    comentarios  = Column(String, nullable=False)
+    estatus  = Column(String, nullable=False)
+    costo = Column(Float, nullable=False)
+    Parcela=relationship('Parcela', foreign_keys=[idParcela])
+    Empleado=relationship('Empleado', foreign_keys=[idEmpleado])
+    Unidad=relationship('UnidadesTransportes', foreign_keys=[idUnidadTransporte])
+
+    
+    def insertar(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def consultaGeneral(self):
+        MAN = self.query.all()
+        return MAN
+
+    def actualizar(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    def eliminar(self):
+        est = self.consultaIndividual()
+        est.estatus="I"
+        db.session.merge(est)
+        db.session.commit()
+
+    def consultaIndividual(self):
+        cli = self.query.get(self.idAsesoria)
+        return cli 

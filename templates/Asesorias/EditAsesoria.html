@@ -1,0 +1,84 @@
+{% extends 'Layout.html'%} {% block body %}
+<div class="col-md-8 offset-md-2">
+    <div class="card card-body">
+        <form action="/Asesorias/modificar" method="POST">
+            <div class="form-group">
+                    <select class="form-control" name="idAsesoria" id="idAsesoria">
+                            {% for cliente in Asesorias %}
+                                    {%if cliente.Estatus=="A" %}
+                                        <option value="{{cliente.idAsesoria}}" >{{cliente.idAsesoria}}</option>
+                                    {%endif%}
+                            {% endfor %}                    
+                            <option value="{{Asesoria.idAsesoria}}" selected>{{Asesoria.idAsesoria}}</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <select class="form-control" name="idParcela" id="idParcela">
+                            {% for cliente in Parcelas %}
+                                    {%if cliente.estatus=="A" %}
+                                        <option value="{{cliente.idParcela}}">{{cliente.Direccion.calle}} #{{cliente.Direccion.numero}} Col. {{cliente.Direccion.colonia}}, {{cliente.Direccion.Ciudad.nombre}} {{cliente.Direccion.Ciudad.Estado.nombre}}. </option>
+                                    {%endif%}
+                            {% endfor %}  
+                            <option value="{{Asesoria.idParcela}}" selected>{{Asesoria.Direccion.calle}} #{{Asesoria.Direccion.numero}} Col. {{Asesoria.Direccion.colonia}}, {{Asesoria.Direccion.Ciudad.nombre}} {{Asesoria.Direccion.Ciudad.Estado.nombre}}. </option>                  
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" name="idEmpleado" id="idEmpleado">
+                            {% for cliente in Empleados %}
+                                    {%if cliente.estatus=="A" %}
+                                        <option value="{{cliente.idEmpleado}}" >{{cliente.nombre}}</option>
+                                    {%endif%}
+                            {% endfor %}      
+                            <option value="{{Asesoria.idEmpleado}}" selected>{{Asesoria.Empleado.nombre}}</option>              
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" name="idUnidadTransporte" id="idUnidadTransporte">
+                            {% for cliente in Unidades %}
+                                    {%if cliente.estatus=="A" %}
+                                        <option value="{{cliente.idUnidadTransporte}}" >{{cliente.marca}}  {{cliente.modelo}}</option>
+                                    {%endif%}
+                            {% endfor %}
+                            <option value="{{Asesoria.idUnidadTransporte}}" selected>{{Asesoria.Unidad.marca}}{{Asociacion.Unidad.modelo}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="fecha" value="{{Asesoria.fecha}}"  placeholder="Fecha" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="comentarios" value="{{Asesoria.comentarios}}" placeholder="Comentarios" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="costo" value="{{Asesoria.costo}}" placeholder="costo" class="form-control" required>
+                </div>
+
+                 <div class="form-group">
+                <select class="form-control" name="estatus" id="estatus">
+                    {%if Asesoria.estatus=="A"%}
+                      <option value="{{Asesoria.estatus}}" selected>Activo</option>
+                      <option value="I">Inactivo</option>
+                    {%endif%}
+                    {%if Asesoria.estatus=="I"%}
+                      <option value="{{Asesoria.estatus}}" selected>Inactivo</option>
+                      <option value="A" >Activo</option>
+                    {%endif%}
+                </select>
+            </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block">
+                        Guardar
+                    </button>
+                </div>
+
+
+        </form>
+    </div>
+</div>
+{% endblock %}
