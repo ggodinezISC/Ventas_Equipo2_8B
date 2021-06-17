@@ -6,11 +6,7 @@
             
             <div class="form-group">
                     <select class="form-control" name="idEmpleado" id="idEmpleado">
-                            {% for cliente in Empleado %}
-                                    {%if cliente.estatus=="A" and cliente.tipo=="Tripulante" %}
-                                        <option value="{{cliente.idEmpleado}}" >{{cliente.Nombre}}</option>
-                                    {%endif%}
-                            {% endfor %}    
+                              
                             <option value="{{Tripulacion.idEmpleado}}" selected>{{Tripulacion.Empleado.Nombre}}</option>                
                     </select>
                 </div>
@@ -18,11 +14,7 @@
                 
                 <div class="form-group">
                     <select class="form-control" name="idEnvio" id="idEnvio">
-                            {% for cliente in Envio %}
-                                    {%if cliente.estatus=="A"%}
-                                        <option value="{{cliente.idEnvio}}">{{cliente.idEnvio}}</option>
-                                    {%endif%}
-                            {% endfor %}     
+                                
                             <option value="{{Tripulacion.idEnvio}}" selected>Envio: {{Tripulacion.idEnvio}}</option>               
                     </select>
                 </div>

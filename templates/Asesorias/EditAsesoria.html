@@ -20,7 +20,7 @@
                                         <option value="{{cliente.idParcela}}">{{cliente.Direccion.calle}} #{{cliente.Direccion.numero}} Col. {{cliente.Direccion.colonia}}, {{cliente.Direccion.Ciudad.nombre}} {{cliente.Direccion.Ciudad.Estado.nombre}}. </option>
                                     {%endif%}
                             {% endfor %}  
-                            <option value="{{Asesoria.idParcela}}" selected>{{Asesoria.Direccion.calle}} #{{Asesoria.Direccion.numero}} Col. {{Asesoria.Direccion.colonia}}, {{Asesoria.Direccion.Ciudad.nombre}} {{Asesoria.Direccion.Ciudad.Estado.nombre}}. </option>                  
+                            <option value="{{Asesoria.idParcela}}" selected>{{Asesoria.Parcela.Direccion.calle}} #{{Asesoria.Parcela.Direccion.numero}} Col. {{Asesoria.Parcela.Direccion.colonia}}, {{Asesoria.Parcela.Direccion.Ciudad.nombre}} {{Asesoria.Parcela.Direccion.Ciudad.Estado.nombre}}. </option>                  
                     </select>
                 </div>
 
@@ -28,34 +28,34 @@
                     <select class="form-control" name="idEmpleado" id="idEmpleado">
                             {% for cliente in Empleados %}
                                     {%if cliente.estatus=="A" %}
-                                        <option value="{{cliente.idEmpleado}}" >{{cliente.nombre}}</option>
+                                        <option value="{{cliente.idEmpleado}}" >{{cliente.Nombre}}</option>
                                     {%endif%}
                             {% endfor %}      
-                            <option value="{{Asesoria.idEmpleado}}" selected>{{Asesoria.Empleado.nombre}}</option>              
+                            <option value="{{Asesoria.idEmpleado}}" selected>{{Asesoria.Empleado.Nombre}}</option>              
                     </select>
                 </div>
 
                 <div class="form-group">
                     <select class="form-control" name="idUnidadTransporte" id="idUnidadTransporte">
                             {% for cliente in Unidades %}
-                                    {%if cliente.estatus=="A" %}
+                                    {%if cliente.estatus=="A"and cliente.tipo=="T" %}
                                         <option value="{{cliente.idUnidadTransporte}}" >{{cliente.marca}}  {{cliente.modelo}}</option>
                                     {%endif%}
                             {% endfor %}
-                            <option value="{{Asesoria.idUnidadTransporte}}" selected>{{Asesoria.Unidad.marca}}{{Asociacion.Unidad.modelo}}</option>
+                            <option value="{{Asesoria.idUnidadTransporte}}" selected>{{Asesoria.Unidad.marca}}{{Asesoria.Unidad.modelo}}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="fecha" value="{{Asesoria.fecha}}"  placeholder="Fecha" class="form-control" required>
+                    <input type="text" id="fecha" name="fecha" value="{{Asesoria.fecha}}"  placeholder="Fecha" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="comentarios" value="{{Asesoria.comentarios}}" placeholder="Comentarios" class="form-control" required>
+                    <input type="text" id="comentarios" name="comentarios" value="{{Asesoria.comentarios}}" placeholder="Comentarios" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="number" id="costo" value="{{Asesoria.costo}}" placeholder="costo" class="form-control" required>
+                    <input type="number" id="costo" name="costo" value="{{Asesoria.costo}}" placeholder="costo" class="form-control" required>
                 </div>
 
                  <div class="form-group">

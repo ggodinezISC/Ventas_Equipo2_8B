@@ -1566,18 +1566,27 @@ def guardarAse():
 @app.route('/EditAse/<int:id>')
 @login_required
 def consultarAse(id):
-    D = VentasDetalle()
-    D.idVentaDetalle = id
+    D = Asesoria()
+    D.idAsesoria = id
     D = D.consultaIndividual()
-    C = Venta()
-    C = C.consultaGeneral()
-    return render_template('Asesorias/EditAsesoria.html', Ventas=C, Detalle=D)
+    
+    
+    E = Empleado()
+    E = E.consultaGeneral()
 
-@app.route('/Asesoria/modificar', methods=['POST'])
+    F = Parcela()
+    F = F.consultaGeneral()
+
+    G = UnidadesTransportes()
+    G = G.consultaGeneral()
+    return render_template('Asesorias/EditAsesoria.html', Asesoria=D,Empleados=E,Parcelas=F,Unidades=G)
+
+@app.route('/Asesorias/modificar', methods=['POST'])
 @login_required
 def actualizarAse():
     try:
         m = Asesoria()
+        m.idAsesoria = request.form['idAsesoria']
         m.idParcela = request.form['idParcela']
         m.idEmpleado = request.form['idEmpleado']
         m.idUnidadTransporte = request.form['idUnidadTransporte']
@@ -1585,7 +1594,6 @@ def actualizarAse():
         m.comentarios = request.form['comentarios']
         m.costo = request.form['costo']
         m.estatus = request.form['estatus']
-        
         m.actualizar()
         return redirect('/Asesorias/1')
     except:

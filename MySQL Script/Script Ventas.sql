@@ -484,9 +484,6 @@ CONSTRAINT pk_Asesorias PRIMARY KEY (idAsesoria)
 );
 
 
-
-
-
 /*==============================================================*/
 /* Table:ProductosProveedor							            */
 /*==============================================================*/
@@ -1070,4 +1067,3 @@ update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=2;
 update ExistenciasSucursal set cantidad=cantidad-1 where idPresentacion=10;
 update ExistenciasSucursal set cantidad=cantidad-6 where idPresentacion=2;
 SHOW TABLES FROM ERP;
-select * from UnidadesTransporte;

@@ -122,15 +122,14 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="fecha"  placeholder="Fecha" class="form-control" required>
+                    <input type="text" id="fecha" name="fecha" placeholder="Fecha" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="comentarios"  name="comentarios" placeholder="Comentarios" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="comentarios"  placeholder="Comentarios" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="number" id="costo"  placeholder="costo" class="form-control" required>
+                    <input type="number" id="costo" name="costo"  placeholder="costo" class="form-control" required>
                 </div>
 
                 <div class="form-group">
@@ -145,9 +144,70 @@
                 </div>
 
             </form>
+            
         </div>
     </div>
+<div class="col-md-7">
+        <p>Asesorias</p>
+        <table class="table table-striped table-bordered bg-white table-sm">
+            <thead>
+                <tr>
+                    <td>idAsesoria</td>
+                    <td>Parcela</td>
+                    <td>Empleado</td>
+                    <td>Unidad de Transporte</td>
+                    <td>Fecha</td>
+                    <td>Comentarios</td>
+                    <td>Costo</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for Est in Asesorias %}
+                {%if (Est.idAsesoria) <= (PosicionA*5) and (Est.idAsesoria) >= ((PosicionA*5)-4)%}
+                <tr>
+                    <td>{{Est.idAsesoria}}       </td>
+                    <td>{{Est.Parcela.Direccion.calle}} #{{Est.Parcela.Direccion.numero}} Col. {{Est.Parcela.Direccion.colonia}}, {{Est.Parcela.Direccion.Ciudad.nombre}} {{Est.Parcela.Direccion.Ciudad.Estado.nombre}}.</td>
+                    <td>{{Est.Empleado.Nombre}}       </td>
+                    <td>{{Est.Unidad.marca}}, {{Est.Unidad.modelo}}</td>
+                    <td>{{Est.fecha}}       </td>
+                    <td>{{Est.comentarios}}       </td>
+                    {%if Est.estatus=="A"%}
+                        <td>Activo      </td>
+                        <td>
+                        <a href="/EditAse/{{Est.idAsesoria}}" class="btn btn-warning btn-block">Editar</a>
+                        <a href="/DeleteAse/{{Est.idAsesoria}}" class="btn btn-danger btn-block btn-delete">Eliminar</a>
+                        </td>
+                        {%else%}
+                        <td style="background-color:#FF0000">Inactivo</td>
+                        <td>
+                            <a href="/EditAse/{{Est.idAsesoria}}" class="btn btn-warning btn-block">Editar</a>
+                            
+                        </td>
+                        {%endif%}
+                </tr>
+                {%endif%}
+                {% endfor %}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if PosicionA > 1 %}
+              <li class="page-item"><a class="page-link" href="/Asesorias/{{PosicionA-1}}">Previous</a></li>
+              {% endif %}
+              {% for x in range(PaginasA) %}
+              <li class="page-item" selected><a class="page-link" href="/Asesorias/{{x+1}}">{{x+1}}</a></li>
+              {% endfor %}
+              {%if PosicionA < PaginasA %}
+              <li class="page-item"><a class="page-link" href="/Asesorias/{{PosicionA+1}}">Next</a></li>
+              {% endif %}
+            </ul>
+          </nav>
 
     </div>
+</div>
+    </div>
+    
+
 
 </html>
