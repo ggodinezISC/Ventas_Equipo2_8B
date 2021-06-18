@@ -523,13 +523,13 @@ class VentasDetalle(db.Model):
     __tablename__ = 'VentaDetalle'
     idVentaDetalle = Column(Integer, primary_key=True)
     idVenta = Column(Integer, ForeignKey('Ventas.idVenta'), nullable=False)
-    idPresentación = Column(Integer, ForeignKey('PresentacionesProducto.idPresentacion'), nullable=False)
+    idPresentacion = Column(Integer, ForeignKey('PresentacionesProducto.idPresentacion'), nullable=False)
     precioVenta = Column(Float, nullable=False)
     cantidad = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
     estatus = Column(String, nullable=False)
     Venta=relationship('Venta', foreign_keys=[idVenta])
-    Presentacion=relationship('PresentacionProducto', foreign_keys=[idPresentación])
+    Presentacion=relationship('PresentacionProducto', foreign_keys=[idPresentacion])
 
 
     def insertar(self):
